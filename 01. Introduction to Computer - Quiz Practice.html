@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Fundamentals Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #1a1a1a;
+    --card: #222222;
+    --border: #333;
+    --accent: #00e5a0;
+    --accent2: #ff6b35;
+    --wrong: #ff4444;
+    --text: #f0f0f0;
+    --muted: #888;
+    --correct-bg: rgba(0,229,160,0.1);
+    --wrong-bg: rgba(255,68,68,0.1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 780px; margin: 0 auto; }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    padding: 40px 0 30px;
+  }
+  .header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.1;
+  }
+  .header h1 span { color: var(--accent); }
+  .header p { color: var(--muted); margin-top: 10px; font-size: 0.85rem; }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 999px;
+    height: 6px;
+    margin: 20px 0 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 16px;
+    animation: fadeSlide 0.3s ease;
+  }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .q-number {
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .q-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 16px;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.88rem;
+    color: var(--text);
+    text-align: left;
+    transition: border-color 0.2s, background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .option:hover:not(:disabled) {
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+  .option .opt-letter {
+    font-weight: 500;
+    color: var(--muted);
+    min-width: 18px;
+  }
+  .option.correct {
+    background: var(--correct-bg);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .option.correct .opt-letter { color: var(--accent); }
+  .option.wrong {
+    background: var(--wrong-bg);
+    border-color: var(--wrong);
+    color: var(--wrong);
+  }
+  .option.wrong .opt-letter { color: var(--wrong); }
+  .option:disabled { cursor: default; }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: var(--correct-bg); border: 1px solid var(--accent); color: var(--accent); }
+  .feedback.wrong-fb   { background: var(--wrong-bg);   border: 1px solid var(--wrong);  color: #ff8888; }
+
+  /* NAVIGATION */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 40px;
+    gap: 12px;
+  }
+  .btn {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 12px 28px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s;
+    letter-spacing: 0.5px;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:disabled { opacity: 0.3; cursor: default; transform: none; }
+  .btn-prev { background: var(--surface); color: var(--text); border: 1.5px solid var(--border); }
+  .btn-next { background: var(--accent); color: #000; }
+  .btn-submit { background: var(--accent2); color: #fff; }
+  .score-chip {
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: center;
+  }
+  .score-chip span { color: var(--accent); font-weight: bold; }
+
+  /* RESULTS */
+  .results-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    animation: fadeSlide 0.4s ease;
+  }
+  .results-screen.show { display: block; }
+  .result-score-ring {
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    border: 6px solid var(--accent);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    margin: 0 auto 30px;
+  }
+  .result-score-ring .big { font-family: 'Syne', sans-serif; font-size: 2.8rem; font-weight: 800; color: var(--accent); }
+  .result-score-ring .small { font-size: 0.75rem; color: var(--muted); }
+  .results-screen h2 { font-family: 'Syne', sans-serif; font-size: 1.8rem; margin-bottom: 10px; }
+  .result-breakdown {
+    display: flex; justify-content: center; gap: 30px;
+    margin: 20px 0 30px; flex-wrap: wrap;
+  }
+  .rb-item { text-align: center; }
+  .rb-item .val { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; }
+  .rb-item .lbl { font-size: 0.72rem; color: var(--muted); }
+  .btn-restart { margin-top: 10px; }
+  .grade-msg { color: var(--muted); font-size: 0.9rem; margin-bottom: 20px; }
+
+  /* REVIEW */
+  .review-section { margin-top: 40px; text-align: left; }
+  .review-section h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; margin-bottom: 16px; text-align: center; color: var(--muted); letter-spacing: 1px; }
+  .review-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    font-size: 0.82rem;
+  }
+  .review-item.r-correct { border-left: 3px solid var(--accent); }
+  .review-item.r-wrong   { border-left: 3px solid var(--wrong); }
+  .review-item .r-q { font-family: 'Syne', sans-serif; font-weight: 700; margin-bottom: 8px; font-size: 0.88rem; }
+  .review-item .r-your { color: var(--wrong); }
+  .review-item .r-ans  { color: var(--accent); }
+  .review-item .r-skip { color: var(--muted); font-style: italic; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>Computer<br><span>Fundamentals</span> Quiz</h1>
+    <p>70 Questions · Based on your study notes</p>
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="quizScreen">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="progress-label">
+      <span id="progressText">Question 1 of 70</span>
+      <span id="liveScore">Score: 0</span>
+    </div>
+
+    <div class="question-card" id="questionCard">
+      <div class="q-number" id="qNumber">QUESTION 01</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="nav">
+      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
+      <div class="score-chip">Answered: <span id="answeredCount">0</span>/70</div>
+      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </div>
+    <div style="text-align:center; margin-bottom:40px;">
+      <button class="btn btn-submit" onclick="submitQuiz()">Submit & See Results</button>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div class="results-screen" id="resultsScreen">
+    <div class="result-score-ring">
+      <div class="big" id="rScore">0</div>
+      <div class="small">out of 70</div>
+    </div>
+    <h2 id="rGrade">Well done!</h2>
+    <div class="grade-msg" id="rMsg"></div>
+    <div class="result-breakdown">
+      <div class="rb-item"><div class="val" id="rCorrect" style="color:var(--accent)">0</div><div class="lbl">Correct</div></div>
+      <div class="rb-item"><div class="val" id="rWrong" style="color:var(--wrong)">0</div><div class="lbl">Wrong</div></div>
+      <div class="rb-item"><div class="val" id="rSkipped" style="color:var(--muted)">0</div><div class="lbl">Skipped</div></div>
+      <div class="rb-item"><div class="val" id="rPercent" style="color:var(--accent2)">0%</div><div class="lbl">Percentage</div></div>
+    </div>
+    <button class="btn btn-next btn-restart" onclick="restartQuiz()">↺ Try Again</button>
+
+    <div class="review-section">
+      <h3>— REVIEW ALL ANSWERS —</h3>
+      <div id="reviewContainer"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  // --- HISTORY & GENERATIONS ---
+  { q: "Who is known as the Father of the Computer?", opts: ["Alan Turing","Charles Babbage","Bill Gates","John von Neumann"], ans: 1 },
+  { q: "What language do computers use at their most basic level?", opts: ["HTML","Assembly","Binary (0 and 1)","Python"], ans: 2 },
+  { q: "Which generation of computers used vacuum tubes?", opts: ["2nd","3rd","1st","4th"], ans: 2 },
+  { q: "What replaced vacuum tubes in 2nd generation computers?", opts: ["Integrated circuits","Microprocessors","Transistors","Capacitors"], ans: 2 },
+  { q: "Integrated circuits were introduced in which generation?", opts: ["2nd","3rd","4th","5th"], ans: 1 },
+  { q: "Which generation introduced the microprocessor (entire CPU on one chip)?", opts: ["3rd","5th","2nd","4th"], ans: 3 },
+  { q: "Which Intel chip was the first microprocessor?", opts: ["Intel 8080","Intel 4004","Intel Pentium","Intel Core i3"], ans: 1 },
+  { q: "The 5th generation of computers is focused on:", opts: ["Transistors","Vacuum tubes","Artificial Intelligence & machine learning","Integrated circuits"], ans: 2 },
+  { q: "What is the fastest type of computer?", opts: ["Mainframe","Minicomputer","Supercomputer","Workstation"], ans: 2 },
+  { q: "Which generation introduced AI, NLP, and neural networks?", opts: ["3rd","4th","1st","5th"], ans: 3 },
+
+  // --- HARDWARE BASICS ---
+  { q: "What does CPU stand for?", opts: ["Central Processing Unit","Computer Power Unit","Core Processing Utility","Central Program Unit"], ans: 0 },
+  { q: "CPU speed is measured in:", opts: ["Megabytes and Gigabytes","Megahertz and Gigahertz","Watts and Kilowatts","Pixels and Dots"], ans: 1 },
+  { q: "Which component is called the 'brain' of the computer?", opts: ["RAM","Motherboard","CPU","Hard Disk"], ans: 2 },
+  { q: "What does BIOS stand for?", opts: ["Basic Input Output System","Binary Internal Operating Software","Basic Integrated Output Storage","Boot Initialization Operating System"], ans: 0 },
+  { q: "Which is the smallest unit of memory?", opts: ["Byte","Kilobyte","Bit","Megabyte"], ans: 2 },
+  { q: "How many Megabytes make 1 Gigabyte?", opts: ["100","512","2048","1024"], ans: 3 },
+  { q: "What does RAM stand for?", opts: ["Read Access Memory","Random Access Memory","Rapid Access Module","Readable Array Memory"], ans: 1 },
+  { q: "RAM is classified as:", opts: ["Permanent memory","Secondary storage","Temporary memory","Read-only memory"], ans: 2 },
+  { q: "What does ROM stand for?", opts: ["Random Output Memory","Read Only Memory","Removable Operating Module","Readable Output Mode"], ans: 1 },
+  { q: "What is the storage capacity of a standard floppy disk?", opts: ["700 MB","4.7 GB","1.44 MB","25 GB"], ans: 2 },
+  { q: "A CD (Compact Disk) can store approximately:", opts: ["1.44 MB","650–700 MB","4.7 GB","25 GB"], ans: 1 },
+  { q: "What is the storage capacity range of a DVD?", opts: ["650–700 MB","1.44–2 MB","4.7–8.5 GB","25–50 GB"], ans: 2 },
+  { q: "Blu-ray discs can store:", opts: ["700 MB","4.7 GB","1.44 MB","25–50 GB"], ans: 3 },
+  { q: "What type of storage is a Hard Disk?", opts: ["Primary storage","Secondary storage","Cache storage","Virtual memory"], ans: 1 },
+  { q: "What is the Motherboard?", opts: ["The screen display unit","The basic processing hardware to which all peripherals connect","The power supply unit","The graphics card"], ans: 1 },
+
+  // --- INPUT / OUTPUT ---
+  { q: "Which of these is an INPUT device?", opts: ["Monitor","Speaker","Printer","Scanner"], ans: 3 },
+  { q: "Which of these is an OUTPUT device?", opts: ["Keyboard","Mouse","Printer","Touchscreen"], ans: 2 },
+  { q: "A mouse is used for:", opts: ["Typing text into the computer","Moving a pointer on the display","Printing documents","Scanning images"], ans: 1 },
+  { q: "A standard QWERTY keyboard has how many keys?", opts: ["101","108","104","96"], ans: 2 },
+  { q: "Function keys (F1, F2, etc.) are located:", opts: ["On the number pad","On the side of the keyboard","At the top of the keyboard","At the bottom of the keyboard"], ans: 2 },
+  { q: "Which key is used to close a dialog box or cancel a command?", opts: ["Delete","Enter","Tab","ESC"], ans: 3 },
+
+  // --- NETWORK & COMMUNICATION ---
+  { q: "What does Modem stand for?", opts: ["Memory Output Device","Modulator Demodulator","Monitor Output Device Management","Module Output Display"], ans: 1 },
+  { q: "A Wide Area Network (WAN) covers:", opts: ["A single room","A building","A sizable geographical area","A single floor"], ans: 2 },
+  { q: "Which type of computer handles large-scale data processing for banks and governments?", opts: ["Microcomputer","Supercomputer","Minicomputer","Mainframe"], ans: 3 },
+
+  // --- SOFTWARE ---
+  { q: "Which type of software manages computer hardware and provides essential services?", opts: ["Application software","Utility software","System software","Firmware"], ans: 2 },
+  { q: "Windows is an example of:", opts: ["Application software","Hardware","System software","Firmware"], ans: 2 },
+  { q: "MS Word is an example of:", opts: ["System software","Firmware","Application software","Utility software"], ans: 2 },
+  { q: "A computer cannot boot without:", opts: ["MS Word","An internet connection","An operating system","A printer"], ans: 2 },
+  { q: "What does GUI stand for?", opts: ["General User Interface","Graphical User Interface","Global Utility Integration","Graphical Utility Installer"], ans: 1 },
+  { q: "Icons on a desktop represent:", opts: ["Hardware components","Small pictures that represent files & folders","System errors","Network connections"], ans: 1 },
+  { q: "Which is NOT an item of computer hardware?", opts: ["Keyboard","Monitor","Icon","Mouse"], ans: 2 },
+  { q: "Firmware is permanent software stored in:", opts: ["RAM","Hard disk","USB drive","ROM"], ans: 3 },
+  { q: "Utility software is a sub-type of:", opts: ["Application software","System software","Firmware","Network software"], ans: 1 },
+
+  // --- MS WORD ---
+  { q: "MS Word is used for:", opts: ["Spreadsheet calculations","Creating presentations","Documentation purposes","Database management"], ans: 2 },
+  { q: "What is the default file extension for MS Word 2007 documents?", opts: [".doc",".txt",".docx",".wrd"], ans: 2 },
+  { q: "The top bar in MS Word showing the document name is called:", opts: ["Menu bar","Ribbon","Title bar","Status bar"], ans: 2 },
+  { q: "Which shortcut opens the Find dialog in MS Word?", opts: ["Ctrl+H","Ctrl+F","Ctrl+G","Ctrl+S"], ans: 1 },
+  { q: "What is the default font size in MS Word?", opts: ["10","12","11","14"], ans: 2 },
+  { q: "What is the default page size in MS Word?", opts: ["A4 (8.27\" x 11.69\")","8.5\" x 11\"","Letter (8\" x 10\")","Legal (8.5\" x 14\")"], ans: 1 },
+  { q: "What are the default page margins in MS Word?", opts: ["0.5 inch all sides","1 inch all sides","1.5 inch all sides","2 inch all sides"], ans: 1 },
+  { q: "Header items are placed:", opts: ["At the end of the document","At the bottom of every page","At the top of all document pages","In the middle of the page"], ans: 2 },
+  { q: "Spelling mistakes in MS Word are indicated with:", opts: ["Blue lines","Green lines","Red lines","Yellow highlight"], ans: 2 },
+  { q: "Grammatical mistakes in MS Word are indicated with:", opts: ["Red lines","Yellow lines","Green and blue lines","Purple lines"], ans: 2 },
+  { q: "A Watermark in MS Word appears:", opts: ["On top of all text","Dimly behind the text","In the header only","In the footer only"], ans: 1 },
+  { q: "Drop caps in MS Word were traditionally used to:", opts: ["Create tables","Highlight new sections of a document","Insert images","Add page numbers"], ans: 1 },
+  { q: "The Ribbon in MS Word is:", opts: ["A decorative border","A command bar organizing features into tabs at the top","A type of page border","The status bar at the bottom"], ans: 1 },
+  { q: "Which shortcut key centers text in MS Word?", opts: ["Ctrl+L","Ctrl+R","Ctrl+J","Ctrl+E"], ans: 3 },
+  { q: "Format Painter is used to:", opts: ["Paint images on a document","Apply the same formatting from one text to another","Change the page color","Insert a watermark"], ans: 1 },
+  { q: "The 'New Comment' option is found under which tab?", opts: ["Insert","Home","View","Review"], ans: 3 },
+  { q: "Gutter Margin is added to:", opts: ["The top of the page","The bottom of the page","The binding side of the page","The right side of the page"], ans: 2 },
+
+  // --- KEYBOARD SHORTCUTS ---
+  { q: "What does Ctrl + Z do?", opts: ["Redo last action","Save file","Undo the last action","Close the document"], ans: 2 },
+  { q: "Which shortcut saves the current file?", opts: ["Ctrl+P","Ctrl+O","Ctrl+S","Ctrl+N"], ans: 2 },
+  { q: "Shift + Delete does what to a file?", opts: ["Moves it to Recycle Bin","Renames the file","Permanently deletes it without Recycle Bin","Copies it to clipboard"], ans: 2 },
+  { q: "Which key refreshes the current window or page?", opts: ["F1","F2","F3","F5"], ans: 3 },
+  { q: "Alt + F4 is used to:", opts: ["Open Task Manager","Switch between applications","Close the active application window","Lock the screen"], ans: 2 },
+  { q: "Which shortcut opens Task Manager directly?", opts: ["Ctrl+Alt+Delete","Ctrl+Shift+Esc","Alt+F4","Windows+L"], ans: 1 },
+  { q: "Windows key + L does what?", opts: ["Opens File Explorer","Shows the Desktop","Locks the computer screen","Opens Settings"], ans: 2 },
+  { q: "Print Screen (PrtSc) is used to:", opts: ["Print the current page","Open Print dialog","Capture a screenshot of the entire screen","Save the current file"], ans: 2 },
+
+  // --- FILE MANAGEMENT & WINDOWS ---
+  { q: "When you copy and paste a file:", opts: ["The original is deleted","A duplicate is created; original remains","The file is moved","The file is renamed"], ans: 1 },
+  { q: "What is a folder also known as?", opts: ["File","Directory","Drive","Extension"], ans: 1 },
+  { q: "Which Windows version first introduced USB support and Active Desktop?", opts: ["Windows XP","Windows 2000","Windows 98","Windows Vista"], ans: 2 },
+  { q: "Windows XP introduced which font rendering technology?", opts: ["TrueType","ClearType","OpenType","Aero Glass"], ans: 1 },
+  { q: "Windows Vista introduced which visual effect?", opts: ["Metro UI","Snap window docking","Aero Glass","Libraries"], ans: 2 },
+  { q: "Windows 8 replaced the Start menu with:", opts: ["Taskbar","Start Screen (Metro UI)","Control Panel","File Explorer"], ans: 1 },
+  { q: "Which file system supports file permissions and larger file sizes than FAT32?", opts: ["FAT16","exFAT","NTFS","HFS+"], ans: 2 },
+  { q: "A yellow exclamation mark in Device Manager indicates:", opts: ["The device is working correctly","A driver problem with a hardware device","The device needs charging","The device is not connected"], ans: 1 },
+  { q: "What is the Default Printer?", opts: ["The newest printer installed","The most expensive printer","The printer automatically selected when you print","The networked printer"], ans: 2 },
+  { q: "To safely remove a USB drive, you should use:", opts: ["Device Manager","Control Panel","Safely Remove Hardware icon in the system tray","File Explorer"], ans: 2 },
+];
+
+let current = 0;
+let userAnswers = new Array(70).fill(null);
+
+function render() {
+  const q = questions[current];
+  document.getElementById('qNumber').textContent = `QUESTION ${String(current+1).padStart(2,'0')}`;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('progressText').textContent = `Question ${current+1} of 70`;
+  document.getElementById('progressFill').style.width = `${((current+1)/70)*100}%`;
+
+  // count answered
+  const answered = userAnswers.filter(a => a !== null).length;
+  document.getElementById('answeredCount').textContent = answered;
+  const score = userAnswers.reduce((s,a,i) => s + (a === questions[i].ans ? 1 : 0), 0);
+  document.getElementById('liveScore').textContent = `Score: ${score}`;
+
+  // nav buttons
+  document.getElementById('prevBtn').disabled = current === 0;
+  document.getElementById('nextBtn').textContent = current === 69 ? 'Last →' : 'Next →';
+
+  // options
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span>${opt}`;
+    btn.onclick = () => selectAnswer(i);
+    if (userAnswers[current] !== null) {
+      btn.disabled = true;
+      if (i === q.ans) btn.classList.add('correct');
+      else if (i === userAnswers[current]) btn.classList.add('wrong');
+    }
+    container.appendChild(btn);
+  });
+
+  // feedback
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  if (userAnswers[current] !== null) {
+    const correct = userAnswers[current] === q.ans;
+    fb.textContent = correct
+      ? `✓ Correct! "${q.opts[q.ans]}" is the right answer.`
+      : `✗ Wrong. The correct answer is: "${q.opts[q.ans]}"`;
+    fb.className = `feedback show ${correct ? 'correct-fb' : 'wrong-fb'}`;
+  }
+
+  // re-animate card
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'fadeSlide 0.3s ease';
+}
+
+function selectAnswer(i) {
+  if (userAnswers[current] !== null) return;
+  userAnswers[current] = i;
+  render();
+}
+
+function navigate(dir) {
+  current = Math.max(0, Math.min(69, current + dir));
+  render();
+}
+
+function submitQuiz() {
+  const score = userAnswers.reduce((s,a,i) => s + (a === questions[i].ans ? 1 : 0), 0);
+  const wrong = userAnswers.filter((a,i) => a !== null && a !== questions[i].ans).length;
+  const skipped = userAnswers.filter(a => a === null).length;
+  const pct = Math.round((score/70)*100);
+
+  document.getElementById('rScore').textContent = score;
+  document.getElementById('rCorrect').textContent = score;
+  document.getElementById('rWrong').textContent = wrong;
+  document.getElementById('rSkipped').textContent = skipped;
+  document.getElementById('rPercent').textContent = pct + '%';
+
+  let grade, msg;
+  if (pct >= 90) { grade = "Outstanding! 🏆"; msg = "Excellent mastery of computer fundamentals."; }
+  else if (pct >= 75) { grade = "Great Work! ✨"; msg = "Strong understanding — review a few weak spots."; }
+  else if (pct >= 60) { grade = "Good Effort! 👍"; msg = "Decent foundation — keep practicing."; }
+  else if (pct >= 40) { grade = "Keep Going! 💪"; msg = "Review your notes and try again."; }
+  else { grade = "More Practice Needed"; msg = "Go over the study notes carefully and retry."; }
+
+  document.getElementById('rGrade').textContent = grade;
+  document.getElementById('rMsg').textContent = msg;
+
+  // build review
+  const rc = document.getElementById('reviewContainer');
+  rc.innerHTML = '';
+  const letters = ['A','B','C','D'];
+  questions.forEach((q, i) => {
+    const ua = userAnswers[i];
+    const correct = ua === q.ans;
+    const div = document.createElement('div');
+    div.className = `review-item ${ua === null ? '' : correct ? 'r-correct' : 'r-wrong'}`;
+    let detail = '';
+    if (ua === null) detail = `<div class="r-skip">⟳ Skipped — Answer: <b>${q.opts[q.ans]}</b></div>`;
+    else if (correct) detail = `<div class="r-ans">✓ ${q.opts[q.ans]}</div>`;
+    else detail = `<div class="r-your">✗ Your answer: ${q.opts[ua]}</div><div class="r-ans">✓ Correct: ${q.opts[q.ans]}</div>`;
+    div.innerHTML = `<div class="r-q">Q${i+1}. ${q.q}</div>${detail}`;
+    rc.appendChild(div);
+  });
+
+  document.getElementById('quizScreen').style.display = 'none';
+  const rs = document.getElementById('resultsScreen');
+  rs.classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartQuiz() {
+  userAnswers = new Array(70).fill(null);
+  current = 0;
+  document.getElementById('quizScreen').style.display = 'block';
+  document.getElementById('resultsScreen').classList.remove('show');
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+render();
+</script>
+</body>
+</html>
