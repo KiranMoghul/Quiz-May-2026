@@ -6,7 +6,7 @@
 <title>May 2026 Exam Practice</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--wrong:#ff4444;}
+  :root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;}
   *{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
   body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;pointer-events:none;z-index:0;}
@@ -29,7 +29,7 @@
   .subject-info{flex:1;}
   .subject-name{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:-0.5px;}
   .subject-sub{font-size:0.68rem;color:var(--muted);margin-top:2px;letter-spacing:0.5px;}
-  .subject-count{font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:999px;border:1px solid var(--border);color:var(--muted);}
+  .subject-count{font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:999px;border:1px solid var(--border);color:var(--muted);white-space:nowrap;}
   .divider{height:1px;background:var(--border);margin-bottom:18px;}
   .quiz-list{display:flex;flex-direction:column;gap:10px;}
   .quiz-card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:18px 20px;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:16px;transition:border-color 0.2s,transform 0.15s,background 0.2s;position:relative;overflow:hidden;}
@@ -43,6 +43,7 @@
   .badge{font-size:0.62rem;padding:2px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--border);color:var(--muted);}
   .badge.live{border-color:var(--c);color:var(--c);background:transparent;}
   .badge.random{border-color:#5b8cff;color:#5b8cff;background:transparent;}
+  .badge.priority{border-color:var(--gold);color:var(--gold);background:transparent;}
   .quiz-arrow{color:var(--c);font-size:1rem;transition:transform 0.2s;flex-shrink:0;}
   .quiz-card:not(.coming-soon):hover .quiz-arrow{transform:translateX(4px);}
   .quiz-card.coming-soon{opacity:0.35;border-style:dashed;pointer-events:none;}
@@ -67,15 +68,16 @@
   .lb-date{color:var(--muted);font-size:0.7rem;}
   .lb-empty{padding:40px;text-align:center;color:var(--muted);font-size:0.8rem;}
   .lb-loading{padding:30px;text-align:center;color:var(--muted);font-size:0.75rem;}
-  .ghost-toast{display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(30,30,30,0.95);border:1px solid var(--orange);color:var(--orange);font-size:0.78rem;padding:10px 22px;border-radius:999px;letter-spacing:1px;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.5);animation:toastIn 0.3s ease;}
-  .ghost-toast.show{display:block;}
+  .ghost-toast{display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(30,30,30,0.95);border:1px solid var(--orange);color:var(--orange);font-size:0.78rem;padding:10px 22px;border-radius:999px;letter-spacing:1px;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.5);}
+  .ghost-toast.show{display:block;animation:toastIn 0.3s ease;}
   @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
   .footer{border-top:1px solid var(--border);padding:24px 0 0;text-align:center;font-size:0.7rem;color:var(--muted2);line-height:2;}
   .footer span{color:var(--muted);}
   @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
-  .subject:nth-child(1){animation-delay:0.15s;}
-  .subject:nth-child(2){animation-delay:0.25s;}
-  .subject:nth-child(3){animation-delay:0.35s;}
+  .subject:nth-child(1){animation-delay:0.1s;}
+  .subject:nth-child(2){animation-delay:0.2s;}
+  .subject:nth-child(3){animation-delay:0.3s;}
+  .subject:nth-child(4){animation-delay:0.4s;}
   @media(max-width:580px){.lb-header,.lb-row{grid-template-columns:40px 1fr 60px 55px;}.lb-date{display:none;}.stats{flex-wrap:wrap;}.stat{min-width:50%;border-bottom:1px solid var(--border);}.subject-count{display:none;}}
 </style>
 </head>
@@ -87,13 +89,13 @@
   <div class="hero">
     <div class="hero-tag" id="heroTag">📚 Practice Hub</div>
     <h1>May 2026<br><em>Exam Practice</em></h1>
-    <p>Three subjects. All your MCQs in one place. Pick a topic, test yourself, see your score — and keep going until exam day.</p>
+    <p>Four subjects. All your MCQs in one place. Pick a topic, test yourself, see your score — and keep going until exam day.</p>
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="val">3</div><div class="lbl">Subjects</div></div>
-    <div class="stat"><div class="val">7</div><div class="lbl">Quiz Sets</div></div>
-    <div class="stat"><div class="val">200+</div><div class="lbl">Questions</div></div>
+    <div class="stat"><div class="val">4</div><div class="lbl">Subjects</div></div>
+    <div class="stat"><div class="val">11</div><div class="lbl">Quiz Sets</div></div>
+    <div class="stat"><div class="val">300+</div><div class="lbl">Questions</div></div>
     <div class="stat"><div class="val">∞</div><div class="lbl">Attempts</div></div>
   </div>
 
@@ -101,9 +103,10 @@
   <div class="leaderboard">
     <div class="section-label">🏆 Leaderboard</div>
     <div class="lb-tabs" id="lbTabs">
-      <div class="lb-tab active" data-quiz="all" onclick="switchTab(this)">All Quizzes</div>
+      <div class="lb-tab active" data-quiz="all" onclick="switchTab(this)">All</div>
       <div class="lb-tab" data-quiz="computer-01" onclick="switchTab(this)">Computer 01</div>
       <div class="lb-tab" data-quiz="computer-02" onclick="switchTab(this)">Computer 02</div>
+      <div class="lb-tab" data-quiz="english-01" onclick="switchTab(this)">English 01</div>
     </div>
     <div class="lb-table">
       <div class="lb-header"><div>#</div><div>Name</div><div>Score</div><div>Percent</div><div>Date</div></div>
@@ -111,7 +114,7 @@
     </div>
   </div>
 
-  <!-- COMPUTER -->
+  <!-- ── COMPUTER ── -->
   <div class="subject">
     <div class="subject-header">
       <div class="subject-icon">💻</div>
@@ -127,11 +130,7 @@
         <div class="quiz-num">01</div>
         <div class="quiz-info">
           <div class="quiz-title">Introduction to Computer</div>
-          <div class="quiz-badges">
-            <span class="badge live">● Live</span>
-            <span class="badge">70 Questions</span>
-            <span class="badge random">🎲 Random each time</span>
-          </div>
+          <div class="quiz-badges"><span class="badge">70 Questions</span><span class="badge random">🎲</span></div>
         </div>
         <div class="quiz-arrow">→</div>
       </a>
@@ -139,37 +138,90 @@
         <div class="quiz-num">02</div>
         <div class="quiz-info">
           <div class="quiz-title">Introduction to Word 2007</div>
-          <div class="quiz-badges">
-            <span class="badge live">● Live</span>
-            <span class="badge">70 Questions</span>
-            <span class="badge random">🎲 Random each time</span>
-          </div>
+          <div class="quiz-badges"><span class="badge">70 Questions</span><span class="badge random">🎲</span></div>
         </div>
         <div class="quiz-arrow">→</div>
       </a>
     </div>
   </div>
 
-  <!-- ENGLISH -->
+  <!-- ── ENGLISH ── -->
   <div class="subject">
     <div class="subject-header">
       <div class="subject-icon">🗣️</div>
       <div class="subject-info">
         <div class="subject-name" style="color:var(--orange)">English</div>
-        <div class="subject-sub">Oxford Word Skills · Spoken English · GDP</div>
+        <div class="subject-sub">Spoken English · Oxford Word Skills</div>
       </div>
-      <div class="subject-count">4 quizzes</div>
+      <div class="subject-count">2 quizzes</div>
     </div>
     <div class="divider"></div>
     <div class="quiz-list">
-      <div class="quiz-card coming-soon" style="--c:var(--orange)"><div class="quiz-num">01</div><div class="quiz-info"><div class="quiz-title">How to Communicate Effectively & Important Factors for Effective Communication</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div><div class="quiz-arrow">→</div></div>
-      <div class="quiz-card coming-soon" style="--c:var(--orange)"><div class="quiz-num">02</div><div class="quiz-info"><div class="quiz-title">Verbal & Non-Verbal Communication — Difference, Types and Importance</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div><div class="quiz-arrow">→</div></div>
-      <div class="quiz-card coming-soon" style="--c:var(--orange)"><div class="quiz-num">03</div><div class="quiz-info"><div class="quiz-title">Tell Time · Countries & Nationalities · Describe Physical Actions</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div><div class="quiz-arrow">→</div></div>
-      <div class="quiz-card coming-soon" style="--c:var(--orange)"><div class="quiz-num">04</div><div class="quiz-info"><div class="quiz-title">Food Safety & Hygiene · Personal Hygiene Guidelines for Food Workers</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div><div class="quiz-arrow">→</div></div>
+      <a class="quiz-card" href="01-SpokenEnglish.html" style="--c:var(--orange)">
+        <div class="quiz-num">01</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Spoken English</div>
+          <div class="quiz-badges"><span class="badge">30 Questions</span><span class="badge random">🎲</span><span class="badge priority">⭐</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </a>
+      <div class="quiz-card coming-soon" style="--c:var(--orange)">
+        <div class="quiz-num">02</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Oxford Word Skills</div>
+          <div class="quiz-badges"><span class="badge">Coming Soon</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </div>
     </div>
   </div>
 
-  <!-- CULINARY ARTS -->
+  <!-- ── GPDP ── -->
+  <div class="subject">
+    <div class="subject-header">
+      <div class="subject-icon">📋</div>
+      <div class="subject-info">
+        <div class="subject-name" style="color:var(--purple)">GPDP</div>
+        <div class="subject-sub">Food Safety · Culinary Skills · Knife Skills</div>
+      </div>
+      <div class="subject-count">6 quizzes</div>
+    </div>
+    <div class="divider"></div>
+    <div class="quiz-list">
+      <div class="quiz-card coming-soon" style="--c:var(--purple)">
+        <div class="quiz-num">01</div>
+        <div class="quiz-info"><div class="quiz-title">Food Safety & Personal Hygiene</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
+        <div class="quiz-arrow">→</div>
+      </div>
+      <div class="quiz-card coming-soon" style="--c:var(--purple)">
+        <div class="quiz-num">02</div>
+        <div class="quiz-info"><div class="quiz-title">Culinary Boot Camp</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
+        <div class="quiz-arrow">→</div>
+      </div>
+      <div class="quiz-card coming-soon" style="--c:var(--purple)">
+        <div class="quiz-num">03</div>
+        <div class="quiz-info"><div class="quiz-title">Culinary Foundations</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
+        <div class="quiz-arrow">→</div>
+      </div>
+      <div class="quiz-card coming-soon" style="--c:var(--purple)">
+        <div class="quiz-num">04</div>
+        <div class="quiz-info"><div class="quiz-title">Cutting and Processing</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
+        <div class="quiz-arrow">→</div>
+      </div>
+      <div class="quiz-card coming-soon" style="--c:var(--purple)">
+        <div class="quiz-num">05</div>
+        <div class="quiz-info"><div class="quiz-title">Food Presentation and Plating</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
+        <div class="quiz-arrow">→</div>
+      </div>
+      <div class="quiz-card coming-soon" style="--c:var(--purple)">
+        <div class="quiz-num">06</div>
+        <div class="quiz-info"><div class="quiz-title">Knife Skills</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
+        <div class="quiz-arrow">→</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CULINARY ARTS ── -->
   <div class="subject">
     <div class="subject-header">
       <div class="subject-icon">🍳</div>
@@ -181,7 +233,11 @@
     </div>
     <div class="divider"></div>
     <div class="quiz-list">
-      <div class="quiz-card coming-soon" style="--c:var(--gold)"><div class="quiz-num">—</div><div class="quiz-info"><div class="quiz-title">Quizzes will be added soon</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div><div class="quiz-arrow">→</div></div>
+      <div class="quiz-card coming-soon" style="--c:var(--gold)">
+        <div class="quiz-num">—</div>
+        <div class="quiz-info"><div class="quiz-title">Quizzes will be added soon</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
+        <div class="quiz-arrow">→</div>
+      </div>
     </div>
   </div>
 
@@ -200,8 +256,8 @@ heroTag.addEventListener('click',()=>{
     tapCount=0;clearTimeout(tapTimer);
     ghostMode=!ghostMode;
     sessionStorage.setItem('ghostMode',ghostMode?'1':'0');
-    const msg=ghostMode?'👻 Ghost Mode ON — scores won\'t be saved':'👤 Ghost Mode OFF — scores will be saved';
-    toast.textContent=msg;toast.classList.add('show');
+    toast.textContent=ghostMode?'👻 Ghost Mode ON — scores won\'t be saved':'👤 Ghost Mode OFF — scores will be saved';
+    toast.classList.add('show');
     setTimeout(()=>toast.classList.remove('show'),3000);
   }
 });
@@ -210,21 +266,39 @@ heroTag.addEventListener('click',()=>{
 const STORAGE_KEY='leaderboard-scores';
 let currentTab='all';
 
-async function loadScores(){try{const r=await window.storage.get(STORAGE_KEY,true);return r?JSON.parse(r.value):[];}catch{return[];}}
-async function loadScoresSafe(){try{const r=await window.storage.get(STORAGE_KEY,true);return r?JSON.parse(r.value):[];}catch{return[];}}
+async function loadScores(){
+  try{const r=await window.storage.get(STORAGE_KEY,true);return r?JSON.parse(r.value):[];}
+  catch{return[];}
+}
 
-function switchTab(el){document.querySelectorAll('.lb-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');currentTab=el.dataset.quiz;renderLeaderboard();}
+function switchTab(el){
+  document.querySelectorAll('.lb-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  currentTab=el.dataset.quiz;
+  renderLeaderboard();
+}
 
 async function renderLeaderboard(){
   const body=document.getElementById('lbBody');
   body.innerHTML='<div class="lb-loading">Loading...</div>';
-  const scores=await loadScoresSafe();
+  const scores=await loadScores();
   const filtered=currentTab==='all'?scores:scores.filter(s=>s.quiz===currentTab);
-  const sorted=filtered.slice().sort((a,b)=>b.score-a.score||b.pct-a.pct).slice(0,20);
+  const sorted=filtered.slice().sort((a,b)=>b.pct-a.pct||b.score-a.score).slice(0,20);
   if(sorted.length===0){body.innerHTML='<div class="lb-empty">No scores yet — be the first! 🎯</div>';return;}
-  const rankLabel=(i)=>{const cls=i===0?'r1':i===1?'r2':i===2?'r3':'';const sym=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;return`<span class="lb-rank ${cls}">${sym}</span>`;};
+  const rankLabel=(i)=>{
+    const cls=i===0?'r1':i===1?'r2':i===2?'r3':'';
+    const sym=i===0?'🥇':i===1?'🥈':i===2?'🥉':`${i+1}`;
+    return`<span class="lb-rank ${cls}">${sym}</span>`;
+  };
   const rowClass=(i)=>i===0?'top1':i===1?'top2':i===2?'top3':'';
-  body.innerHTML=sorted.map((s,i)=>`<div class="lb-row ${rowClass(i)}"><div>${rankLabel(i)}</div><div class="lb-name">${s.name}</div><div class="lb-score">${s.score}/${s.total}</div><div class="lb-pct">${s.pct}%</div><div class="lb-date">${s.date}</div></div>`).join('');
+  body.innerHTML=sorted.map((s,i)=>`
+    <div class="lb-row ${rowClass(i)}">
+      <div>${rankLabel(i)}</div>
+      <div>${s.name}</div>
+      <div class="lb-score">${s.score}/${s.total}</div>
+      <div class="lb-pct">${s.pct}%</div>
+      <div class="lb-date">${s.date}</div>
+    </div>`).join('');
 }
 
 renderLeaderboard();
