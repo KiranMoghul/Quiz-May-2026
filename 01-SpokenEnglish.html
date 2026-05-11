@@ -25,6 +25,7 @@
   .ghost-notice.show{display:block;}
   .bank-info{margin-top:14px;font-size:0.7rem;color:var(--muted);line-height:1.9;}
   .bank-info span{color:var(--accent);}
+  .session-badge{margin-top:10px;font-size:0.72rem;padding:5px 14px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);display:inline-block;}
   .back-link{margin-top:30px;font-size:0.75rem;color:var(--muted);text-decoration:none;}
   .back-link:hover{color:var(--text);}
   .header{text-align:center;padding:40px 0 30px;}
@@ -39,9 +40,9 @@
   .q-number{font-size:0.7rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
   .q-text{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;line-height:1.5;margin-bottom:20px;}
   .options{display:flex;flex-direction:column;gap:10px;}
-  .option{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--text);text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.1s;display:flex;align-items:center;gap:12px;width:100%;}
+  .option{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--text);text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.1s;display:flex;align-items:center;gap:12px;}
   .option:hover:not(:disabled){border-color:var(--accent);transform:translateX(4px);}
-  .option .opt-letter{font-weight:500;color:var(--muted);min-width:18px;flex-shrink:0;}
+  .option .opt-letter{font-weight:500;color:var(--muted);min-width:18px;}
   .option.correct{background:var(--correct-bg);border-color:var(--accent);color:var(--accent);}
   .option.correct .opt-letter{color:var(--accent);}
   .option.wrong{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong);}
@@ -86,19 +87,18 @@
 </head>
 <body>
 <div class="container">
-
   <div class="name-screen" id="nameScreen">
     <h2>Spoken<br><span>English</span></h2>
     <p>Hospitality · MBTI · Grooming · Work Ethics · Goal Setting<br>Enter your name to start.</p>
     <div class="name-input-wrap">
       <input type="text" class="name-input" id="nameInput" placeholder="Your name..." maxlength="30">
-      <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>Start Quiz &#8594;</button>
-      <div class="ghost-notice" id="ghostNotice">&#128123; Ghost Mode &#8212; score won't be saved</div>
+      <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>Start Quiz →</button>
+      <div class="ghost-notice" id="ghostNotice">👻 Ghost Mode — score won't be saved</div>
     </div>
-    <div class="bank-info">&#127922; <span>30 questions</span> per session &middot; Bank of <span>50</span> &middot; High-priority first</div>
-    <a href="index.html" class="back-link">&#8592; Back to all quizzes</a>
+    <div class="bank-info">🎲 <span>30 questions</span> per session · Bank of <span>50</span> · New questions each session · Full bank in <span>2 sessions</span></div>
+    <div class="session-badge" id="sessionBadge">Session 1 of 2</div>
+    <a href="index.html" class="back-link">← Back to all quizzes</a>
   </div>
-
   <div id="quizScreen" style="display:none">
     <div class="header">
       <h1>Spoken<br><span>English</span></h1>
@@ -113,15 +113,14 @@
       <div class="feedback" id="feedback"></div>
     </div>
     <div class="nav">
-      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>&#8592; Prev</button>
+      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
       <div class="score-chip">Answered: <span id="answeredCount">0</span>/30</div>
-      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next &#8594;</button>
+      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next →</button>
     </div>
     <div style="text-align:center;margin-bottom:40px;">
-      <button class="btn btn-submit" onclick="submitQuiz()">Submit &amp; See Results</button>
+      <button class="btn btn-submit" onclick="submitQuiz()">Submit & See Results</button>
     </div>
   </div>
-
   <div class="results-screen" id="resultsScreen">
     <div class="result-score-ring"><div class="big" id="rScore">0</div><div class="small">out of 30</div></div>
     <h2 id="rGrade"></h2>
@@ -134,291 +133,207 @@
       <div class="rb-item"><div class="val" id="rPercent" style="color:var(--accent2)">0%</div><div class="lbl">Percentage</div></div>
     </div>
     <div class="results-btns">
-      <button class="btn btn-next" onclick="restartQuiz()">&#8634; Try Again</button>
-      <a href="index.html" class="btn btn-prev" style="text-decoration:none;display:inline-flex;align-items:center;">&#127968; Home</a>
+      <button class="btn btn-next" onclick="restartQuiz()">↺ Next Session</button>
+      <a href="index.html" class="btn btn-prev" style="text-decoration:none;display:inline-flex;align-items:center;">🏠 Home</a>
     </div>
-    <div class="review-section"><h3>&#8212; REVIEW ALL ANSWERS &#8212;</h3><div id="reviewContainer"></div></div>
+    <div class="review-section"><h3>— REVIEW ALL ANSWERS —</h3><div id="reviewContainer"></div></div>
   </div>
 </div>
-
 <script>
-var QUIZ_ID = 'english-01';
-var STORAGE_KEY = 'leaderboard-scores';
-var TOTAL_Q = 30;
-var isGhost = sessionStorage.getItem('ghostMode') === '1';
+const QUIZ_ID='english-01',STORAGE_KEY='leaderboard-scores',TOTAL_Q=30,LS_KEY='eng01_seen';
+let isGhost=sessionStorage.getItem('ghostMode')==='1';
+if(isGhost)document.getElementById('ghostNotice').classList.add('show');
+const nameInput=document.getElementById('nameInput'),startBtn=document.getElementById('startBtn');
+nameInput.addEventListener('input',()=>{startBtn.disabled=nameInput.value.trim().length<2;});
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&nameInput.value.trim().length>=2)startQuiz();});
+let playerName='',current=0,sessionQ=[],userAnswers=[];
 
-if (isGhost) {
-  document.getElementById('ghostNotice').classList.add('show');
-}
+function getSeenIds(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch{return[];}}
+function saveSeenIds(ids){try{localStorage.setItem(LS_KEY,JSON.stringify(ids));}catch{}}
+function getSessionNum(){return Math.min(2,Math.floor(getSeenIds().length/TOTAL_Q)+1);}
+function updateSessionBadge(){document.getElementById('sessionBadge').textContent='Session '+getSessionNum()+' of 2';}
+updateSessionBadge();
 
-var nameInput = document.getElementById('nameInput');
-var startBtn = document.getElementById('startBtn');
-
-nameInput.addEventListener('input', function() {
-  startBtn.disabled = nameInput.value.trim().length < 2;
-});
-
-nameInput.addEventListener('keydown', function(e) {
-  if (e.key === 'Enter' && nameInput.value.trim().length >= 2) startQuiz();
-});
-
-var playerName = '';
-var current = 0;
-var sessionQ = [];
-var userAnswers = [];
-
-var BANK = [
-  {p:'H', q:'Hospitality is best defined as:', opts:['The act of managing hotel staff', 'The act of kindness in welcoming and looking after the basic needs of the customer', 'A standalone industry focused only on accommodation', 'A government service for tourists'], ans:1},
-  {p:'H', q:'The hospitality industry is broken down into how many basic areas?', opts:['Two', 'Five', 'Three', 'Four'], ans:2},
-  {p:'H', q:'Which are the three basic areas of the hospitality industry?', opts:['Food, Transport, Education', 'Accommodation, Food and Beverages, and Travel and Tourism', 'Hotels, Airlines, Hospitals', 'Restaurants, Banks, Schools'], ans:1},
-  {p:'H', q:'Hospitality primarily involves:', opts:['Managing government services', 'Addressing customer satisfaction and catering to the needs of the guest', 'Providing medical care', 'Running transportation systems'], ans:1},
-  {p:'H', q:'Hospitality is described as:', opts:['A standalone industry', 'One facet of the service industry', 'A government department', 'A branch of healthcare'], ans:1},
-  {p:'H', q:'Which falls under Restaurants and Food Service?', opts:['Motels and campgrounds', 'Event planning and conferences', 'Catering services, bars and food trucks', 'Transportation and media publications'], ans:2},
-  {p:'H', q:'Which falls under Lodging?', opts:['Food trucks and private chefs', 'Boutique hotels, motels and bed and breakfast services', 'Convention centers and destination marketing', 'Airlines and cruise lines'], ans:1},
-  {p:'H', q:'Which falls under Travel and Tourism?', opts:['Restaurants and catering', 'Event planning, conferences and transportation', 'Motels and campgrounds', 'Bars and taverns'], ans:1},
-  {p:'H', q:'The culinary industry falls under hospitality because it deals with:', opts:['Construction and design', 'Food preparation, restaurant management, catering and customer service', 'IT and technology', 'Banking and finance'], ans:1},
-  {p:'H', q:"Who sits at the top of a hotel's organisational structure?", opts:['Head of Housekeeping', 'Front Office Manager', 'General Manager', 'Head of Security'], ans:2},
-  {p:'H', q:'How many departments does a hotel have?', opts:['Five', 'Six', 'Eight', 'Seven'], ans:3},
-  {p:'H', q:'Which of the following is one of the seven hotel departments?', opts:['IT Department', 'Marketing Agency', 'Front Office', 'Public Relations'], ans:2},
-  {p:'H', q:'Tourism is part of hospitality, particularly in:', opts:['Food preparation', 'Travel and destination management', 'Accommodation management', 'Human resources'], ans:1},
-  {p:'H', q:'MBTI stands for:', opts:['Myers-Briggs Type Indicator', 'Management Based Training Index', 'Multiple Behaviour Type Inventory', 'Myers Basic Thinking Index'], ans:0},
-  {p:'H', q:'MBTI was developed by:', opts:['Carl Jung and Sigmund Freud', 'Isabel Briggs Myers and Katherine Cook Briggs', 'Abraham Maslow and Carl Rogers', 'Howard Gardner and Daniel Goleman'], ans:1},
-  {p:'H', q:'MBTI places individuals into one of how many personality types?', opts:['8', '12', '16', '24'], ans:2},
-  {p:'H', q:'MBTI does NOT measure:', opts:['Personality preferences', 'How you direct your energy', 'Intelligence or ability', 'How you organise your world'], ans:2},
-  {p:'H', q:'The primary purpose of MBTI is to:', opts:['Measure IQ', 'Enhance self-awareness and improve communication and collaboration', 'Predict academic performance', 'Assess physical fitness'], ans:1},
-  {p:'H', q:'Extraversion vs Introversion describes:', opts:['How you make decisions', 'Where you direct your energy — outward or inward', 'How you take in information', 'How you organise your world'], ans:1},
-  {p:'H', q:'Sensing vs Intuition describes:', opts:['Where you direct your energy', 'How you make decisions', 'How you take in information — concrete facts vs patterns', 'How you organise your world'], ans:2},
-  {p:'H', q:'Thinking vs Feeling describes:', opts:['Where you direct your energy', 'How you take in information', 'How you organise your world', 'How you make decisions — logic vs personal values'], ans:3},
-  {p:'H', q:'Judging vs Perceiving describes:', opts:['How you take in information', 'How you make decisions', 'How you organise your world — structured vs flexible', 'Where you direct your energy'], ans:2},
-  {p:'H', q:'MBTI produces a personality type by combining:', opts:['Two preferences from two dichotomies', 'One preference from each of four dichotomies', 'Three preferences from one dichotomy', 'Random personality scores'], ans:1},
-  {p:'H', q:'Values are best defined as:', opts:['Rules set by the government', 'Fundamental beliefs that influence our attitude and determine what is meaningful in life', 'Skills learned at work', 'Physical habits we develop'], ans:1},
-  {p:'H', q:'Work ethics refers to:', opts:['The hours you work each week', 'The set of values and attitudes individuals bring to their jobs enabling them to act with integrity', 'Rules written in the employee handbook', 'Physical fitness standards at work'], ans:1},
-  {p:'H', q:'Which is an example of the OPPOSITE of ethical behaviour?', opts:['Honesty and teamwork', 'Discipline and humility', 'Theft, violence, dishonesty and neglect', 'Quality and responsibility'], ans:2},
-  {p:'H', q:'Strong work ethics in hospitality include:', opts:['Speed, appearance, and profit', 'Honesty, responsibility, quality, service, discipline, humility and teamwork', 'Silence, compliance and obedience', 'Only following rules'], ans:1},
-  {p:'H', q:'Self-awareness is best defined as:', opts:['The ability to read body language', 'The ability to understand your own thoughts, emotions, strengths and areas for improvement', 'The ability to manage others', 'A personality type in MBTI'], ans:1},
-  {p:'H', q:'Self-awareness is:', opts:['A fixed talent you are born with', 'A habit that can be developed through regular reflection and practice', 'Only useful in therapy', 'Measured by MBTI scores'], ans:1},
-  {p:'H', q:'In self-awareness, strengths include:', opts:['Poor time management and shyness', 'Knowledge, being organised, confident and a good team player', 'Difficulty speaking in public', 'Avoiding responsibilities'], ans:1},
-  {p:'H', q:'Goal setting is best defined as:', opts:['Writing a daily to-do list', 'The process of deciding what you want to achieve, breaking it into steps and taking action', 'Setting rules for others to follow', 'A type of performance review'], ans:1},
-  {p:'H', q:'A SMART goal is:', opts:['A quick goal set without planning', 'A clear, realistic goal that helps you stay focused and track progress', 'A goal set by your manager', 'A goal only for academic performance'], ans:1},
-  {p:'H', q:"In SMART goals, 'S' stands for:", opts:['Simple', 'Strategic', 'Specific', 'Structured'], ans:2},
-  {p:'H', q:"In SMART goals, 'M' stands for:", opts:['Manageable', 'Measurable', 'Meaningful', 'Motivating'], ans:1},
-  {p:'H', q:"In SMART goals, 'A' stands for:", opts:['Ambitious', 'Achievable', 'Automated', 'Active'], ans:1},
-  {p:'H', q:"In SMART goals, 'R' stands for:", opts:['Realistic', 'Responsible', 'Relevant', 'Resourceful'], ans:2},
-  {p:'H', q:"In SMART goals, 'T' stands for:", opts:['Tactical', 'Trackable', 'Time-based', 'Transparent'], ans:2},
-  {p:'M', q:'Professional grooming and appearance in hospitality reflect:', opts:['Personal wealth', 'Professionalism, respect for the job and attention to detail', 'Cultural background', 'Seniority level'], ans:1},
-  {p:'M', q:'Well-groomed employees are perceived as:', opts:['Wealthier and more educated', 'More approachable, confident and competent — strengthening customer trust', 'Stricter and less friendly', 'More experienced automatically'], ans:1},
-  {p:'M', q:'Uniforms in hospitality must be:', opts:['Any colour the employee prefers', 'Free from stains and wrinkles, including all mandatory accessories', 'Worn only during training', 'Personalised with name tags only'], ans:1},
-  {p:'M', q:'Shoes and socks in a professional hospitality uniform must be:', opts:['Any dark colour', 'Fully plain black with no colour detail, socks must cover the ankle', 'Brown or black leather only', 'White socks with black shoes'], ans:1},
-  {p:'M', q:'Hair in a professional hospitality setting should be:', opts:['Left loose and natural', 'Neatly tied back for both male and female staff', 'Coloured brightly to stand out', 'Cut very short for all staff'], ans:1},
-  {p:'M', q:'Nails in a professional hospitality setting must be:', opts:['Long and painted in neutral colours', 'Short, trimmed and clean — nail polish should be avoided', 'Painted in company colours', 'Acrylic nails are acceptable'], ans:1},
-  {p:'M', q:'Makeup in hospitality must be:', opts:['Bold and colourful to look energetic', 'Soft and discreet — no strong lipstick or eyeshadow', 'Not worn at all', 'Applied heavily for formal events'], ans:1},
-  {p:'M', q:'Fragrance in the workplace should be:', opts:['Strong and distinctive', 'Not worn at all', 'Only mild — avoid strong or overpowering scents', 'Changed daily'], ans:2},
-  {p:'L', q:'The ideal gap between a shirt cuff and blazer sleeve is:', opts:['None — they should be flush', 'Half to 1 inch', '2 to 3 inches', 'Only visible on formal occasions'], ans:1},
-  {p:'L', q:'MBTI was inspired by whose theory of psychological types?', opts:['Sigmund Freud', 'Abraham Maslow', 'Carl Jung', 'Howard Gardner'], ans:2},
-  {p:'L', q:'Which is NOT listed as a hotel department?', opts:['Front Office', 'Housekeeping', 'IT Services', 'Finance'], ans:2},
-  {p:'L', q:'Goal setting helps you:', opts:['Avoid responsibilities', 'Track progress and stay motivated', 'Set rules for others', 'Work without a plan'], ans:1},
-  {p:'L', q:'Without clear goals, we:', opts:['Work more efficiently', 'Lose focus just as planning a trip requires a destination', 'Become more creative', 'Naturally find direction'], ans:1}
+const BANK=[
+  {p:'H',q:"Hospitality is best defined as:",opts:["The act of managing hotel staff","The act of kindness in welcoming and looking after the basic needs of the customer","A standalone industry focused only on accommodation","A government service for tourists"],ans:1},
+  {p:'H',q:"The hospitality industry is broken down into how many basic areas?",opts:["Two","Five","Three","Four"],ans:2},
+  {p:'H',q:"Which are the three basic areas of the hospitality industry?",opts:["Food, Transport, Education","Accommodation, Food and Beverages, and Travel and Tourism","Hotels, Airlines, Hospitals","Restaurants, Banks, Schools"],ans:1},
+  {p:'H',q:"Hospitality primarily involves:",opts:["Managing government services","Addressing customer satisfaction and catering to the needs of the guest","Providing medical care","Running transportation systems"],ans:1},
+  {p:'H',q:"Hospitality is described as:",opts:["A standalone industry","One facet of the service industry","A government department","A branch of healthcare"],ans:1},
+  {p:'H',q:"Which falls under Restaurants and Food Service?",opts:["Motels and campgrounds","Event planning and conferences","Catering services, bars and food trucks","Transportation and media publications"],ans:2},
+  {p:'H',q:"Which falls under Lodging?",opts:["Food trucks and private chefs","Boutique hotels, motels and bed and breakfast services","Convention centers and destination marketing","Airlines and cruise lines"],ans:1},
+  {p:'H',q:"Which falls under Travel and Tourism?",opts:["Restaurants and catering","Event planning, conferences and transportation","Motels and campgrounds","Bars and taverns"],ans:1},
+  {p:'H',q:"The culinary industry falls under hospitality because it deals with:",opts:["Construction and design","Food preparation, restaurant management, catering and customer service","IT and technology","Banking and finance"],ans:1},
+  {p:'H',q:"Who sits at the top of a hotel's organisational structure?",opts:["Head of Housekeeping","Front Office Manager","General Manager","Head of Security"],ans:2},
+  {p:'H',q:"How many departments does a hotel have?",opts:["Five","Six","Eight","Seven"],ans:3},
+  {p:'H',q:"Which of the following is one of the seven hotel departments?",opts:["IT Department","Marketing Agency","Front Office","Public Relations"],ans:2},
+  {p:'H',q:"Tourism is part of hospitality, particularly in:",opts:["Food preparation","Travel and destination management","Accommodation management","Human resources"],ans:1},
+  {p:'H',q:"MBTI stands for:",opts:["Myers-Briggs Type Indicator","Management Based Training Index","Multiple Behaviour Type Inventory","Myers Basic Thinking Index"],ans:0},
+  {p:'H',q:"MBTI was developed by:",opts:["Carl Jung and Sigmund Freud","Isabel Briggs Myers and Katherine Cook Briggs","Abraham Maslow and Carl Rogers","Howard Gardner and Daniel Goleman"],ans:1},
+  {p:'H',q:"MBTI places individuals into one of how many personality types?",opts:["8","12","16","24"],ans:2},
+  {p:'H',q:"MBTI does NOT measure:",opts:["Personality preferences","How you direct your energy","Intelligence or ability","How you organise your world"],ans:2},
+  {p:'H',q:"The primary purpose of MBTI is to:",opts:["Measure IQ","Enhance self-awareness and improve communication and collaboration","Predict academic performance","Assess physical fitness"],ans:1},
+  {p:'H',q:"Extraversion vs Introversion describes:",opts:["How you make decisions","Where you direct your energy — outward or inward","How you take in information","How you organise your world"],ans:1},
+  {p:'H',q:"Sensing vs Intuition describes:",opts:["Where you direct your energy","How you make decisions","How you take in information — concrete facts vs patterns","How you organise your world"],ans:2},
+  {p:'H',q:"Thinking vs Feeling describes:",opts:["Where you direct your energy","How you take in information","How you organise your world","How you make decisions — logic vs personal values"],ans:3},
+  {p:'H',q:"Judging vs Perceiving describes:",opts:["How you take in information","How you make decisions","How you organise your world — structured vs flexible","Where you direct your energy"],ans:2},
+  {p:'H',q:"MBTI produces a personality type by combining:",opts:["Two preferences from two dichotomies","One preference from each of four dichotomies","Three preferences from one dichotomy","Random personality scores"],ans:1},
+  {p:'H',q:"Values are best defined as:",opts:["Rules set by the government","Fundamental beliefs that influence our attitude and determine what is meaningful in life","Skills learned at work","Physical habits we develop"],ans:1},
+  {p:'H',q:"Work ethics refers to:",opts:["The hours you work each week","The set of values and attitudes individuals bring to their jobs enabling them to act with integrity","Rules written in the employee handbook","Physical fitness standards at work"],ans:1},
+  {p:'H',q:"Which is an example of the OPPOSITE of ethical behaviour?",opts:["Honesty and teamwork","Discipline and humility","Theft, violence, dishonesty and neglect","Quality and responsibility"],ans:2},
+  {p:'H',q:"Strong work ethics in hospitality include:",opts:["Speed, appearance, and profit","Honesty, responsibility, quality, service, discipline, humility and teamwork","Silence, compliance and obedience","Only following rules"],ans:1},
+  {p:'H',q:"Self-awareness is best defined as:",opts:["The ability to read body language","The ability to understand your own thoughts, emotions, strengths and areas for improvement","The ability to manage others","A personality type in MBTI"],ans:1},
+  {p:'H',q:"Goal setting is best defined as:",opts:["Writing a daily to-do list","The process of deciding what you want to achieve, breaking it into steps and taking action","Setting rules for others to follow","A type of performance review"],ans:1},
+  {p:'H',q:"A SMART goal is:",opts:["A quick goal set without planning","A clear, realistic goal that helps you stay focused and track progress","A goal set by your manager","A goal only for academic performance"],ans:1},
+  {p:'H',q:"In SMART goals, 'S' stands for:",opts:["Simple","Strategic","Specific","Structured"],ans:2},
+  {p:'H',q:"In SMART goals, 'M' stands for:",opts:["Manageable","Measurable","Meaningful","Motivating"],ans:1},
+  {p:'H',q:"In SMART goals, 'A' stands for:",opts:["Ambitious","Achievable","Automated","Active"],ans:1},
+  {p:'H',q:"In SMART goals, 'R' stands for:",opts:["Realistic","Responsible","Relevant","Resourceful"],ans:2},
+  {p:'H',q:"In SMART goals, 'T' stands for:",opts:["Tactical","Trackable","Time-based","Transparent"],ans:2},
+  {p:'M',q:"Professional grooming and appearance in hospitality reflect:",opts:["Personal wealth","Professionalism, respect for the job and attention to detail","Cultural background","Seniority level"],ans:1},
+  {p:'M',q:"Well-groomed employees are perceived as:",opts:["Wealthier and more educated","More approachable, confident and competent — strengthening customer trust","Stricter and less friendly","More experienced automatically"],ans:1},
+  {p:'M',q:"Uniforms in hospitality must be:",opts:["Any colour the employee prefers","Free from stains and wrinkles, including all mandatory accessories","Worn only during training","Personalised with name tags only"],ans:1},
+  {p:'M',q:"Shoes and socks in a professional hospitality uniform must be:",opts:["Any dark colour","Fully plain black with no colour detail, socks must cover the ankle","Brown or black leather only","White socks with black shoes"],ans:1},
+  {p:'M',q:"Hair in a professional hospitality setting should be:",opts:["Left loose and natural","Neatly tied back for both male and female staff","Coloured brightly to stand out","Cut very short for all staff"],ans:1},
+  {p:'M',q:"Nails in a professional hospitality setting must be:",opts:["Long and painted in neutral colours","Short, trimmed and clean — nail polish should be avoided","Painted in company colours","Acrylic nails are acceptable"],ans:1},
+  {p:'M',q:"Makeup in hospitality must be:",opts:["Bold and colourful to look energetic","Soft and discreet — no strong lipstick or eyeshadow","Not worn at all","Applied heavily for formal events"],ans:1},
+  {p:'M',q:"Fragrance in the workplace should be:",opts:["Strong and distinctive","Not worn at all","Only mild — avoid strong or overpowering scents","Changed daily"],ans:2},
+  {p:'M',q:"Self-awareness is:",opts:["A fixed talent you are born with","A habit that can be developed through regular reflection and practice","Only useful in therapy","Measured by MBTI scores"],ans:1},
+  {p:'M',q:"In self-awareness, strengths include:",opts:["Poor time management and shyness","Knowledge, being organised, confident and a good team player","Difficulty speaking in public","Avoiding responsibilities"],ans:1},
+  {p:'L',q:"The ideal gap between a shirt cuff and blazer sleeve is:",opts:["None — they should be flush","Half to 1 inch","2 to 3 inches","Only visible on formal occasions"],ans:1},
+  {p:'L',q:"MBTI was inspired by whose theory of psychological types?",opts:["Sigmund Freud","Abraham Maslow","Carl Jung","Howard Gardner"],ans:2},
+  {p:'L',q:"Which is NOT listed as a hotel department?",opts:["Front Office","Housekeeping","IT Services","Finance"],ans:2},
+  {p:'L',q:"Goal setting helps you:",opts:["Avoid responsibilities","Track progress and stay motivated","Set rules for others","Work without a plan"],ans:1},
+  {p:'L',q:"Without clear goals, we:",opts:["Work more efficiently","Lose focus just as planning a trip requires a destination","Become more creative","Naturally find direction"],ans:1}
 ];
 
-function shuffle(arr) {
-  var a = arr.slice();
-  for (var i = a.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var t = a[i]; a[i] = a[j]; a[j] = t;
-  }
-  return a;
-}
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-function buildSession() {
-  var high = shuffle(BANK.filter(function(q) { return q.p === 'H'; }));
-  var med  = shuffle(BANK.filter(function(q) { return q.p === 'M'; }));
-  var low  = shuffle(BANK.filter(function(q) { return q.p === 'L'; }));
-  var combined = high.concat(med).concat(low);
-  var picked = shuffle(combined.slice(0, TOTAL_Q));
-  return picked.map(function(q) {
-    var correctText = q.opts[q.ans];
-    var shuffledOpts = shuffle(q.opts.slice());
-    return { q: q.q, opts: shuffledOpts, ans: shuffledOpts.indexOf(correctText) };
+function buildSession(){
+  const seen=getSeenIds();
+  const unseen=shuffle(BANK.filter((_,i)=>!seen.includes(i)));
+  const seenQ=shuffle(BANK.filter((_,i)=>seen.includes(i)));
+  const combined=unseen.concat(seenQ);
+  const picked=combined.slice(0,TOTAL_Q);
+  const pickedIdx=picked.map(q=>BANK.indexOf(q));
+  const newSeen=[...new Set([...seen,...pickedIdx])];
+  saveSeenIds(newSeen.length>=BANK.length?[]:newSeen);
+  updateSessionBadge();
+  return shuffle(picked).map(q=>{
+    const ct=q.opts[q.ans];
+    const so=shuffle(q.opts.slice());
+    return{q:q.q,opts:so,ans:so.indexOf(ct)};
   });
 }
 
-function startQuiz() {
-  playerName = nameInput.value.trim();
-  if (playerName.length < 2) return;
-  if (playerName === '1994') { isGhost = true; playerName = 'Ghost'; }
-  sessionQ = buildSession();
-  userAnswers = [];
-  for (var i = 0; i < TOTAL_Q; i++) userAnswers.push(null);
-  current = 0;
-  document.getElementById('nameScreen').style.display = 'none';
-  document.getElementById('quizScreen').style.display = 'block';
-  document.getElementById('playerLabel').textContent = isGhost ? '👻 Playing anonymously' : 'Playing as ' + playerName;
+function startQuiz(){
+  playerName=nameInput.value.trim();
+  if(playerName.length<2)return;
+  if(playerName==='1994'){isGhost=true;playerName='Ghost';}
+  sessionQ=buildSession();
+  userAnswers=new Array(TOTAL_Q).fill(null);
+  current=0;
+  document.getElementById('nameScreen').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  document.getElementById('playerLabel').textContent=isGhost?'👻 Playing anonymously':'Playing as '+playerName;
   render();
 }
 
-function render() {
-  var q = sessionQ[current];
-  document.getElementById('qNumber').textContent = 'QUESTION ' + (current < 9 ? '0' : '') + (current + 1);
-  document.getElementById('qText').textContent = q.q;
-  document.getElementById('progressText').textContent = 'Question ' + (current + 1) + ' of ' + TOTAL_Q;
-  document.getElementById('progressFill').style.width = ((current + 1) / TOTAL_Q * 100) + '%';
-
-  var answered = 0;
-  for (var i = 0; i < userAnswers.length; i++) { if (userAnswers[i] !== null) answered++; }
-  document.getElementById('answeredCount').textContent = answered;
-
-  var score = 0;
-  for (var i = 0; i < userAnswers.length; i++) { if (sessionQ[i] && userAnswers[i] === sessionQ[i].ans) score++; }
-  document.getElementById('liveScore').textContent = 'Score: ' + score;
-
-  document.getElementById('prevBtn').disabled = (current === 0);
-  document.getElementById('nextBtn').textContent = current === TOTAL_Q - 1 ? 'Last' : 'Next \u2192';
-
-  var container = document.getElementById('optionsContainer');
-  container.innerHTML = '';
-  var letters = ['A', 'B', 'C', 'D'];
-
-  for (var i = 0; i < q.opts.length; i++) {
-    var btn = document.createElement('button');
-    btn.className = 'option';
-    var span = document.createElement('span');
-    span.className = 'opt-letter';
-    span.textContent = letters[i];
-    btn.appendChild(span);
-    btn.appendChild(document.createTextNode(q.opts[i]));
-    (function(idx) {
-      btn.onclick = function() { selectAnswer(idx); };
-    })(i);
-    if (userAnswers[current] !== null) {
-      btn.disabled = true;
-      if (i === q.ans) btn.classList.add('correct');
-      else if (i === userAnswers[current]) btn.classList.add('wrong');
+function render(){
+  const q=sessionQ[current];
+  document.getElementById('qNumber').textContent='QUESTION '+(current<9?'0':'')+(current+1);
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('progressText').textContent='Question '+(current+1)+' of '+TOTAL_Q;
+  document.getElementById('progressFill').style.width=((current+1)/TOTAL_Q*100)+'%';
+  document.getElementById('answeredCount').textContent=userAnswers.filter(a=>a!==null).length;
+  document.getElementById('liveScore').textContent='Score: '+userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').textContent=current===TOTAL_Q-1?'Last →':'Next →';
+  const container=document.getElementById('optionsContainer');
+  container.innerHTML='';
+  const letters=['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option';
+    btn.innerHTML='<span class="opt-letter">'+letters[i]+'</span>'+opt;
+    btn.onclick=()=>selectAnswer(i);
+    if(userAnswers[current]!==null){
+      btn.disabled=true;
+      if(i===q.ans)btn.classList.add('correct');
+      else if(i===userAnswers[current])btn.classList.add('wrong');
     }
     container.appendChild(btn);
+  });
+  const fb=document.getElementById('feedback');
+  fb.className='feedback';
+  if(userAnswers[current]!==null){
+    const correct=userAnswers[current]===q.ans;
+    fb.textContent=correct?'Correct! "'+q.opts[q.ans]+'" is the right answer.':'Wrong. The correct answer is: "'+q.opts[q.ans]+'"';
+    fb.className='feedback show '+(correct?'correct-fb':'wrong-fb');
   }
-
-  var fb = document.getElementById('feedback');
-  fb.className = 'feedback';
-  fb.textContent = '';
-  if (userAnswers[current] !== null) {
-    var correct = userAnswers[current] === q.ans;
-    fb.textContent = correct
-      ? 'Correct! "' + q.opts[q.ans] + '" is the right answer.'
-      : 'Wrong. The correct answer is: "' + q.opts[q.ans] + '"';
-    fb.className = 'feedback show ' + (correct ? 'correct-fb' : 'wrong-fb');
-  }
-
-  var card = document.getElementById('questionCard');
-  card.style.animation = 'none';
-  card.offsetHeight;
-  card.style.animation = 'fadeSlide 0.3s ease';
+  const card=document.getElementById('questionCard');
+  card.style.animation='none';card.offsetHeight;card.style.animation='fadeSlide 0.3s ease';
 }
 
-function selectAnswer(i) {
-  if (userAnswers[current] !== null) return;
-  userAnswers[current] = i;
-  render();
-}
+function selectAnswer(i){if(userAnswers[current]!==null)return;userAnswers[current]=i;render();}
+function navigate(dir){current=Math.max(0,Math.min(TOTAL_Q-1,current+dir));render();}
 
-function navigate(dir) {
-  current = current + dir;
-  if (current < 0) current = 0;
-  if (current > TOTAL_Q - 1) current = TOTAL_Q - 1;
-  render();
-}
-
-function submitQuiz() {
-  var score = 0;
-  for (var i = 0; i < userAnswers.length; i++) { if (userAnswers[i] === sessionQ[i].ans) score++; }
-  var wrong = 0;
-  for (var i = 0; i < userAnswers.length; i++) { if (userAnswers[i] !== null && userAnswers[i] !== sessionQ[i].ans) wrong++; }
-  var skipped = 0;
-  for (var i = 0; i < userAnswers.length; i++) { if (userAnswers[i] === null) skipped++; }
-  var pct = Math.round(score / TOTAL_Q * 100);
-
-  document.getElementById('rScore').textContent = score;
-  document.getElementById('rCorrect').textContent = score;
-  document.getElementById('rWrong').textContent = wrong;
-  document.getElementById('rSkipped').textContent = skipped;
-  document.getElementById('rPercent').textContent = pct + '%';
-
-  var grade, msg;
-  if (pct >= 90) { grade = 'Outstanding! \uD83C\uDFC6'; msg = 'Excellent understanding of Spoken English!'; }
-  else if (pct >= 75) { grade = 'Great Work! \u2728'; msg = 'Strong — review a few weak spots.'; }
-  else if (pct >= 60) { grade = 'Good Effort! \uD83D\uDC4D'; msg = 'Keep practising.'; }
-  else if (pct >= 40) { grade = 'Keep Going! \uD83D\uDCAA'; msg = 'Review your notes and try again.'; }
-  else { grade = 'More Practice Needed'; msg = 'Go over the study notes carefully.'; }
-
-  document.getElementById('rGrade').textContent = grade;
-  document.getElementById('rMsg').textContent = msg;
-
-  var savedMsg = document.getElementById('savedMsg');
-  if (isGhost) {
-    savedMsg.textContent = '👻 Ghost Mode — score not saved';
-    savedMsg.style.color = '#f5c542';
-  } else {
-    savedMsg.textContent = 'Saving score...';
-    try {
-      window.storage.get(STORAGE_KEY, true).then(function(existing) {
-        var scores = existing ? JSON.parse(existing.value) : [];
-        scores.push({
-          name: playerName, score: score, total: TOTAL_Q, pct: pct,
-          quiz: QUIZ_ID,
-          date: new Date().toLocaleDateString('en-GB', {day:'2-digit', month:'short'})
-        });
-        return window.storage.set(STORAGE_KEY, JSON.stringify(scores), true);
-      }).then(function() {
-        savedMsg.textContent = 'Score saved as "' + playerName + '"';
-      }).catch(function() {
-        savedMsg.textContent = 'Score could not be saved.';
-        savedMsg.style.color = '#888';
-      });
-    } catch(e) {
-      savedMsg.textContent = '';
-    }
+async function submitQuiz(){
+  const score=userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  const wrong=userAnswers.filter((a,i)=>a!==null&&a!==sessionQ[i].ans).length;
+  const skipped=userAnswers.filter(a=>a===null).length;
+  const pct=Math.round(score/TOTAL_Q*100);
+  document.getElementById('rScore').textContent=score;
+  document.getElementById('rCorrect').textContent=score;
+  document.getElementById('rWrong').textContent=wrong;
+  document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('rPercent').textContent=pct+'%';
+  let grade,msg;
+  if(pct>=90){grade='Outstanding! 🏆';msg='Excellent understanding of Spoken English!';}
+  else if(pct>=75){grade='Great Work! ✨';msg='Strong — review a few weak spots.';}
+  else if(pct>=60){grade='Good Effort! 👍';msg='Keep practising.';}
+  else if(pct>=40){grade='Keep Going! 💪';msg='Review your notes and try again.';}
+  else{grade='More Practice Needed';msg='Go over the study notes carefully.';}
+  document.getElementById('rGrade').textContent=grade;
+  document.getElementById('rMsg').textContent=msg;
+  const savedMsg=document.getElementById('savedMsg');
+  if(isGhost){savedMsg.textContent='👻 Ghost Mode — score not saved';savedMsg.style.color='#f5c542';}
+  else{
+    try{
+      const existing=await window.storage.get(STORAGE_KEY,true).catch(()=>null);
+      const scores=existing?JSON.parse(existing.value):[];
+      scores.push({name:playerName,score,total:TOTAL_Q,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(STORAGE_KEY,JSON.stringify(scores),true);
+      savedMsg.textContent='Score saved as "'+playerName+'"';
+    }catch(e){savedMsg.textContent='';} 
   }
-
-  var rc = document.getElementById('reviewContainer');
-  rc.innerHTML = '';
-  var letters = ['A', 'B', 'C', 'D'];
-  for (var i = 0; i < sessionQ.length; i++) {
-    var q = sessionQ[i];
-    var ua = userAnswers[i];
-    var correct = ua === q.ans;
-    var div = document.createElement('div');
-    div.className = 'review-item ' + (ua === null ? '' : correct ? 'r-correct' : 'r-wrong');
-    var qDiv = document.createElement('div');
-    qDiv.className = 'r-q';
-    qDiv.textContent = 'Q' + (i + 1) + '. ' + q.q;
-    div.appendChild(qDiv);
-    var detail = document.createElement('div');
-    if (ua === null) {
-      detail.className = 'r-skip';
-      detail.textContent = 'Skipped — Answer: ' + q.opts[q.ans];
-    } else if (correct) {
-      detail.className = 'r-ans';
-      detail.textContent = '\u2713 ' + q.opts[q.ans];
-    } else {
-      detail.innerHTML = '<span class="r-your">\u2717 Your answer: ' + q.opts[ua] + '</span><br><span class="r-ans">\u2713 Correct: ' + q.opts[q.ans] + '</span>';
-    }
-    div.appendChild(detail);
+  const rc=document.getElementById('reviewContainer');
+  rc.innerHTML='';
+  sessionQ.forEach((q,i)=>{
+    const ua=userAnswers[i],correct=ua===q.ans;
+    const div=document.createElement('div');
+    div.className='review-item '+(ua===null?'':correct?'r-correct':'r-wrong');
+    let detail='';
+    if(ua===null)detail='<div class="r-skip">Skipped — Answer: <b>'+q.opts[q.ans]+'</b></div>';
+    else if(correct)detail='<div class="r-ans">✓ '+q.opts[q.ans]+'</div>';
+    else detail='<div class="r-your">✗ Your answer: '+q.opts[ua]+'</div><div class="r-ans">✓ Correct: '+q.opts[q.ans]+'</div>';
+    div.innerHTML='<div class="r-q">Q'+(i+1)+'. '+q.q+'</div>'+detail;
     rc.appendChild(div);
-  }
-
-  document.getElementById('quizScreen').style.display = 'none';
+  });
+  document.getElementById('quizScreen').style.display='none';
   document.getElementById('resultsScreen').classList.add('show');
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  window.scrollTo({top:0,behavior:'smooth'});
+  updateSessionBadge();
 }
 
-function restartQuiz() {
-  sessionQ = buildSession();
-  userAnswers = [];
-  for (var i = 0; i < TOTAL_Q; i++) userAnswers.push(null);
-  current = 0;
+function restartQuiz(){
+  sessionQ=buildSession();
+  userAnswers=new Array(TOTAL_Q).fill(null);
+  current=0;
   document.getElementById('resultsScreen').classList.remove('show');
-  document.getElementById('quizScreen').style.display = 'block';
+  document.getElementById('quizScreen').style.display='block';
   render();
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 </script>
 </body>
