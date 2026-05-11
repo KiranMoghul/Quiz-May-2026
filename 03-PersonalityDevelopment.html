@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personality Development — Quiz Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d0d0d;--surface:#1a1a1a;--card:#222;--border:#333;--accent:#ff6b35;--accent2:#00e5a0;--wrong:#ff4444;--text:#f0f0f0;--muted:#888;--correct-bg:rgba(255,107,53,0.12);--wrong-bg:rgba(255,68,68,0.1);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;padding:20px;}
+  .container{max-width:780px;margin:0 auto;}
+  .name-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;animation:fadeSlide 0.4s ease;}
+  .name-screen h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
+  .name-screen h2 span{color:var(--accent);}
+  .name-screen p{color:var(--muted);font-size:0.82rem;margin-bottom:28px;line-height:1.8;}
+  .name-input-wrap{width:100%;max-width:380px;}
+  .name-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--text);outline:none;transition:border-color 0.2s;text-align:center;margin-bottom:14px;}
+  .name-input:focus{border-color:var(--accent);}
+  .name-input::placeholder{color:var(--muted);}
+  .btn-start{width:100%;padding:15px;background:var(--accent);color:#fff;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:transform 0.15s,opacity 0.2s;letter-spacing:0.5px;}
+  .btn-start:hover{transform:translateY(-2px);}
+  .btn-start:disabled{opacity:0.4;cursor:default;transform:none;}
+  .ghost-notice{margin-top:14px;font-size:0.72rem;color:#f5c542;display:none;}
+  .ghost-notice.show{display:block;}
+  .bank-info{margin-top:14px;font-size:0.7rem;color:var(--muted);line-height:1.9;}
+  .bank-info span{color:var(--accent);}
+  .back-link{margin-top:30px;font-size:0.75rem;color:var(--muted);text-decoration:none;}
+  .back-link:hover{color:var(--text);}
+  .header{text-align:center;padding:40px 0 30px;}
+  .header h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-1px;line-height:1.1;}
+  .header h1 span{color:var(--accent);}
+  .header p{color:var(--muted);margin-top:10px;font-size:0.85rem;}
+  .progress-bar-wrap{background:var(--border);border-radius:999px;height:6px;margin:20px 0 10px;overflow:hidden;}
+  .progress-bar-fill{height:100%;background:var(--accent);border-radius:999px;transition:width 0.4s ease;}
+  .progress-label{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-bottom:24px;}
+  .question-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px;animation:fadeSlide 0.3s ease;}
+  @keyframes fadeSlide{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+  .q-number{font-size:0.7rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+  .q-text{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;line-height:1.5;margin-bottom:20px;}
+  .options{display:flex;flex-direction:column;gap:10px;}
+  .option{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--text);text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.1s;display:flex;align-items:center;gap:12px;}
+  .option:hover:not(:disabled){border-color:var(--accent);transform:translateX(4px);}
+  .option .opt-letter{font-weight:500;color:var(--muted);min-width:18px;}
+  .option.correct{background:var(--correct-bg);border-color:var(--accent);color:var(--accent);}
+  .option.correct .opt-letter{color:var(--accent);}
+  .option.wrong{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong);}
+  .option.wrong .opt-letter{color:var(--wrong);}
+  .option:disabled{cursor:default;}
+  .feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-size:0.82rem;line-height:1.5;display:none;}
+  .feedback.show{display:block;}
+  .feedback.correct-fb{background:var(--correct-bg);border:1px solid var(--accent);color:var(--accent);}
+  .feedback.wrong-fb{background:var(--wrong-bg);border:1px solid var(--wrong);color:#ff8888;}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin:20px 0 40px;gap:12px;}
+  .btn{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;padding:12px 28px;border-radius:10px;border:none;cursor:pointer;transition:transform 0.15s,opacity 0.15s;letter-spacing:0.5px;}
+  .btn:hover{transform:translateY(-2px);}
+  .btn:disabled{opacity:0.3;cursor:default;transform:none;}
+  .btn-prev{background:var(--surface);color:var(--text);border:1.5px solid var(--border);}
+  .btn-next{background:var(--accent);color:#fff;}
+  .btn-submit{background:var(--accent2);color:#000;}
+  .score-chip{font-size:0.78rem;color:var(--muted);text-align:center;}
+  .score-chip span{color:var(--accent);font-weight:bold;}
+  .results-screen{display:none;text-align:center;padding:60px 20px;animation:fadeSlide 0.4s ease;}
+  .results-screen.show{display:block;}
+  .result-score-ring{width:160px;height:160px;border-radius:50%;border:6px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 30px;}
+  .result-score-ring .big{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--accent);}
+  .result-score-ring .small{font-size:0.75rem;color:var(--muted);}
+  .results-screen h2{font-family:'Syne',sans-serif;font-size:1.8rem;margin-bottom:10px;}
+  .result-breakdown{display:flex;justify-content:center;gap:30px;margin:20px 0 10px;flex-wrap:wrap;}
+  .rb-item{text-align:center;}
+  .rb-item .val{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;}
+  .rb-item .lbl{font-size:0.72rem;color:var(--muted);}
+  .grade-msg{color:var(--muted);font-size:0.9rem;margin-bottom:10px;}
+  .saved-msg{font-size:0.75rem;color:var(--accent);margin-bottom:16px;min-height:20px;}
+  .results-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+  .review-section{margin-top:40px;text-align:left;}
+  .review-section h3{font-family:'Syne',sans-serif;font-size:1.1rem;margin-bottom:16px;text-align:center;color:var(--muted);letter-spacing:1px;}
+  .review-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;font-size:0.82rem;}
+  .review-item.r-correct{border-left:3px solid var(--accent);}
+  .review-item.r-wrong{border-left:3px solid var(--wrong);}
+  .review-item .r-q{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:8px;font-size:0.88rem;}
+  .review-item .r-your{color:var(--wrong);}
+  .review-item .r-ans{color:var(--accent);}
+  .review-item .r-skip{color:var(--muted);font-style:italic;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="name-screen" id="nameScreen">
+    <h2>Personality<br><span>Development</span></h2>
+    <p>Communication · Body Language · Interview · Confidence<br>Enter your name to start.</p>
+    <div class="name-input-wrap">
+      <input type="text" class="name-input" id="nameInput" placeholder="Your name..." maxlength="30">
+      <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>Start Quiz →</button>
+      <div class="ghost-notice" id="ghostNotice">👻 Ghost Mode — score won't be saved</div>
+    </div>
+    <div class="bank-info">🎲 <span>75 questions</span> per session · Bank of <span>183</span> · New questions each session · Full bank in <span>3 sessions</span></div>
+    <div class="session-badge" id="sessionBadge" style="margin-top:10px;font-size:0.72rem;padding:5px 14px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);display:inline-block;">Session 1 of 3</div>
+    <a href="index.html" class="back-link">← Back to all quizzes</a>
+  </div>
+
+  <div id="quizScreen" style="display:none">
+    <div class="header">
+      <h1>Personality<br><span>Development</span></h1>
+      <p id="playerLabel" style="color:var(--accent);font-size:0.8rem;"></p>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label"><span id="progressText">Question 1 of 75</span><span id="liveScore">Score: 0</span></div>
+    <div class="question-card" id="questionCard">
+      <div class="q-number" id="qNumber">QUESTION 01</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
+      <div class="score-chip">Answered: <span id="answeredCount">0</span>/75</div>
+      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </div>
+    <div style="text-align:center;margin-bottom:40px;">
+      <button class="btn btn-submit" onclick="submitQuiz()">Submit & See Results</button>
+    </div>
+  </div>
+
+  <div class="results-screen" id="resultsScreen">
+    <div class="result-score-ring"><div class="big" id="rScore">0</div><div class="small">out of 75</div></div>
+    <h2 id="rGrade"></h2>
+    <div class="grade-msg" id="rMsg"></div>
+    <div class="saved-msg" id="savedMsg"></div>
+    <div class="result-breakdown">
+      <div class="rb-item"><div class="val" id="rCorrect" style="color:var(--accent)">0</div><div class="lbl">Correct</div></div>
+      <div class="rb-item"><div class="val" id="rWrong" style="color:var(--wrong)">0</div><div class="lbl">Wrong</div></div>
+      <div class="rb-item"><div class="val" id="rSkipped" style="color:var(--muted)">0</div><div class="lbl">Skipped</div></div>
+      <div class="rb-item"><div class="val" id="rPercent" style="color:var(--accent2)">0%</div><div class="lbl">Percentage</div></div>
+    </div>
+    <div class="results-btns">
+      <button class="btn btn-next" onclick="restartQuiz()">↺ Try Again</button>
+      <a href="index.html" class="btn btn-prev" style="text-decoration:none;display:inline-flex;align-items:center;">🏠 Home</a>
+    </div>
+    <div class="review-section"><h3>— REVIEW ALL ANSWERS —</h3><div id="reviewContainer"></div></div>
+  </div>
+</div>
+
+<script>
+const QUIZ_ID='english-03',STORAGE_KEY='leaderboard-scores',TOTAL_Q=75,LS_KEY='eng03_seen';
+let isGhost=sessionStorage.getItem('ghostMode')==='1';
+if(isGhost)document.getElementById('ghostNotice').classList.add('show');
+const nameInput=document.getElementById('nameInput'),startBtn=document.getElementById('startBtn');
+nameInput.addEventListener('input',()=>{startBtn.disabled=nameInput.value.trim().length<2;});
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&nameInput.value.trim().length>=2)startQuiz();});
+let playerName='',current=0,sessionQ=[],userAnswers=[];
+
+// p: H=High priority, M=Medium, L=Low
+const BANK=[
+
+// ══════════════════════════════════════════════════
+// TOPIC 1 — VERBAL vs NON-VERBAL COMMUNICATION
+// ══════════════════════════════════════════════════
+{p:'H',q:"Communication is the process of exchanging:",opts:["Food and goods","Money and services","Ideas, feelings, thoughts, and information","Instructions only"],ans:2},
+{p:'H',q:"Effective communication means:",opts:["Speaking very loudly","Using many complex words","Writing long messages","The receiver understands the message clearly without confusion"],ans:3},
+{p:'H',q:"Verbal communication includes:",opts:["Facial expressions and posture","Gestures and eye contact","Body movements","Spoken forms such as conversations, interviews, and meetings"],ans:3},
+{p:'H',q:"Non-verbal communication includes:",opts:["Telephone calls","Writing emails","Spoken presentations","Body language, facial expressions, gestures, posture, and eye contact"],ans:3},
+{p:'H',q:"Written communication includes:",opts:["Conversations and meetings","Body language signals","Eye contact","Emails, reports, notices, and text messages"],ans:3},
+{p:'H',q:"The sender in communication is:",opts:["The person who receives the message","The method used to communicate","The feedback given by receiver","The person who sends or initiates the message"],ans:3},
+{p:'H',q:"The receiver in communication is:",opts:["The person who sends the message","The medium used to communicate","The feedback given","The person who receives and interprets the message"],ans:3},
+{p:'H',q:"The medium in communication refers to:",opts:["The feedback","The message content","The sender's idea","The method used to communicate such as speaking or writing"],ans:3},
+{p:'H',q:"Feedback in communication is:",opts:["The original message","The medium of delivery","The sender's intention","The response given by the receiver to the sender"],ans:3},
+{p:'H',q:"Without feedback, communication is considered:",opts:["Complete","Effective","Perfect","Incomplete"],ans:3},
+{p:'H',q:"The five main elements of communication are:",opts:["Voice, paper, phone, reply, silence","Speaker, words, listener, email, response","Sender, message, receiver, medium, and feedback","Writer, content, reader, pen, answer"],ans:2},
+{p:'H',q:"Which type of communication uses body movements and posture?",opts:["Verbal","Written","Digital","Non-verbal"],ans:3},
+{p:'H',q:"Which of the following is an example of verbal communication?",opts:["A smile","A handshake","Crossed arms","A waiter politely talking to a customer"],ans:3},
+{p:'H',q:"Which of the following is an example of non-verbal communication?",opts:["A telephone call","Writing a report","A team meeting","Eye contact and posture"],ans:3},
+{p:'H',q:"Which is NOT a form of verbal communication?",opts:["A conversation","A smile","An interview","A meeting"],ans:1},
+{p:'H',q:"Which is NOT a form of non-verbal communication?",opts:["Eye contact","Posture","Speaking words","Facial expression"],ans:2},
+{p:'H',q:"Body language is a form of:",opts:["Verbal communication","Written communication","Digital communication","Non-verbal communication"],ans:3},
+{p:'H',q:"A handshake is an example of:",opts:["Verbal communication","Written communication","Digital communication","Haptic touch-based non-verbal communication"],ans:3},
+{p:'H',q:"Gestures are:",opts:["Spoken words in sign language","Written symbols","Digital signals","Hand or body movements used to express or emphasise a message"],ans:3},
+{p:'H',q:"Posture refers to:",opts:["The tone of voice","The words chosen","The speed of speaking","How a person holds their body, communicating attitude and confidence"],ans:3},
+{p:'H',q:"Facial expressions are:",opts:["Only used in formal situations","The least expressive form of body language","Only used by trained professionals","One of the most expressive forms of body language"],ans:3},
+{p:'H',q:"The difference between verbal and non-verbal communication is:",opts:["Verbal uses body language, non-verbal uses words","Both are exactly the same","Non-verbal is always more accurate than verbal","Verbal uses spoken or written words, non-verbal uses body language and gestures"],ans:3},
+{p:'H',q:"Good communication builds:",opts:["Confusion and mistakes","More barriers","Less teamwork","Strong relationships between staff and customers"],ans:3},
+{p:'H',q:"Poor communication in hospitality can cause:",opts:["Better teamwork","Increased customer satisfaction","Faster service","Wrong orders, delays, and customer complaints"],ans:3},
+{p:'H',q:"Communication involves at least:",opts:["One party only","Three or more parties","Five parties","Two parties — a sender and a receiver"],ans:3},
+{p:'M',q:"Non-verbal communication can:",opts:["Only be used in writing","Never be misunderstood","Replace all verbal communication","Contradict a positive verbal message"],ans:3},
+{p:'M',q:"A chef explaining orders clearly to staff is an example of:",opts:["Non-verbal communication","Written communication","Digital communication","Effective verbal communication"],ans:3},
+{p:'M',q:"A manager giving clear instructions to employees demonstrates:",opts:["Poor communication","Non-verbal communication","Written communication","Effective verbal communication"],ans:3},
+{p:'M',q:"First impressions in hospitality are formed through:",opts:["Written reports","The menu first","Food quality only","Body language before words are spoken"],ans:3},
+{p:'M',q:"Communication improves teamwork because:",opts:["It replaces teamwork","It is faster than working alone","It eliminates the need for meetings","Staff can share information and coordinate effectively"],ans:3},
+
+// ══════════════════════════════════════════════════
+// TOPIC 2 — TYPES & IMPORTANCE OF NON-VERBAL COMMUNICATION
+// ══════════════════════════════════════════════════
+{p:'H',q:"Body language uses:",opts:["Words and sentences","Writing and reading","Digital signals","Gestures, posture, and facial expressions"],ans:3},
+{p:'H',q:"Slouching posture shows:",opts:["Confidence","Energy","Strength","Laziness and disinterest"],ans:3},
+{p:'H',q:"Standing erect shows:",opts:["Weakness","Fear","Anger","Confidence"],ans:3},
+{p:'H',q:"Hands in pockets show:",opts:["Confidence","Respect","Happiness","Disinterest"],ans:3},
+{p:'H',q:"Open hands signal:",opts:["Fear","Laziness","Anger","Honesty and openness"],ans:3},
+{p:'H',q:"Crossing arms shows:",opts:["Openness","Confidence","Happiness","Defensiveness"],ans:3},
+{p:'H',q:"Crossing legs while standing shows:",opts:["Confidence","Strength","Happiness","Defensiveness"],ans:3},
+{p:'H',q:"Eye contact shows:",opts:["Weakness","Laziness","Fear","Confidence and attentiveness"],ans:3},
+{p:'H',q:"Avoiding eye contact shows:",opts:["Confidence","Interest","Strength","Nervousness or shyness"],ans:3},
+{p:'H',q:"A real smile includes:",opts:["Only lips","Only eyes","No expression","Both eyes and lips"],ans:3},
+{p:'H',q:"A fake smile uses:",opts:["Eyes","The whole face","The head only","Lips only"],ans:3},
+{p:'H',q:"Nodding your head shows:",opts:["Anger","Fear","Laziness","Agreement and interest"],ans:3},
+{p:'H',q:"No reaction while listening shows:",opts:["Interest","Confidence","Happiness","Boredom"],ans:3},
+{p:'H',q:"Excessive blinking shows:",opts:["Confidence","Strength","Focus","Nervousness"],ans:3},
+{p:'H',q:"Less blinking shows:",opts:["Fear","Laziness","Anger","Focus and attention"],ans:3},
+{p:'H',q:"Good body language includes:",opts:["Slouching","No eye contact","Crossing arms","Straight posture and open gestures"],ans:3},
+{p:'H',q:"Bad body language includes:",opts:["Eye contact","Smiling","Confidence","Slouching and avoiding eye contact"],ans:3},
+{p:'H',q:"Body language is important in:",opts:["Cooking only","Writing only","Sleeping","Interviews and guest interactions"],ans:3},
+{p:'H',q:"Poor body language during an interview may lead to:",opts:["Success","Selection","Promotion","Rejection"],ans:3},
+{p:'H',q:"Straight posture shows:",opts:["Weakness","Laziness","Fear","Confidence"],ans:3},
+{p:'H',q:"Hands in pockets while talking show:",opts:["Respect","Interest","Confidence","Disrespect"],ans:3},
+{p:'H',q:"Smiling helps to:",opts:["Show anger","Show fear","Show sadness","Show friendliness and warmth"],ans:3},
+{p:'H',q:"Good eye contact should be:",opts:["Avoided completely","Maintained for very long periods","None at all","Balanced and natural"],ans:3},
+{p:'H',q:"Too much eye contact can be:",opts:["Normal","Confident","Friendly","Awkward and intimidating"],ans:3},
+{p:'H',q:"Body language helps to:",opts:["Hide all feelings","Stop all talking","Avoid communication","Express feelings and reinforce messages"],ans:3},
+{p:'H',q:"Interview success depends on:",opts:["Words alone","Body language alone","Nothing specific","Both verbal and body language combined"],ans:3},
+{p:'H',q:"A firm handshake signals:",opts:["Insecurity","Laziness","Anger","Confidence and professionalism"],ans:3},
+{p:'H',q:"A weak handshake can signal:",opts:["Confidence","Professionalism","Energy","Insecurity or disinterest"],ans:3},
+{p:'H',q:"Leaning forward slightly signals:",opts:["Boredom","Anger","Nervousness","Interest and engagement"],ans:3},
+{p:'H',q:"Mirroring someone's body language helps:",opts:["Create conflict","Show dominance","Show disinterest","Build rapport and trust"],ans:3},
+{p:'H',q:"Body language creates the first impression:",opts:["After words are spoken","Only in written form","Only in interviews","Before words are even spoken"],ans:3},
+{p:'H',q:"Positive body language includes:",opts:["Crossed arms and looking down","Slouching and avoiding eye contact","Weak handshake and frowning","Eye contact, upright posture, and open gestures"],ans:3},
+{p:'H',q:"Negative body language can:",opts:["Reinforce a positive message","Have no effect","Replace verbal communication","Contradict a positive verbal message"],ans:3},
+{p:'H',q:"Body language builds:",opts:["Conflict between communicators","More confusion","Distance between people","Trust between the communicator and receiver"],ans:3},
+{p:'M',q:"Controlling body language in stressful situations requires:",opts:["Ignoring others","Staying completely silent","Avoiding all interviews","Practice and self-awareness"],ans:3},
+{p:'M',q:"Body language is especially important in hospitality because:",opts:["Customers read menus","Food quality is the only thing that matters","Staff work in silence","First impressions matter and guests notice non-verbal cues"],ans:3},
+{p:'M',q:"Confident body language shows:",opts:["Fear and weakness","Laziness and disinterest","Confusion and anxiety","Professionalism and self-assurance"],ans:3},
+{p:'M',q:"Arms are sometimes called the vocal cords of the body because:",opts:["They make sounds","They help you write","They are used for cooking","They express emotions and messages through movement"],ans:3},
+
+// ══════════════════════════════════════════════════
+// TOPIC 3 — IMPORTANT FACTORS FOR EFFECTIVE COMMUNICATION
+// ══════════════════════════════════════════════════
+{p:'H',q:"Clarity in communication means:",opts:["Speaking very fast","Using many technical words","Talking for a long time","The message should be easy to understand without ambiguity"],ans:3},
+{p:'H',q:"Confidence in communication means:",opts:["Speaking aggressively","Shouting at the receiver","Using long complicated sentences","The speaker delivers the message in a self-assured manner"],ans:3},
+{p:'H',q:"Respect in communication involves:",opts:["Interrupting the speaker","Using rude language","Ignoring the receiver","Using polite language and treating the receiver with dignity"],ans:3},
+{p:'H',q:"Tone in communication refers to:",opts:["The words chosen","The length of the message","The speed of writing","The emotional quality of the voice — it should be calm and professional"],ans:3},
+{p:'H',q:"Active listening means:",opts:["Pretending to listen","Listening with your eyes closed","Only hearing the first few words","Fully concentrating on the speaker and responding thoughtfully"],ans:3},
+{p:'H',q:"Paying attention is:",opts:["The last feature of active listening","Not important in communication","Only needed in formal meetings","The first feature of active listening"],ans:3},
+{p:'H',q:"Not interrupting the speaker is:",opts:["Optional in casual conversation","Only needed in interviews","Not important","An essential rule of active listening"],ans:3},
+{p:'H',q:"Asking relevant questions is:",opts:["A sign of poor listening","Not allowed in professional settings","Rude to the speaker","A feature of active listening"],ans:3},
+{p:'H',q:"Giving appropriate feedback demonstrates:",opts:["Lack of interest","Overconfidence","Disrespect","Active listening"],ans:3},
+{p:'H',q:"A calm tone prevents:",opts:["Good communication","Positive relationships","Professional behaviour","Miscommunication and emotional conflict"],ans:3},
+{p:'H',q:"Confidence encourages the receiver to:",opts:["Ignore the message","Argue with the sender","Feel confused","Trust and believe the message being delivered"],ans:3},
+{p:'H',q:"Clear and concise messages:",opts:["Increase misunderstanding","Have no effect","Make communication slower","Reduce the chance of misunderstanding"],ans:3},
+{p:'H',q:"Empathy in communication means:",opts:["Ignoring the other person","Talking only about yourself","Speaking only about facts","Understanding the other person's perspective"],ans:3},
+{p:'H',q:"Two-way communication is more effective than one-way because:",opts:["It is faster","It uses fewer words","Only one person speaks","It includes feedback from both parties"],ans:3},
+{p:'H',q:"Feedback confirms that:",opts:["The sender is always correct","Communication has failed","The receiver is confused","The message has been understood correctly"],ans:3},
+{p:'H',q:"Effective communicators adapt their:",opts:["Appearance only","Physical environment","Job role","Tone and language to suit their audience"],ans:3},
+{p:'H',q:"Pausing before responding shows:",opts:["Lack of interest","Nervousness","Confusion","Thoughtfulness and active listening"],ans:3},
+{p:'H',q:"The physical environment affects communication because:",opts:["It changes the meaning of words","It determines who the sender is","It controls what is said","Factors like noise and lighting affect the effectiveness of communication"],ans:3},
+{p:'H',q:"Timing matters in communication because:",opts:["Messages are always delivered at the right time","Time of day changes the message meaning","Only written communication needs timing","Delivering a message at the right moment improves its effectiveness"],ans:3},
+{p:'H',q:"Effective communication builds:",opts:["Conflict and disagreement","Confusion and misunderstanding","Fear and anxiety","Mutual understanding and cooperation"],ans:3},
+{p:'M',q:"Using appropriate vocabulary for the audience is:",opts:["Optional","Only for formal settings","Not important","A key factor of effective communication"],ans:3},
+{p:'M',q:"Maintaining composure under pressure is a sign of:",opts:["Weakness","Poor communication","Inexperience","An effective communicator"],ans:3},
+{p:'M',q:"Clarity of purpose means:",opts:["Speaking for a long time","Using complex words","Avoiding eye contact","Knowing what you want to say before speaking"],ans:3},
+{p:'M',q:"Respecting the receiver's time means:",opts:["Speaking for as long as possible","Repeating everything many times","Avoiding eye contact","Being brief and to the point"],ans:3},
+{p:'M',q:"The relationship between sender and receiver affects:",opts:["Only written communication","Only formal communication","Nothing in communication","How a message is interpreted"],ans:3},
+
+// ══════════════════════════════════════════════════
+// TOPIC 4 — HOW TO COMMUNICATE EFFECTIVELY
+// ══════════════════════════════════════════════════
+{p:'H',q:"Speaking clearly and confidently is:",opts:["A barrier to communication","Optional in hospitality","Not important","A key tip for effective communication"],ans:3},
+{p:'H',q:"Using polite language helps:",opts:["Create conflict","Make communication more difficult","Confuse the receiver","Create a respectful communication environment"],ans:3},
+{p:'H',q:"Maintaining eye contact during communication shows:",opts:["Aggression","Boredom","Disinterest","Attentiveness and confidence"],ans:3},
+{p:'H',q:"Avoiding rude behaviour is essential for:",opts:["Casual conversations only","Making friends only","Home settings only","Professional communication"],ans:3},
+{p:'H',q:"Proper body language supports and reinforces:",opts:["Written messages","Non-verbal messages","Digital messages","Verbal messages"],ans:3},
+{p:'H',q:"Noise is a barrier to communication because:",opts:["It helps the sender","It improves listening","It creates better understanding","Loud sounds disturb message delivery"],ans:3},
+{p:'H',q:"A language barrier occurs when:",opts:["People speak too slowly","People are too confident","People listen carefully","People speak different languages and misunderstandings result"],ans:3},
+{p:'H',q:"Lack of attention is a communication barrier where:",opts:["The sender speaks too fast","The message is too long","The medium is wrong","The receiver does not listen properly"],ans:3},
+{p:'H',q:"Speaking slowly and clearly helps:",opts:["Create more barriers","Confuse the listener","Make communication less effective","Remove communication barriers"],ans:3},
+{p:'H',q:"Using simple words:",opts:["Makes communication unprofessional","Is only for children","Creates confusion","Reduces the chance of misunderstanding"],ans:3},
+{p:'H',q:"Staying calm during communication helps:",opts:["Create emotional barriers","Cause confusion","Make people nervous","Maintain clarity and professionalism"],ans:3},
+{p:'H',q:"Listening carefully is a method for:",opts:["Creating misunderstandings","Ignoring the sender","Interrupting the conversation","Removing barriers to communication"],ans:3},
+{p:'H',q:"Avoiding distractions helps the communicator:",opts:["Speak faster","Use more body language","Avoid feedback","Stay focused and effective"],ans:3},
+{p:'H',q:"Using positive body language helps:",opts:["Create more barriers","Confuse the receiver","Make communication less effective","Overcome communication barriers"],ans:3},
+{p:'H',q:"Communication barriers can be:",opts:["Only physical","Only emotional","Only linguistic","Physical, emotional, linguistic, or psychological"],ans:3},
+{p:'H',q:"A noisy kitchen environment is an example of:",opts:["An emotional barrier","A linguistic barrier","A psychological barrier","A physical barrier to communication"],ans:3},
+{p:'H',q:"Emotional barriers like fear or anxiety:",opts:["Improve communication","Have no effect","Make communication faster","Can prevent a person from communicating clearly"],ans:3},
+{p:'H',q:"Cultural differences can:",opts:["Never affect communication","Always improve communication","Only affect written communication","Also act as a barrier to effective communication"],ans:3},
+{p:'H',q:"Repeating key information is a strategy to overcome:",opts:["Physical barriers","Language barriers","Emotional barriers","The barrier of poor listening"],ans:3},
+{p:'H',q:"Using visual aids or demonstrations can help overcome:",opts:["Emotional barriers","Physical barriers","Psychological barriers","Language barriers"],ans:3},
+{p:'M',q:"Communication is extremely important in hotels and restaurants because:",opts:["Staff rarely interact with customers","Customers don't ask questions","Food preparation is the only priority","Staff constantly interact with customers, chefs, and managers"],ans:3},
+{p:'M',q:"Simplifying technical terms helps when:",opts:["Speaking to experts only","Writing formal reports only","Using digital communication","Communicating with people from different backgrounds"],ans:3},
+{p:'M',q:"Wrong or negative body language can:",opts:["Improve a message","Have no effect","Replace verbal messages","Create confusion and misinterpret a message"],ans:3},
+{p:'M',q:"Stress and anger are examples of:",opts:["Physical barriers","Linguistic barriers","Noise barriers","Emotional barriers to communication"],ans:3},
+{p:'M',q:"Two-way communication, where both parties speak and listen, is:",opts:["Less effective than one-way","The same as one-way","Only used in formal settings","More effective than one-way communication"],ans:3},
+
+// ══════════════════════════════════════════════════
+// TOPIC 5 — INTRODUCTION TO INTERVIEW QUESTIONS
+// ══════════════════════════════════════════════════
+{p:'H',q:"An interview is:",opts:["A casual chat between friends","A cooking test","A written examination","A formal meeting where employers judge a candidate's confidence, personality, and skills"],ans:3},
+{p:'H',q:"The purpose of an interview is to:",opts:["Confuse candidates","Test cooking skills","Check physical fitness","Select a suitable employee for a role"],ans:3},
+{p:'H',q:"Which is a common interview question?",opts:["What is your favourite food?","Where do you live?","What time do you wake up?","Tell me about yourself"],ans:3},
+{p:'H',q:"'Why do you want this job?' is used to assess:",opts:["Physical appearance","Cooking skills","Technical knowledge","The candidate's motivation"],ans:3},
+{p:'H',q:"'What are your strengths?' tests:",opts:["Memory","Cooking ability","Physical fitness","Self-awareness"],ans:3},
+{p:'H',q:"'What are your weaknesses?' tests:",opts:["Cooking skills","Language ability","Physical strength","Honesty and self-reflection"],ans:3},
+{p:'H',q:"'Why should we hire you?' tests:",opts:["Punctuality","Physical appearance","Language skills","The candidate's value proposition"],ans:3},
+{p:'H',q:"Dressing professionally in an interview creates:",opts:["A negative impression","No impression at all","A casual impression","A positive first impression"],ans:3},
+{p:'H',q:"Arriving on time for an interview shows:",opts:["Overconfidence","Disrespect","Lack of interest","Respect and reliability"],ans:3},
+{p:'H',q:"Maintaining eye contact during an interview demonstrates:",opts:["Aggression","Boredom","Disrespect","Confidence"],ans:3},
+{p:'H',q:"Using a mobile phone during an interview is:",opts:["Acceptable","A sign of confidence","Normal practice","A serious mistake"],ans:3},
+{p:'H',q:"Interrupting the interviewer is:",opts:["A positive behaviour","A sign of confidence","Acceptable in casual interviews","A negative behaviour that should be avoided"],ans:3},
+{p:'H',q:"Speaking too fast in an interview:",opts:["Impresses the interviewer","Shows confidence","Has no effect","Makes it difficult for the interviewer to understand"],ans:3},
+{p:'H',q:"Poor posture in an interview reflects:",opts:["Confidence and energy","Interest and engagement","Enthusiasm","Lack of confidence and professionalism"],ans:3},
+{p:'H',q:"Lack of confidence is:",opts:["A strength in interviews","Unrelated to interview performance","Appreciated by interviewers","One of the most common interview mistakes"],ans:3},
+{p:'H',q:"Preparing answers to common questions in advance:",opts:["Is a waste of time","Makes answers less genuine","Is only for experienced candidates","Improves interview performance"],ans:3},
+{p:'H',q:"Giving specific examples from experience makes interview answers:",opts:["Too long","Less convincing","Harder to understand","More convincing"],ans:3},
+{p:'H',q:"Using formal, polite language throughout the interview is:",opts:["Optional","Only for senior positions","Not necessary","Important for making a good impression"],ans:3},
+{p:'H',q:"Asking relevant questions at the end of an interview shows:",opts:["Overconfidence","Lack of preparation","Rudeness","Genuine interest in the role"],ans:3},
+{p:'H',q:"An interview is a two-way process because:",opts:["Only the employer asks questions","Both parties are silent","Only the candidate speaks","The candidate also evaluates the employer"],ans:3},
+{p:'M',q:"Smiling politely during an interview creates:",opts:["A negative impression","A threatening impression","No impression","A friendly and positive impression"],ans:3},
+{p:'M',q:"Sitting properly with good posture in an interview reflects:",opts:["Overconfidence","Disinterest","Nervousness","Professionalism"],ans:3},
+{p:'M',q:"A negative attitude during an interview:",opts:["Increases chances of selection","Impresses the interviewer","Has no effect","Reduces the chances of selection"],ans:3},
+{p:'M',q:"Knowledge of the company before the interview shows:",opts:["Overconfidence","Disrespect","Lack of focus","Initiative and preparation"],ans:3},
+{p:'M',q:"Listening carefully before answering in an interview shows:",opts:["Slowness","Overconfidence","Disrespect","Respect and attentiveness"],ans:3},
+
+// ══════════════════════════════════════════════════
+// TOPIC 6 — FIVE PILLARS OF CONFIDENCE
+// ══════════════════════════════════════════════════
+{p:'H',q:"The Five Pillars of Confidence are:",opts:["Food, water, shelter, clothing, health","Communication, hygiene, safety, food, service","Confidence, courage, clarity, control, care","Self, Mindset, Body, Resilience, and Purpose"],ans:3},
+{p:'H',q:"The first pillar — Self — means:",opts:["Being selfish","Avoiding others","Only focusing on yourself","Knowing who you are and your worth"],ans:3},
+{p:'H',q:"The second pillar — Mindset — refers to:",opts:["Physical fitness only","How you decorate your room","Avoiding all challenges","Having a positive perspective and way of thinking"],ans:3},
+{p:'H',q:"The third pillar — Body — refers to:",opts:["Your diet plan only","Clothing and appearance only","Exercise routine only","Physical wellness and posture"],ans:3},
+{p:'H',q:"The fourth pillar — Resilience — means:",opts:["Giving up easily","Avoiding failure","Never making mistakes","Bouncing back from failure"],ans:3},
+{p:'H',q:"The fifth pillar — Purpose — means:",opts:["Having no goals","Working without a plan","Doing tasks randomly","Acting with intention and direction"],ans:3},
+{p:'H',q:"Which pillar of confidence relates to how you think?",opts:["Self","Body","Purpose","Mindset"],ans:3},
+{p:'H',q:"Which pillar of confidence relates to physical wellness and posture?",opts:["Self","Mindset","Resilience","Body"],ans:3},
+{p:'H',q:"Which pillar of confidence relates to knowing your own worth?",opts:["Mindset","Body","Resilience","Self"],ans:3},
+{p:'H',q:"Which pillar of confidence relates to bouncing back from failure?",opts:["Self","Mindset","Body","Resilience"],ans:3},
+{p:'H',q:"Which pillar of confidence relates to acting with intention?",opts:["Self","Mindset","Body","Purpose"],ans:3},
+{p:'H',q:"Resilience in the context of confidence means:",opts:["Never failing","Avoiding difficult situations","Depending on others","The ability to recover from setbacks and keep going"],ans:3},
+{p:'H',q:"Good posture (Body pillar) contributes to confidence because:",opts:["It changes the words you use","It has no effect on confidence","It improves your diet","It affects how others perceive you and how you feel"],ans:3},
+{p:'H',q:"Purpose helps with confidence because:",opts:["It removes all challenges","It avoids all risks","It makes all decisions for you","It gives direction and meaning to your actions"],ans:3},
+{p:'H',q:"Self-awareness means:",opts:["Knowing what others think of you","Only knowing your strengths","Ignoring your weaknesses","Understanding your own thoughts, emotions, strengths, and areas for improvement"],ans:3},
+{p:'M',q:"Which pillar would help most when recovering from a failed interview?",opts:["Body","Mindset","Purpose","Resilience"],ans:3},
+{p:'M',q:"Which pillar would help most when setting career goals?",opts:["Self","Body","Resilience","Purpose"],ans:3},
+{p:'M',q:"A positive mindset in communication leads to:",opts:["More barriers","More negativity","Less confidence","Better outcomes and more effective communication"],ans:3},
+{p:'M',q:"The link between Self (knowing your worth) and communication is:",opts:["There is no link","Self-awareness has no effect on communication","Self-awareness only affects body language","Self-awareness helps you answer questions about strengths and weaknesses confidently"],ans:3},
+{p:'M',q:"Strong communication skills increase:",opts:["Confusion and barriers","Food waste","Cooking speed","Confidence and leadership ability"],ans:3},
+
+// ══════════════════════════════════════════════════
+// CROSS-TOPIC HIGH-PROBABILITY EXAM QUESTIONS
+// ══════════════════════════════════════════════════
+{p:'H',q:"Which of the following is a characteristic of effective communication?",opts:["Using complicated language","Speaking very fast","Being rude to the receiver","Being clear, simple, and respectful"],ans:3},
+{p:'H',q:"A communication barrier is:",opts:["Something that improves message delivery","Something that helps the sender","A type of verbal communication","Anything that prevents effective communication"],ans:3},
+{p:'H',q:"Which barrier is related to emotion?",opts:["Physical barrier","Linguistic barrier","Noise barrier","Stress and anxiety as emotional barriers"],ans:3},
+{p:'H',q:"Which of the following best describes active listening?",opts:["Hearing sounds in the background","Only listening to the first sentence","Nodding without understanding","Fully concentrating on the speaker and responding thoughtfully"],ans:3},
+{p:'H',q:"In hospitality, why is non-verbal communication especially important?",opts:["Because customers cannot speak","Because verbal communication is not used","Because staff work in silence","Because body language creates first impressions before words are spoken"],ans:3},
+{p:'H',q:"The most effective way to overcome the barrier of poor listening is:",opts:["Speaking louder","Using more gestures","Writing everything down","Repeating key information and listening carefully"],ans:3},
+{p:'H',q:"A professional appearance is a form of:",opts:["Verbal communication","Digital communication","Written communication","Non-verbal communication that reflects the establishment's brand"],ans:3},
+{p:'H',q:"Why is feedback important in communication?",opts:["It is not important","It replaces the need for a medium","It is only used in written communication","It confirms the message has been understood correctly"],ans:3},
+{p:'H',q:"Which is an example of removing a communication barrier?",opts:["Speaking faster","Using louder volume","Ignoring the receiver","Using simple words and staying calm"],ans:3},
+{p:'H',q:"The key difference between a real smile and a fake smile is:",opts:["A real smile uses only lips","There is no difference","A fake smile uses both eyes and lips","A real smile involves both the eyes and lips, a fake smile uses only lips"],ans:3},
+{p:'H',q:"Which type of communication is most immediately noticed in a first meeting?",opts:["Written communication","Digital communication","Verbal communication","Non-verbal communication"],ans:3},
+{p:'H',q:"What makes an interview a two-way process?",opts:["Only the employer asks questions","Both parties are silent","Only the candidate speaks","The candidate also evaluates the employer"],ans:3},
+{p:'H',q:"A communication that only goes from sender to receiver with no response is called:",opts:["Two-way communication","Active communication","Effective communication","One-way communication"],ans:3},
+{p:'H',q:"What is the role of eye contact in communication?",opts:["It has no role","It replaces all other forms of communication","It is only for non-verbal communication","It shows attention, interest, and confidence"],ans:3},
+{p:'M',q:"Which behaviour should be avoided during an interview?",opts:["Maintaining eye contact","Sitting with good posture","Speaking clearly and confidently","Using a mobile phone"],ans:3},
+{p:'M',q:"Which of the five pillars of confidence is most directly related to body language?",opts:["Self","Mindset","Purpose","Body"],ans:3},
+{p:'M',q:"Empathy improves communication because:",opts:["It helps you speak faster","It makes messages shorter","It removes the need for feedback","Understanding the other person's perspective leads to better interaction"],ans:3},
+{p:'M',q:"Which factor makes communication effective in a noisy environment?",opts:["Ignoring the noise","Shouting louder than the noise","Avoiding communication altogether","Speaking slowly, clearly, and using simple words"],ans:3},
+{p:'M',q:"A hospitality professional must demonstrate clarity, confidence, and respect in:",opts:["Only formal meetings","Only written communication","Only customer complaints","Every interaction"],ans:3},
+{p:'L',q:"Which of the following demonstrates the link between the Five Pillars of Confidence and effective communication?",opts:["Only Body and Purpose are linked to communication","The pillars are completely separate from communication","None of the pillars relate to communication","Self, Mindset, Body, Resilience, and Purpose all contribute to how confidently a person communicates"],ans:3},
+];
+
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function getSeenIds(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch{return[];}}
+function saveSeenIds(ids){try{localStorage.setItem(LS_KEY,JSON.stringify(ids));}catch{}}
+function getTotalSessions(){return Math.ceil(BANK.length/TOTAL_Q);}
+function getSessionNum(){return Math.min(getTotalSessions(),Math.floor(getSeenIds().length/TOTAL_Q)+1);}
+function updateSessionBadge(){
+  const el=document.getElementById('sessionBadge');
+  if(el)el.textContent='Session '+getSessionNum()+' of '+getTotalSessions();
+}
+
+function buildSession(){
+  const seen=getSeenIds();
+  // Prioritise unseen, within unseen keep High priority first
+  const unseenH=shuffle(BANK.filter((q,i)=>!seen.includes(i)&&q.p==='H'));
+  const unseenM=shuffle(BANK.filter((q,i)=>!seen.includes(i)&&q.p==='M'));
+  const unseenL=shuffle(BANK.filter((q,i)=>!seen.includes(i)&&q.p==='L'));
+  const seenAll=shuffle(BANK.filter((_,i)=>seen.includes(i)));
+  const combined=unseenH.concat(unseenM).concat(unseenL).concat(seenAll);
+  const picked=combined.slice(0,TOTAL_Q);
+  const pickedIdx=picked.map(q=>BANK.indexOf(q));
+  const newSeen=[...new Set([...seen,...pickedIdx])];
+  saveSeenIds(newSeen.length>=BANK.length?[]:newSeen);
+  updateSessionBadge();
+  return shuffle(picked).map(q=>{
+    const ct=q.opts[q.ans];
+    const so=shuffle(q.opts.slice());
+    return{q:q.q,opts:so,ans:so.indexOf(ct)};
+  });
+}
+
+function startQuiz(){
+  playerName=nameInput.value.trim();
+  if(playerName.length<2)return;
+  if(playerName==='1994'){isGhost=true;playerName='Ghost';}
+  sessionQ=buildSession();
+  userAnswers=new Array(TOTAL_Q).fill(null);
+  current=0;
+  document.getElementById('nameScreen').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  document.getElementById('playerLabel').textContent=isGhost?'👻 Playing anonymously':'Playing as '+playerName;
+  render();
+}
+
+function render(){
+  const q=sessionQ[current];
+  document.getElementById('qNumber').textContent='QUESTION '+(current<9?'0':'')+(current+1);
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('progressText').textContent='Question '+(current+1)+' of '+TOTAL_Q;
+  document.getElementById('progressFill').style.width=((current+1)/TOTAL_Q*100)+'%';
+  document.getElementById('answeredCount').textContent=userAnswers.filter(a=>a!==null).length;
+  document.getElementById('liveScore').textContent='Score: '+userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').textContent=current===TOTAL_Q-1?'Last →':'Next →';
+  const container=document.getElementById('optionsContainer');
+  container.innerHTML='';
+  const letters=['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option';
+    btn.innerHTML='<span class="opt-letter">'+letters[i]+'</span>'+opt;
+    btn.onclick=()=>selectAnswer(i);
+    if(userAnswers[current]!==null){
+      btn.disabled=true;
+      if(i===q.ans)btn.classList.add('correct');
+      else if(i===userAnswers[current])btn.classList.add('wrong');
+    }
+    container.appendChild(btn);
+  });
+  const fb=document.getElementById('feedback');
+  fb.className='feedback';
+  if(userAnswers[current]!==null){
+    const correct=userAnswers[current]===q.ans;
+    fb.textContent=correct?'Correct! "'+q.opts[q.ans]+'" is the right answer.':'Wrong. The correct answer is: "'+q.opts[q.ans]+'"';
+    fb.className='feedback show '+(correct?'correct-fb':'wrong-fb');
+  }
+  const card=document.getElementById('questionCard');
+  card.style.animation='none';card.offsetHeight;card.style.animation='fadeSlide 0.3s ease';
+}
+
+function selectAnswer(i){if(userAnswers[current]!==null)return;userAnswers[current]=i;render();}
+function navigate(dir){current=Math.max(0,Math.min(TOTAL_Q-1,current+dir));render();}
+
+async function submitQuiz(){
+  const score=userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  const wrong=userAnswers.filter((a,i)=>a!==null&&a!==sessionQ[i].ans).length;
+  const skipped=userAnswers.filter(a=>a===null).length;
+  const pct=Math.round(score/TOTAL_Q*100);
+  document.getElementById('rScore').textContent=score;
+  document.getElementById('rCorrect').textContent=score;
+  document.getElementById('rWrong').textContent=wrong;
+  document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('rPercent').textContent=pct+'%';
+  let grade,msg;
+  if(pct>=90){grade='Outstanding! 🏆';msg='Excellent mastery of Personality Development!';}
+  else if(pct>=75){grade='Great Work! ✨';msg='Strong performance — review a few weak spots.';}
+  else if(pct>=60){grade='Good Effort! 👍';msg='Keep practising.';}
+  else if(pct>=40){grade='Keep Going! 💪';msg='Review your notes and try again.';}
+  else{grade='More Practice Needed';msg='Go over the study content carefully.';}
+  document.getElementById('rGrade').textContent=grade;
+  document.getElementById('rMsg').textContent=msg;
+  const savedMsg=document.getElementById('savedMsg');
+  if(isGhost){savedMsg.textContent='👻 Ghost Mode — score not saved';savedMsg.style.color='#f5c542';}
+  else{
+    try{
+      const existing=await window.storage.get(STORAGE_KEY,true).catch(()=>null);
+      const scores=existing?JSON.parse(existing.value):[];
+      scores.push({name:playerName,score,total:TOTAL_Q,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(STORAGE_KEY,JSON.stringify(scores),true);
+      savedMsg.textContent='Score saved as "'+playerName+'"';
+    }catch(e){savedMsg.textContent='Score could not be saved.';savedMsg.style.color='#888';}
+  }
+  const rc=document.getElementById('reviewContainer');
+  rc.innerHTML='';
+  sessionQ.forEach((q,i)=>{
+    const ua=userAnswers[i],correct=ua===q.ans;
+    const div=document.createElement('div');
+    div.className='review-item '+(ua===null?'':correct?'r-correct':'r-wrong');
+    let detail='';
+    if(ua===null)detail='<div class="r-skip">Skipped — Answer: <b>'+q.opts[q.ans]+'</b></div>';
+    else if(correct)detail='<div class="r-ans">✓ '+q.opts[q.ans]+'</div>';
+    else detail='<div class="r-your">✗ Your answer: '+q.opts[ua]+'</div><div class="r-ans">✓ Correct: '+q.opts[q.ans]+'</div>';
+    div.innerHTML='<div class="r-q">Q'+(i+1)+'. '+q.q+'</div>'+detail;
+    rc.appendChild(div);
+  });
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('resultsScreen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function restartQuiz(){
+  sessionQ=buildSession();
+  userAnswers=new Array(TOTAL_Q).fill(null);
+  current=0;
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizScreen').style.display='block';
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
