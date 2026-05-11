@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍳</text></svg>">
+<title>Food Safety & Hygiene — Quiz Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0d0d0d;--surface:#1a1a1a;--card:#222;--border:#333;--accent:#00e5a0;--accent2:#ff6b35;--wrong:#ff4444;--text:#f0f0f0;--muted:#888;--correct-bg:rgba(0,229,160,0.12);--wrong-bg:rgba(255,68,68,0.1);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;padding:20px;}
+  .container{max-width:780px;margin:0 auto;}
+  .name-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;animation:fadeSlide 0.4s ease;}
+  .name-screen h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
+  .name-screen h2 span{color:var(--accent);}
+  .name-screen p{color:var(--muted);font-size:0.82rem;margin-bottom:28px;line-height:1.8;}
+  .name-input-wrap{width:100%;max-width:380px;}
+  .name-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--text);outline:none;transition:border-color 0.2s;text-align:center;margin-bottom:14px;}
+  .name-input:focus{border-color:var(--accent);}
+  .name-input::placeholder{color:var(--muted);}
+  .btn-start{width:100%;padding:15px;background:var(--accent);color:#000;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:transform 0.15s,opacity 0.2s;letter-spacing:0.5px;}
+  .btn-start:hover{transform:translateY(-2px);}
+  .btn-start:disabled{opacity:0.4;cursor:default;transform:none;}
+  .ghost-notice{margin-top:14px;font-size:0.72rem;color:#f5c542;display:none;}
+  .ghost-notice.show{display:block;}
+  .bank-info{margin-top:14px;font-size:0.7rem;color:var(--muted);line-height:1.9;}
+  .bank-info span{color:var(--accent);}
+  .session-badge{margin-top:10px;font-size:0.72rem;padding:5px 14px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);display:inline-block;}
+  .back-link{margin-top:30px;font-size:0.75rem;color:var(--muted);text-decoration:none;}
+  .back-link:hover{color:var(--text);}
+  .header{text-align:center;padding:40px 0 30px;}
+  .header h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-1px;line-height:1.1;}
+  .header h1 span{color:var(--accent);}
+  .header p{color:var(--muted);margin-top:10px;font-size:0.85rem;}
+  .progress-bar-wrap{background:var(--border);border-radius:999px;height:6px;margin:20px 0 10px;overflow:hidden;}
+  .progress-bar-fill{height:100%;background:var(--accent);border-radius:999px;transition:width 0.4s ease;}
+  .progress-label{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-bottom:24px;}
+  .question-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px;animation:fadeSlide 0.3s ease;}
+  @keyframes fadeSlide{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+  .q-number{font-size:0.7rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+  .q-text{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;line-height:1.5;margin-bottom:20px;}
+  .options{display:flex;flex-direction:column;gap:10px;}
+  .option{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--text);text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.1s;display:flex;align-items:center;gap:12px;}
+  .option:hover:not(:disabled){border-color:var(--accent);transform:translateX(4px);}
+  .option .opt-letter{font-weight:500;color:var(--muted);min-width:18px;}
+  .option.correct{background:var(--correct-bg);border-color:var(--accent);color:var(--accent);}
+  .option.correct .opt-letter{color:var(--accent);}
+  .option.wrong{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong);}
+  .option.wrong .opt-letter{color:var(--wrong);}
+  .option:disabled{cursor:default;}
+  .feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-size:0.82rem;line-height:1.5;display:none;}
+  .feedback.show{display:block;}
+  .feedback.correct-fb{background:var(--correct-bg);border:1px solid var(--accent);color:var(--accent);}
+  .feedback.wrong-fb{background:var(--wrong-bg);border:1px solid var(--wrong);color:#ff8888;}
+  .nav{display:flex;justify-content:space-between;align-items:center;margin:20px 0 40px;gap:12px;}
+  .btn{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;padding:12px 28px;border-radius:10px;border:none;cursor:pointer;transition:transform 0.15s,opacity 0.15s;letter-spacing:0.5px;}
+  .btn:hover{transform:translateY(-2px);}
+  .btn:disabled{opacity:0.3;cursor:default;transform:none;}
+  .btn-prev{background:var(--surface);color:var(--text);border:1.5px solid var(--border);}
+  .btn-next{background:var(--accent);color:#000;}
+  .btn-submit{background:var(--accent2);color:#fff;}
+  .score-chip{font-size:0.78rem;color:var(--muted);text-align:center;}
+  .score-chip span{color:var(--accent);font-weight:bold;}
+  .results-screen{display:none;text-align:center;padding:60px 20px;animation:fadeSlide 0.4s ease;}
+  .results-screen.show{display:block;}
+  .result-score-ring{width:160px;height:160px;border-radius:50%;border:6px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 30px;}
+  .result-score-ring .big{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--accent);}
+  .result-score-ring .small{font-size:0.75rem;color:var(--muted);}
+  .results-screen h2{font-family:'Syne',sans-serif;font-size:1.8rem;margin-bottom:10px;}
+  .result-breakdown{display:flex;justify-content:center;gap:30px;margin:20px 0 10px;flex-wrap:wrap;}
+  .rb-item{text-align:center;}
+  .rb-item .val{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;}
+  .rb-item .lbl{font-size:0.72rem;color:var(--muted);}
+  .grade-msg{color:var(--muted);font-size:0.9rem;margin-bottom:10px;}
+  .saved-msg{font-size:0.75rem;color:var(--accent);margin-bottom:16px;min-height:20px;}
+  .results-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+  .review-section{margin-top:40px;text-align:left;}
+  .review-section h3{font-family:'Syne',sans-serif;font-size:1.1rem;margin-bottom:16px;text-align:center;color:var(--muted);letter-spacing:1px;}
+  .review-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;font-size:0.82rem;}
+  .review-item.r-correct{border-left:3px solid var(--accent);}
+  .review-item.r-wrong{border-left:3px solid var(--wrong);}
+  .review-item .r-q{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:8px;font-size:0.88rem;}
+  .review-item .r-your{color:var(--wrong);}
+  .review-item .r-ans{color:var(--accent);}
+  .review-item .r-skip{color:var(--muted);font-style:italic;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="name-screen" id="nameScreen">
+    <h2>Food Safety<br><span>& Hygiene</span></h2>
+    <p>Allergies · Temperature · Hygiene · HACCP · Fire Safety · Pests<br>Enter your name to start.</p>
+    <div class="name-input-wrap">
+      <input type="text" class="name-input" id="nameInput" placeholder="Your name..." maxlength="30">
+      <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>Start Quiz →</button>
+      <div class="ghost-notice" id="ghostNotice">👻 Ghost Mode — score won't be saved</div>
+    </div>
+    <div class="bank-info">🎲 <span>50 questions</span> per session · Bank of <span>300</span><br>Unseen questions prioritised · Full bank in <span>6 sessions</span></div>
+    <div class="session-badge" id="sessionBadge">Session 1 of 6</div>
+    <a href="index.html" class="back-link">← Back to all quizzes</a>
+  </div>
+
+  <div id="quizScreen" style="display:none">
+    <div class="header">
+      <h1>Food Safety<br><span>& Hygiene</span></h1>
+      <p id="playerLabel" style="color:var(--accent);font-size:0.8rem;"></p>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label"><span id="progressText">Question 1 of 50</span><span id="liveScore">Score: 0</span></div>
+    <div class="question-card" id="questionCard">
+      <div class="q-number" id="qNumber">QUESTION 01</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
+      <div class="score-chip">Answered: <span id="answeredCount">0</span>/50</div>
+      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </div>
+    <div style="text-align:center;margin-bottom:40px;">
+      <button class="btn btn-submit" onclick="submitQuiz()">Submit & See Results</button>
+    </div>
+  </div>
+
+  <div class="results-screen" id="resultsScreen">
+    <div class="result-score-ring"><div class="big" id="rScore">0</div><div class="small">out of 50</div></div>
+    <h2 id="rGrade"></h2>
+    <div class="grade-msg" id="rMsg"></div>
+    <div class="saved-msg" id="savedMsg"></div>
+    <div class="result-breakdown">
+      <div class="rb-item"><div class="val" id="rCorrect" style="color:var(--accent)">0</div><div class="lbl">Correct</div></div>
+      <div class="rb-item"><div class="val" id="rWrong" style="color:var(--wrong)">0</div><div class="lbl">Wrong</div></div>
+      <div class="rb-item"><div class="val" id="rSkipped" style="color:var(--muted)">0</div><div class="lbl">Skipped</div></div>
+      <div class="rb-item"><div class="val" id="rPercent" style="color:var(--accent2)">0%</div><div class="lbl">Percentage</div></div>
+    </div>
+    <div class="results-btns">
+      <button class="btn btn-next" onclick="restartQuiz()">↺ Next Session</button>
+      <a href="index.html" class="btn btn-prev" style="text-decoration:none;display:inline-flex;align-items:center;">🏠 Home</a>
+    </div>
+    <div class="review-section"><h3>— REVIEW ALL ANSWERS —</h3><div id="reviewContainer"></div></div>
+  </div>
+</div>
+<script>
+const QUIZ_ID='gpdp-01',STORAGE_KEY='leaderboard-scores',TOTAL_Q=50,LS_KEY='gpdp01_seen';
+let isGhost=sessionStorage.getItem('ghostMode')==='1';
+if(isGhost)document.getElementById('ghostNotice').classList.add('show');
+const nameInput=document.getElementById('nameInput'),startBtn=document.getElementById('startBtn');
+nameInput.addEventListener('input',()=>{startBtn.disabled=nameInput.value.trim().length<2;});
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&nameInput.value.trim().length>=2)startQuiz();});
+let playerName='',current=0,sessionQ=[],userAnswers=[];
+
+function getSeenIds(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch{return[];}}
+function saveSeenIds(ids){try{localStorage.setItem(LS_KEY,JSON.stringify(ids));}catch{}}
+function getSessionNum(){const s=getSeenIds().length;return Math.min(6,Math.floor(s/TOTAL_Q)+1);}
+function updateSessionBadge(){document.getElementById('sessionBadge').textContent='Session '+getSessionNum()+' of 6';}
+updateSessionBadge();
+
+const BANK=[
+{id:1,q:"What are the 8 most common food allergens?",opts:["Milk, soy, eggs, wheat, peas/nuts, fish, and shellfish","Salt, pepper, oil, sugar, flour, cream, butter, yeast","Garlic, onion, tomato, cheese, peanut, corn, rice, oats","Lemon, lime, orange, grapefruit, vinegar, mustard, celery, sesame"],ans:0},
+{id:2,q:"What should a food worker do if a customer shows allergy symptoms?",opts:["Offer them water","Ask them to leave","Continue working normally","Tell the person in charge immediately"],ans:3},
+{id:3,q:"Which of the following is an allergy symptom to watch for?",opts:["Sneezing","Hiccups","Difficulty breathing and swelling of throat","Yawning"],ans:2},
+{id:4,q:"Food allergies are serious because:",opts:["They always cause mild discomfort","They are easy to treat at home","Allergic reactions can sometimes be fatal","They only affect children"],ans:2},
+{id:5,q:"Whose responsibility is it to inform customers about higher food risks?",opts:["The customer's responsibility only","The chef's responsibility only","The manager's responsibility only","The staff's responsibility to inform, though it is the customer's choice"],ans:3},
+{id:6,q:"Labels on food are important because:",opts:["They make the packaging look nice","They increase the price","They are required by law only","They are an important source of allergy information"],ans:3},
+{id:7,q:"Customers with food allergies must avoid:",opts:["Only foods they dislike","Any source of the food including foods that contact the allergen","Only visible pieces of the allergen","Only cooked forms of the allergen"],ans:1},
+{id:8,q:"Which thermometer type is best for thick foods?",opts:["Digital thermometer","Infrared thermometer","Laser thermometer","Metal stem / dial thermometer"],ans:3},
+{id:9,q:"Which thermometer type is better for thin foods?",opts:["Metal stem dial","Analogue thermometer","Infrared","Digital thermometer"],ans:3},
+{id:10,q:"How deep should a dial thermometer be inserted?",opts:["Half an inch","One inch","Three inches","Two inches"],ans:3},
+{id:11,q:"How long should a dial thermometer be held in food?",opts:["5 seconds","10 seconds","30 seconds","20 seconds"],ans:3},
+{id:12,q:"How deep should a digital thermometer be inserted?",opts:["Two inches","One inch","Quarter inch","Half an inch"],ans:3},
+{id:13,q:"How long should a digital thermometer be held in food?",opts:["20 seconds","10 seconds","15 seconds","5 seconds"],ans:3},
+{id:14,q:"How do you check a thermometer's accuracy?",opts:["Place it in boiling water — should read 212°F","Place it in warm water — should read 98°F","Hold it in the air — should read 68°F","Place the sensor in crushed ice and water — should read 32°F"],ans:3},
+{id:15,q:"When inserting a thermometer into poultry, you should insert it:",opts:["From the top","Straight down","Through the bone","From the side"],ans:3},
+{id:16,q:"An unsanitized thermometer is:",opts:["Fine to use occasionally","A food safety tool","A safety hazard, not a preventive tool","Only a risk for raw meat"],ans:2},
+{id:17,q:"Food thermometers should measure temperatures from:",opts:["32°F to 100°F","0°F to 150°F","10°F to 180°F","0°F to 220°F (-18 to 104°C)"],ans:3},
+{id:18,q:"The first requirement of the two-phase cooling method is:",opts:["Cool from 135°F to 41°F within 4 hours","Cool from 70°F to 32°F within 2 hours","Cool from 100°F to 70°F within 1 hour","Cool from cooking temperature to 70°F within 2 hours"],ans:3},
+{id:19,q:"The second requirement of the two-phase cooling method is:",opts:["Cool from 70°F to 41°F within the next 4 hours","Cool from 70°F to 32°F within 2 hours","Cool from 70°F to 41°F within 1 hour","Cool from 100°F to 41°F within 6 hours"],ans:0},
+{id:20,q:"Total cooling time must not exceed:",opts:["2 hours","4 hours","8 hours","6 hours"],ans:3},
+{id:21,q:"When setting up an ice bath, what do you fill the sink with first?",opts:["Cold water only","Warm water","Ice, then add cold water","Salt water"],ans:2},
+{id:22,q:"During an ice bath, you should stir the food:",opts:["Only at the beginning","Never — let it cool undisturbed","Every hour only","Often to ensure even cooling"],ans:3},
+{id:23,q:"Once food reaches 41°F in an ice bath, you should:",opts:["Leave it in the sink overnight","Continue stirring for another hour","Serve it immediately","Cover it and place it in the refrigerator"],ans:3},
+{id:24,q:"The most effective way to keep a kitchen pest-free is:",opts:["Killing pests after they appear","Using poison traps only","Calling pest control monthly","Prevention — before pests appear"],ans:3},
+{id:25,q:"Pest prevention is the responsibility of:",opts:["Management only","The pest control company","The cleaning staff only","Everyone working in the kitchen"],ans:3},
+{id:26,q:"Poorly disposed garbage attracts pests — garbage cans must be:",opts:["Left open for easy access","Emptied only weekly","Covered with lids and used boxes thrown away","Kept outside the kitchen"],ans:2},
+{id:27,q:"Dishes, pots, and supplies should be kept off the floor to:",opts:["Save space","Look more professional","Eliminate hiding spaces for pests","Make cleaning easier"],ans:2},
+{id:28,q:"An estimated how many Americans get sick from foodborne illness annually?",opts:["10 million","48 million","5 million","100 million"],ans:1},
+{id:29,q:"What does YOPI stand for?",opts:["Young, Old, Pregnant, Immune Compromised","Yellow, Orange, Purple, Indigo","Your Own Personal Information","Years of Practice and Implementation"],ans:0},
+{id:30,q:"YOPI populations require extra caution with:",opts:["All cooked foods","Seasoned foods only","Undercooked meats, raw oysters, undercooked eggs, sprouts, and unpasteurized milk","Dairy products only"],ans:2},
+{id:31,q:"A Person-in-Charge (PIC) must be on the premises:",opts:["Only during peak hours","Only during inspections","On weekdays only","During all hours of operation"],ans:3},
+{id:32,q:"The most important factor in food safety is:",opts:["Speed of service","Number of staff","Cleanliness — a dirty kitchen signals disorganization and lack of effort","Price of ingredients"],ans:2},
+{id:33,q:"The 24-hour rule states:",opts:["Work if you feel better after 24 hours","Wash hands every 24 hours","Report symptoms within 24 hours","Stay home for 24 hours after the last symptom of vomiting, diarrhea, or fever"],ans:3},
+{id:34,q:"Hand-washing is described as:",opts:["The least important food safety tool","Optional when wearing gloves","Only needed after using the toilet","The most important food safety tool"],ans:3},
+{id:35,q:"Hand sanitizers are:",opts:["Better than hand-washing","Substitutes for hand-washing","Not substitutes for hand-washing","Only used before handling raw meat"],ans:2},
+{id:36,q:"Gloves are used to protect:",opts:["Your hands from food","Both hands and food equally","Neither hands nor food","Food from germs on your hands"],ans:3},
+{id:37,q:"You should never wash or reuse gloves because:",opts:["It is expensive","It takes too long","Gloves must be changed often especially between raw and ready-to-eat foods","Gloves are disposable by law"],ans:2},
+{id:38,q:"Ready-to-eat foods include:",opts:["Raw chicken and pork","Uncooked eggs and raw fish","Washed raw produce, sandwiches, deli salads, bread, ice, and already-cooked foods","Only canned goods"],ans:2},
+{id:39,q:"Bare hand contact with ready-to-eat foods must be avoided — use:",opts:["Your apron","Tongs, scoops, deli papers, or gloves","A clean cloth","Any available utensil"],ans:1},
+{id:40,q:"The temperature danger zone is:",opts:["Below 0°F and above 212°F","32°F to 100°F","Between 41°F and 135°F (5°C and 60°C)","Between 70°F and 165°F"],ans:2},
+{id:41,q:"Potentially hazardous foods must not remain at room temperature for more than:",opts:["1 hour","6 hours","8 hours","4 hours (some sources say 2 hours)"],ans:3},
+{id:42,q:"Cold foods must always be held at:",opts:["50°F or below","35°F or below","45°F or below","41°F or below"],ans:3},
+{id:43,q:"Hot foods must always be held at:",opts:["165°F or above","150°F or above","145°F or above","135°F or above"],ans:3},
+{id:44,q:"Cold cooked food must be reheated to what temperature before being placed on a steam table?",opts:["145°F for 15 seconds","150°F for 30 seconds","160°F for 10 seconds","165°F for 15 seconds"],ans:3},
+{id:45,q:"Safe thawing methods include:",opts:["On the counter at room temperature","In hot water","Under direct sunlight","In the refrigerator, under cold running water, as part of cooking, or in the microwave"],ans:3},
+{id:46,q:"Bacteria can produce toxins during improper cooling that are:",opts:["Destroyed by freezing","Visible to the naked eye","Harmless when reheated","Not destroyed by reheating"],ans:3},
+{id:47,q:"Cross contamination is:",opts:["Contamination from chemicals only","The spread of bacteria from raw meat to other foods via juices, surfaces, or packaging","Only a risk with poultry","Contamination from the air"],ans:1},
+{id:48,q:"Raw foods should be stored:",opts:["Above ready-to-eat foods","On the same shelf as cooked foods","Below ready-to-eat foods to prevent contamination from drips","At the front of the refrigerator"],ans:2},
+{id:49,q:"You should use one cutting board for fresh produce and:",opts:["Use the same board after rinsing","A separate board for raw meat, poultry, and seafood","Alternate between boards","Use a board only for cooked foods"],ans:1},
+{id:50,q:"Cleaning and sanitizing are:",opts:["Exactly the same thing","Different — cleaning removes dirt, sanitizing kills germs","Interchangeable in professional kitchens","Only different in name"],ans:1},
+{id:51,q:"Cleaning uses:",opts:["Heat only","Chemicals only","UV light","Soap and water to remove dirt and food from surfaces"],ans:3},
+{id:52,q:"Sanitizing uses:",opts:["Only soap and water","Dry cloth and pressure","Cold water","Chemicals or heat to kill germs"],ans:3},
+{id:53,q:"Food contact surfaces must be washed, rinsed, and sanitized:",opts:["Once a day","Once a week","After each use","Only after handling raw meat"],ans:2},
+{id:54,q:"You should never add soap to sanitizer because:",opts:["It makes the solution too strong","It changes the color","It reduces the sanitizer's effectiveness","It creates a dangerous gas"],ans:2},
+{id:55,q:"Test strips are used to ensure sanitizer is:",opts:["At the right temperature","Not too expensive","Not too old","Not too strong or too weak"],ans:3},
+{id:56,q:"Wiping cloths should be stored in:",opts:["Clean water","A dry cabinet","Clean sanitizer","The freezer"],ans:2},
+{id:57,q:"The 3-sink manual washing method is:",opts:["Wash, dry, store","Rinse, scrub, air dry","Soak, wash, wipe","Wash in hot soapy water, rinse with clean hot water, sanitize, then air dry"],ans:3},
+{id:58,q:"After cleaning dishes, you should always:",opts:["Dry with a clean towel","Use a paper towel to dry","Dry with a cloth","Air dry — towel drying can breed bacteria"],ans:3},
+{id:59,q:"Glasses, cups, and bowls must be stored:",opts:["Right-side up","Sideways","Stacked tightly","Upside down"],ans:3},
+{id:60,q:"Chipped or cracked dishware must be:",opts:["Used carefully","Glued and returned to service","Used only for staff","Removed from service"],ans:3},
+{id:61,q:"Kitchen utensils should be stored at least:",opts:["12 inches off the floor","3 inches off the floor","2 inches off the floor","6 inches off the floor"],ans:3},
+{id:62,q:"Unattended cooking is:",opts:["Safe if the heat is low","The biggest cause of kitchen fires","Acceptable during slow periods","Fine for short periods"],ans:1},
+{id:63,q:"You should never pour water on a grease fire because:",opts:["Water is not hot enough","Water evaporates too quickly","Water extinguishes all fires","Water causes dangerous splashing of burning oil"],ans:3},
+{id:64,q:"To extinguish a grease/pan fire, you should:",opts:["Open a window","Pour water immediately","Use a dry chemical extinguisher with full pressure","Turn off the burner and slide a lid over the pan"],ans:3},
+{id:65,q:"For a microwave or oven fire, you should:",opts:["Open the door to assess","Pour water inside","Use a fire extinguisher inside","Keep the door closed and call the fire department"],ans:3},
+{id:66,q:"What should you do if fire has spread beyond the pan?",opts:["Try to carry the pan outside","Use water","Use baking soda","Do not attempt to handle it — evacuate and call emergency services"],ans:3},
+{id:67,q:"Before frying, you should dry all utensils and food because:",opts:["Wet food cooks unevenly","Wet food sticks to the pan","Water in hot oil causes dangerous splashing","Dry food tastes better"],ans:2},
+{id:68,q:"A Class B kitchen fire extinguisher should be stored:",opts:["In the manager's office","Outside the kitchen","Within easy reach in the kitchen","In a locked cabinet"],ans:3},
+{id:69,q:"Stop, drop, and roll is used when:",opts:["A pan fire occurs","You discover a gas leak","You find pest activity","Your clothing catches fire"],ans:3},
+{id:70,q:"FIFO stands for:",opts:["First In Fresh Out","Food In Food Out","Final Inspection Final Output","First In First Out"],ans:3},
+{id:71,q:"Using FIFO means:",opts:["New stock is used first","Oldest stock is disposed of","Stock is used randomly","New stock is placed behind or under older stock"],ans:3},
+{id:72,q:"Frozen products on delivery must be:",opts:["At room temperature","Above 0°C","At any temperature if packaged","Below −18°C — if thawed, cannot be refrozen"],ans:3},
+{id:73,q:"Raw food should never be stored:",opts:["In labeled containers","In the refrigerator","Below ready-to-eat food","Above ready-to-eat or cooked food"],ans:3},
+{id:74,q:"All food should be stored at least:",opts:["10 cm off the floor","15 cm (6 inches) off the floor","30 cm off the floor","2 inches off the floor"],ans:1},
+{id:75,q:"You should check cans and packages for:",opts:["Only expiry dates","Only price labels","Only brand names","Dents, leaks, and expiry dates"],ans:3},
+{id:76,q:"The internal cooking temperature for most foods (except poultry) is:",opts:["65°C","80°C","70°C","75°C"],ans:3},
+{id:77,q:"Whole poultry must be cooked to an internal temperature of:",opts:["75°C","80°C","82°C","70°C"],ans:2},
+{id:78,q:"The temperature danger zone (Celsius version) is between:",opts:["0°C and 40°C","10°C and 70°C","2°C and 50°C","4°C and 60°C"],ans:3},
+{id:79,q:"At 4°C or below, bacteria:",opts:["Are killed immediately","Cannot multiply (but are not killed)","Multiply rapidly","Stop existing"],ans:1},
+{id:80,q:"Cold storage temperature should be:",opts:["5–10°C","−5 to 0°C","0–10°C","0–4°C"],ans:3},
+{id:81,q:"Frozen storage temperature should be:",opts:["0°C","−10°C","−5°C","Below −18°C"],ans:3},
+{id:82,q:"Hot holding temperature must be above:",opts:["60°C","70°C","75°C","63°C"],ans:3},
+{id:83,q:"Dry storage areas should be maintained at:",opts:["0–5°C","5–10°C","21–30°C","10–21°C"],ans:3},
+{id:84,q:"HACCP stands for:",opts:["Health and Cleanliness Control Program","Hazard Analysis and Critical Control Points","Handling and Catering Control Procedures","Hygiene and Contamination Control Plan"],ans:1},
+{id:85,q:"HACCP is used to:",opts:["React to food safety hazards after they occur","Replace hand-washing requirements","Eliminate all bacteria from food","Prevent food safety hazards rather than reacting to them"],ans:3},
+{id:86,q:"The 4 types of hazards a HACCP plan addresses are:",opts:["Physical, chemical, biological, and nuclear","Heat, cold, moisture, and pressure","Taste, smell, texture, and color","Allergenic, physical, chemical, and biological"],ans:3},
+{id:87,q:"How many principles does HACCP have?",opts:["3","5","10","7"],ans:3},
+{id:88,q:"The first principle of HACCP is:",opts:["Establish critical limits","Determine critical control points","Establish verification procedures","Conduct hazard analysis"],ans:3},
+{id:89,q:"Critical Control Points (CCPs) are:",opts:["Points where food is served to customers","Only applicable to meat products","Staff break times","Points in food production where hazards can be prevented or reduced"],ans:3},
+{id:90,q:"The Pathogen Reduction Rule became law in:",opts:["1990","2000","1993","1996"],ans:3},
+{id:91,q:"A pathogen is:",opts:["A food preservative","A cleaning agent","A temperature measurement","Any virus, microorganism, or substance that causes disease"],ans:3},
+{id:92,q:"What percentage of foodborne illness cases are due to personal hygiene and sanitation problems?",opts:["50%","65%","98%","80%"],ans:3},
+{id:93,q:"What percentage of foodborne illness cases were preventable?",opts:["50%","75%","80%","98%"],ans:3},
+{id:94,q:"Food poisoning can be caused by:",opts:["Temperature changes only","Improper storage only","Bacteria, parasites, viruses, and chemicals","Bacteria only"],ans:2},
+{id:95,q:"The 3 principal objectives of food safety control systems include:",opts:["Reducing costs, increasing profits, and improving appearance","Protecting public health, protecting consumers from unsafe food, and supporting economic development","Speed, efficiency, and profitability","Taste, texture, and presentation"],ans:1},
+{id:96,q:"The 3 food safety categories are:",opts:["Cooking, serving, and storing","Buying, preparing, and eating","Kitchen, staff, and customers","The food itself, people, and facilities/equipment/sanitation"],ans:3},
+{id:97,q:"The 4 steps of food hazard risk assessment are:",opts:["Buy, store, cook, serve","Identify, test, fix, review","Plan, do, check, act","Hazard Identification, Hazard Characterization, Exposure Assessment, Risk Characterization"],ans:3},
+{id:98,q:"FSMS stands for:",opts:["Food Service Management Standard","Food Safety Management System","Federal Sanitation Monitoring Service","Food Supplier Monitoring Standard"],ans:1},
+{id:99,q:"The most important Key Food Safety legislation includes:",opts:["Only national laws","EU law only","Food Safety Act 1990, Food Hygiene Regulations 2006, Food Labeling Regulations 1996","Only local regulations"],ans:2},
+{id:100,q:"Environmental Health Officers (EHOs) check:",opts:["Only the menu","Only staff qualifications","Only food temperatures","Even the darkest corners for dirt and evidence of pest activity"],ans:3},
+{id:101,q:"Biological contamination is:",opts:["The least common food hazard","Only caused by chemicals","Caused by physical objects in food","The most common type of food hazard — caused by harmful pathogens"],ans:3},
+{id:102,q:"Hand-washing is a how many step process?",opts:["3 steps","4 steps","8 steps","6 steps"],ans:3},
+{id:103,q:"The first step of proper hand-washing is:",opts:["Apply soap","Scrub for 10 seconds","Rinse with water","Wet hands under running water"],ans:3},
+{id:104,q:"Hands must be scrubbed together for how long during hand-washing?",opts:["5 seconds","3 seconds","30 seconds","10–15 seconds"],ans:3},
+{id:105,q:"How long should hands be rinsed during hand-washing?",opts:["10 seconds","15 seconds","2 seconds","5 seconds"],ans:3},
+{id:106,q:"Hands should be dried with:",opts:["Your apron","A shared cloth towel","Air only","A disposable paper towel or clean single-use method"],ans:3},
+{id:107,q:"You must wash hands before AND after:",opts:["Each meal","Serving customers","Using the phone","Glove use"],ans:3},
+{id:108,q:"Hair must always be restrained using:",opts:["Only a hat","Only a hairnet","Any method is acceptable","Hair nets, barrettes, ponytail holders, tight braids, or similar — long beards too"],ans:3},
+{id:109,q:"If nail polish or artificial nails are worn while preparing food:",opts:["No extra precaution needed","Wear double gloves","Gloves must be worn when preparing all foods","Only short tasks are permitted"],ans:2},
+{id:110,q:"Jewelry on hands and arms must be removed except:",opts:["All jewelry must be removed without exception","Earrings only","Necklaces only","A wedding ring may be worn if covered by a glove"],ans:3},
+{id:111,q:"You may not eat, drink, or use tobacco:",opts:["Before your shift starts","During breaks outside only","Anywhere in the building","In food preparation areas"],ans:3},
+{id:112,q:"Aprons must be removed when:",opts:["You go to the refrigerator","You start cooking","You are cleaning equipment","Leaving the food prep area — they can contaminate food on return"],ans:3},
+{id:113,q:"Blue waterproof dressings are used to cover cuts because:",opts:["Blue is a calming color","They are cheapest","Blue is medically required","Blue aids detection if the dressing falls into food"],ans:3},
+{id:114,q:"Workers with diarrhea, vomiting, or jaundice must not return to work until:",opts:["They feel better","24 hours after symptoms clear","A week after symptoms clear","48 hours after symptoms have cleared"],ans:3},
+{id:115,q:"A large portion of foodborne illness is spread through:",opts:["Air contamination","Water contamination","Surface contamination","The fecal-oral route"],ans:3},
+{id:116,q:"Bar soap should not be used for hand-washing because:",opts:["It dries the skin","It is too expensive","It does not lather enough","Liquid soap should be used instead — bar soap can spread bacteria"],ans:3},
+{id:117,q:"After washing hands, the tap should be turned off using:",opts:["Your elbow","Your forearm","Your wrist","The paper towel — not bare hands"],ans:3},
+{id:118,q:"Smoking in food preparation areas is prohibited because:",opts:["It smells unpleasant","It is a fire risk only","It is only a customer concern","It transfers bacteria from mouth to hands and creates contamination risks"],ans:3},
+{id:119,q:"Nail polish should not be worn because:",opts:["It looks unprofessional","It fades in water","It reacts with sanitizers","It can chip into food and discourages use of a nail brush"],ans:3},
+{id:120,q:"Jewelry can harbor bacteria and also:",opts:["Help identify staff","Improve grip","Make food look attractive","Fall into food or get caught in equipment"],ans:3},
+{id:121,q:"Food spoilage is caused by:",opts:["Only bacteria","Only physical damage","Temperature alone","Microorganisms, insects, pests, or changes within the food itself"],ans:3},
+{id:122,q:"Highly perishable foods include:",opts:["Rice, dry beans, and flour","Potatoes, nuts, and pasta","Sugar, salt, and oil","Meat, fruit, milk, vegetables, and eggs"],ans:3},
+{id:123,q:"Semi-perishable foods include:",opts:["Raw chicken and fresh fish","Milk and fresh vegetables","Meat and seafood","Potatoes, nuts, and flour"],ans:3},
+{id:124,q:"The three types of food spoilage are:",opts:["Wet, dry, and frozen","Early, middle, and late stage","Hot, cold, and room temperature","Physical, chemical, and microbial"],ans:3},
+{id:125,q:"Microbial spoilage is caused by:",opts:["Physical damage during transport","Oxidation of fatty acids","Extreme temperature changes","Growth of yeasts, molds, and bacteria"],ans:3},
+{id:126,q:"Oxygen causes spoilage by:",opts:["Making food too dry","Making food too wet","Killing all bacteria","Allowing microorganism growth and causing oxidation such as browning"],ans:3},
+{id:127,q:"Light causes spoilage through:",opts:["Making food too warm","Attracting pests","Photodegradation — damaging pigments, fats, proteins, and vitamins","Increasing moisture"],ans:2},
+{id:128,q:"Food preservation prevents microbial spoilage using:",opts:["Only freezing","Only chemicals","Only drying","Physical and/or chemical agents"],ans:3},
+{id:129,q:"Methods of preserving food include:",opts:["Only freezing and drying","Only canning and pasteurization","Refrigeration, freezing, drying, canning, sugaring, pickling, fermentation, pasteurization, and sterilization","Only smoking and salting"],ans:2},
+{id:130,q:"Apple browning occurs when:",opts:["The apple is exposed to heat","The apple is overripe","The apple is frozen","The enzyme phenolase oxidizes the amino acid tyrosine, producing melanin"],ans:3},
+{id:131,q:"To prevent apple browning, you can:",opts:["Add more sugar","Increase temperature","Inactivate the enzyme by blanching or acidifying, or remove oxygen by vacuum packing","Add more water"],ans:2},
+{id:132,q:"Nitrates and nitrites found in processed meats may increase the risk of:",opts:["Allergies only","Heart disease only","Only positive health effects","Diabetes, diarrhea, and respiratory tract infections in children"],ans:3},
+{id:133,q:"PPE stands for:",opts:["Personal Preparedness Equipment","Protective Performance Evaluation","Preventive Practice Examination","Personal Protective Equipment"],ans:3},
+{id:134,q:"PPE provides:",opts:["A first line of defense","No real protection","Only comfort for workers","A last line of defense against injury"],ans:3},
+{id:135,q:"Common types of PPE include:",opts:["Aprons, chef hats, and name badges","Safety helmets, gloves, eye protection, face masks, and safety footwear","Only gloves and face masks","Only safety helmets"],ans:1},
+{id:136,q:"COSHH stands for:",opts:["Control of Standard Hazards to Health","Cleaning Operations Safety and Health Handbook","Control of Substances Hazardous to Health","Chemical Operations Safety and Hygiene Handbook"],ans:2},
+{id:137,q:"The slip and trip prevention mission is:",opts:["Ignore, document, report","Clean, dry, leave","Report, investigate, compensate","See it, Sort it, or Report it"],ans:3},
+{id:138,q:"When a spill is found, the correct procedure is:",opts:["Walk around it carefully","Leave a note for the cleaner","Wait for it to dry naturally","Put out a warning sign, clean the spill, and leave the sign until completely dry"],ans:3},
+{id:139,q:"In the UK, there is a fall on stairs every:",opts:["5 minutes","10 minutes","30 minutes","90 seconds"],ans:3},
+{id:140,q:"The most common injury from a stair fall is:",opts:["A broken wrist","A head injury","A sprained ankle","A broken hip"],ans:3},
+{id:141,q:"The biggest cause of kitchen fires is:",opts:["Gas leaks","Electrical faults","Faulty equipment","Unattended cooking"],ans:3},
+{id:142,q:"Grease fires can also be smothered with:",opts:["Flour","Water","Milk","A large amount of baking soda"],ans:3},
+{id:143,q:"Smoke detectors are not recommended inside kitchens because:",opts:["They are too expensive","They are not sensitive enough","They interfere with cooking equipment","Normal cooking can trigger nuisance alarms"],ans:3},
+{id:144,q:"Food must be moved through the temperature danger zone:",opts:["Slowly and carefully","As slowly as possible","In exactly 4 hours","As quickly as possible"],ans:3},
+{id:145,q:"Biofilms are formed by:",opts:["Only chemical contamination","Only physical damage","Steam and condensation","Bacteria combined with dried food particles — highly resistant to cleaning"],ans:3},
+{id:146,q:"Water temperature for cleaning should be approximately:",opts:["Cold — below 50°F","Boiling — 212°F","Room temperature","Warm to hot — approximately 110°F"],ans:3},
+{id:147,q:"Chlorine sanitizer concentration should be:",opts:["10–20 parts per million","100–200 parts per million","1–5 parts per million","50–100 parts per million"],ans:3},
+{id:148,q:"Iodine sanitizer concentration should be:",opts:["50–100 parts per million","100–200 parts per million","1–5 parts per million","12.5–25 parts per million"],ans:3},
+{id:149,q:"Sanitizer test strips should be placed in solution for at least:",opts:["30 seconds","1 minute","5 seconds","10 seconds"],ans:3},
+{id:150,q:"Most sanitizing solutions are effective for approximately:",opts:["8 hours","24 hours","1 hour","2 hours before needing replacement"],ans:3},
+{id:151,q:"Heat sanitizing final rinse temperature should be:",opts:["120°F","140°F","160°F","180°F when water exits the machine"],ans:3},
+{id:152,q:"Temperature sensor strips for heat sanitizing turn what color when correct temperature is reached?",opts:["Red","White","Blue","Black"],ans:3},
+{id:153,q:"Campylobacter is found most commonly in:",opts:["Beef","Fish","Pork","Raw chicken"],ans:3},
+{id:154,q:"Campylobacter is the most common cause of:",opts:["Respiratory illness","Skin infections","Allergic reactions","Intestinal infection worldwide"],ans:3},
+{id:155,q:"Even a single drop of raw chicken juice can:",opts:["Only cause minor discomfort","Only be dangerous in large quantities","Be safely neutralized by cooking nearby food","Cause illness if it reaches the mouth"],ans:3},
+{id:156,q:"Meat thawed in the refrigerator can be stored for how long before cooking?",opts:["24 hours only","1–2 days","1 week","3–5 days for beef, veal, lamb, pork"],ans:3},
+{id:157,q:"The danger zone for thawing is between:",opts:["0°F and 32°F","32°F and 40°F","140°F and 165°F","40°F and 140°F — bacteria can double in 20 minutes"],ans:3},
+{id:158,q:"Never thaw food:",opts:["In the refrigerator","Under cold running water","In the microwave","On the counter at room temperature"],ans:3},
+{id:159,q:"Whole cuts of pork, beef, and lamb require a rest time of:",opts:["5 minutes","10 minutes","No rest time needed","3 minutes after removal from heat"],ans:3},
+{id:160,q:"During rest time after cooking, the temperature:",opts:["Drops rapidly","Stays exactly the same only","Falls then rises again","Remains constant or continues to rise, destroying remaining bacteria"],ans:3},
+{id:161,q:"Pork internal safe temperature is:",opts:["160°F","135°F","155°F","145°F"],ans:3},
+{id:162,q:"Rodents and insects spread disease via:",opts:["Only their bites","Only food contact","Sound and proximity","Feet, hairs, and feces"],ans:3},
+{id:163,q:"Signs of pest activity include:",opts:["Clean, dry corners","Warm surfaces","Only live pests visible","Footprints, droppings, webbing, and torn packages"],ans:3},
+{id:164,q:"To keep flies out of the kitchen, you should:",opts:["Use insecticides only","Keep all food frozen","Leave windows open for ventilation","Screen doors and windows"],ans:3},
+{id:165,q:"Optimism bias in health and safety means:",opts:["Always thinking safety first","Overestimating the risk to yourself","Being overly cautious","The mistaken belief that negative events are less likely to happen to you than to others"],ans:3},
+{id:166,q:"Inhaling asbestos can cause:",opts:["Asthma","Skin rash","Hearing loss","Mesothelioma — a cancerous condition of the lungs"],ans:3},
+{id:167,q:"Driving is considered:",opts:["A safe daily activity","Only risky on motorways","Only risky at night","Likely the riskiest activity most people do on a daily basis"],ans:3},
+{id:168,q:"Using a mobile phone while driving is:",opts:["Only illegal on motorways","Legal with hands-free only","Legal when stopped at traffic lights","Illegal"],ans:3},
+{id:169,q:"Simply using stair handrails can:",opts:["Only help elderly people","Have no significant effect","Be optional","Prevent the majority of stair fall injuries"],ans:3},
+{id:170,q:"The 6-step hand-washing process includes which steps in order?",opts:["Rinse, soap, scrub hands, scrub backs and fingers, rinse, dry","Wet, soap, scrub hands and forearms, rinse, sanitize, dry","Soap, wet, scrub, rinse, sanitize, air dry","Wet, soap, scrub 10-15 sec, scrub backs/fingers/forearms, rinse 5 sec, dry with disposable towel"],ans:3},
+{id:171,q:"Change gloves when you:",opts:["Feel uncomfortable","Have been wearing them for 1 hour","Only when visibly dirty","Leave your station, touch your face or hair, change products, or touch garbage"],ans:3},
+{id:172,q:"Always take off your apron before:",opts:["Starting to cook","Washing your hands","Serving customers","Using the bathroom"],ans:3},
+{id:173,q:"Hand-washing should take a total of:",opts:["10 seconds","30 seconds","1 minute","20 seconds"],ans:3},
+{id:174,q:"Immune compromised includes those with:",opts:["Only HIV","Only diabetes","Only cancer","Cancer, HIV, diabetes, or those on certain medications"],ans:3},
+{id:175,q:"Most germs are spread by:",opts:["Food contact only","Water contamination only","Air conditioning","Coughing and sneezing"],ans:3},
+{id:176,q:"There are approximately how many times more faecal bacteria on a kitchen cutting board than on a toilet seat?",opts:["10 times","50 times","100 times","200 times"],ans:3},
+{id:177,q:"Germs are microorganisms that:",opts:["Are always visible to the naked eye","Only live in water","Only exist in kitchens","Live all around us and can make us sick"],ans:3},
+{id:178,q:"Even if you do not handle food yourself, you are:",opts:["Not responsible for food safety","Only partially responsible","Responsible only for your own safety","Still legally required to guarantee safe food to customers"],ans:3},
+{id:179,q:"Storing meat with a higher cooking temperature should be:",opts:["Above meat with lower cooking temperature","At the front of the refrigerator","On the same shelf as produce","Below meat with a lower cooking temperature"],ans:3},
+{id:180,q:"Never place cooked food on a surface that previously held:",opts:["Vegetables","Bread","Packaged goods","Raw meat, poultry, seafood, or eggs"],ans:3},
+{id:181,q:"Stocks of blue waterproof dressings must be:",opts:["Available only in the first aid kit","Kept in the manager's office","Available only for management","Available and readily accessible in food preparation areas"],ans:3},
+{id:182,q:"The Food Safety Regulations state every food handler must maintain:",opts:["A food safety certificate","Monthly health checks","Cooking qualifications","A high degree of personal cleanliness and wear suitable protective clothing"],ans:3},
+{id:183,q:"Proper hand-washing requires:",opts:["Cold water only","Any soap and cold water","Any water and any drying method","Hot and cold running water, soap, and a single-use drying method"],ans:3},
+{id:184,q:"When should hands be washed at minimum in a food area?",opts:["Only after using the toilet","Only before cooking","Only at the start of the shift","On entering a food room, between raw and cooked food, after waste handling, after smoking/eating, after toilet use"],ans:3},
+{id:185,q:"Plain wedding bands are:",opts:["Not permitted in food areas","Permitted only with gloves over them","Permitted without restriction","The only jewelry permitted — all other jewelry must be removed"],ans:3},
+{id:186,q:"A 1-pound package thaws in cold water in approximately:",opts:["30 minutes","3 hours","2 hours","1 hour"],ans:3},
+{id:187,q:"After thawing in cold water or microwave, you should:",opts:["Refrigerate for up to 24 hours","Refreeze if not needed","Leave at room temperature","Cook immediately"],ans:3},
+{id:188,q:"Cold water used for thawing should be changed every:",opts:["10 minutes","1 hour","2 hours","30 minutes"],ans:3},
+{id:189,q:"The most significant factor affecting food quality is:",opts:["Humidity","Light exposure","Packaging","Temperature"],ans:3},
+{id:190,q:"Antioxidant preservatives work by:",opts:["Killing all bacteria","Preventing physical damage","Lowering pH","Using up free radicals and oxygen molecules before they react with fatty acids"],ans:3},
+{id:191,q:"Potassium sorbate preserves food by:",opts:["Lowering temperature","Adding acidity","Removing moisture","Inhibiting microbial metabolism and spore germination"],ans:3},
+{id:192,q:"The coldest part of the refrigerator is:",opts:["The door","The top shelf","The vegetable drawer","At the back"],ans:3},
+{id:193,q:"The door of the refrigerator is:",opts:["The coldest part","Good for all products","Ideal for raw meat","Not as cold — unsuitable for highly perishable items"],ans:3},
+{id:194,q:"Physical spoilage involves:",opts:["Bacterial growth only","Oxidation of fatty acids","Color changes from light","Hardening of soft food or softening of crunchy food or physical damage"],ans:3},
+{id:195,q:"Chemical spoilage is caused by:",opts:["Bacterial growth","Pest infestation","Physical impact","Natural decay such as oxidation of fatty acids — affecting flavor, color, and nutrition"],ans:3},
+{id:196,q:"Documentation in food safety is important because:",opts:["It is not required by law","It is optional for small businesses","It only helps during audits","It can be produced as evidence that steps were taken to prevent problems"],ans:3},
+{id:197,q:"In the most serious food safety cases, individuals can:",opts:["Only pay a fine","Only lose their business license","Receive a warning only","Be sent to prison"],ans:3},
+{id:198,q:"The Magistrate's Court has sentencing powers of up to:",opts:["£1,000 per offense","£5,000 per offense","£10,000 per offense","£20,000 per offense"],ans:3},
+{id:199,q:"Temperature control alone cannot compensate for:",opts:["Bacterial growth","Good packaging","Proper cooling","Poor operating practices or physical damage to cargo"],ans:3},
+{id:200,q:"Food safety concerns exist:",opts:["Only in the kitchen","Only during cooking","Only during storage","At every step of the food chain from origin to final consumption"],ans:3},
+{id:201,q:"Cooking does not kill all bacteria — bacteria can:",opts:["Never grow after cooking","Only grow in raw food","Die permanently once food is cooked","Resume growth if food drops back into the danger zone"],ans:3},
+{id:202,q:"Always preheat hot holding units:",opts:["After adding cold food","Only during busy periods","When the manager is present","Before placing hot food in them"],ans:3},
+{id:203,q:"When using ice for cold holding, ice must:",opts:["Only cover the top of the container","Be used for 30 minutes maximum","Be replaced every hour","Surround the container up to the top level of the food"],ans:3},
+{id:204,q:"Never mix cold foods with:",opts:["Raw vegetables","Packaged goods","Other cold foods","Cooked foods"],ans:3},
+{id:205,q:"Cover pans and stir food often during hot holding to:",opts:["Speed up service","Improve presentation","Add flavor","Distribute heat evenly"],ans:3},
+{id:206,q:"Cooling food is often considered:",opts:["The safest step","The easiest step","An optional step","The riskiest step in food preparation"],ans:3},
+{id:207,q:"To convert Fahrenheit to Celsius, the formula is:",opts:["(°F + 32) × 9/5","(°F × 5/9) − 32","(°F − 32) ÷ 5 × 9","(°F − 32) × 5/9"],ans:3},
+{id:208,q:"To convert Celsius to Fahrenheit, the formula is:",opts:["(°C − 32) × 9/5","(°C × 5/9) + 32","(°C + 32) × 5/9","(°C × 9/5) + 32"],ans:3},
+{id:209,q:"Dial thermometers should not be used for thin foods like hamburger patties because:",opts:["They are too fragile","They are too expensive","They measure too quickly","The depth required for accuracy makes them unsuitable for thin foods"],ans:3},
+{id:210,q:"Dial thermometers can be inserted straight or at an angle to:",opts:["Make reading easier","Avoid breaking the thermometer","Satisfy health code requirements","Reach the thickest part without touching bone"],ans:3},
+{id:211,q:"All thermometers should be calibrated:",opts:["Only when purchased","Once a year","Only when inaccurate readings are noticed","Periodically following the manufacturer's directions"],ans:3},
+{id:212,q:"After the thermometer touches an unsanitized surface, you should:",opts:["Continue using it","Replace it immediately","Rinse with water only","Clean and sanitize the probe"],ans:3},
+{id:213,q:"Stir food often during ice bath cooling to:",opts:["Add oxygen","Make it look better","Speed up serving","Ensure even cooling"],ans:3},
+{id:214,q:"Using the ice bath technique greatly reduces:",opts:["Cooking time","Staff workload","Food costs","The risk of foodborne illness to the public"],ans:3},
+{id:215,q:"Prevention of pest infestation should be practiced by:",opts:["Management only","Pest control companies only","Cleaning staff only","Everyone working in the kitchen"],ans:3},
+{id:216,q:"Even the smallest hole in a wall can be:",opts:["Ignored if small enough","Covered with tape","Left for maintenance staff","An entry point for pests"],ans:3},
+{id:217,q:"Food and supply storage must be organized to:",opts:["Save space","Impress inspectors","Look professional","Discourage pest infestation"],ans:3},
+{id:218,q:"Immune compromised people in the YOPI category include those with cancer, HIV, diabetes, or:",opts:["Only elderly people","Anyone over 40","Anyone who has had surgery","Those on certain medications"],ans:3},
+{id:219,q:"The Person-in-Charge must know:",opts:["Only the menu","Only emergency procedures","Only the company policies","The Food Code and procedures used in the establishment"],ans:3},
+{id:220,q:"A dirty, disorganized kitchen is:",opts:["Acceptable during busy periods","A sign of a busy operation","Less likely to be following good food safety practices","Only a concern during inspections"],ans:2},
+{id:221,q:"The PIC is responsible for:",opts:["Menu planning only","Customer service only","Staff scheduling only","All food safety, sanitization, food coming in, and meals going out"],ans:3},
+{id:222,q:"Surfaces that look clean may still:",opts:["Be safe to use","Only need rinsing","Need only a quick wipe","Have germs — sanitizing is required to reduce germs to safe levels"],ans:3},
+{id:223,q:"Change sanitizing solution when:",opts:["It changes color only","Every 8 hours regardless","At the end of the day only","Grease, dirt, or food particles reduce its effectiveness"],ans:3},
+{id:224,q:"Separate cloths and pails should be used for:",opts:["Hot and cold foods","Raw and cooked foods","Different meal periods","Cleaning and sanitizing — never mix them"],ans:3},
+{id:225,q:"Plates and flatware should be loaded in the dishwasher:",opts:["Lying flat","Upside down","In a pile","Stood up edgewise"],ans:3},
+{id:226,q:"Dishes should air dry for how long before removing from dishwasher racks?",opts:["5 minutes","10 minutes","30 seconds","1–2 minutes"],ans:3},
+{id:227,q:"Never touch any part of a dish or utensil that:",opts:["Looks clean","Has been sanitized","Has been air dried","A guest's mouth might touch"],ans:3},
+{id:228,q:"Leave the oven door ajar during grilling so that:",opts:["Food cooks faster","Steam can escape","The light works better","It does not overheat"],ans:3},
+{id:229,q:"Do not operate electrical appliances with:",opts:["Gloves on","Both hands","Wet hands","Cold hands"],ans:2},
+{id:230,q:"Always use tea towels or oven mitts to:",opts:["Clean spills","Dry dishes","Store food","Handle hot pots and pans"],ans:3},
+{id:231,q:"Slide food gently and away from you into hot oil to:",opts:["Cook it faster","Improve flavor","Prevent sticking","Prevent dangerous splashing"],ans:3},
+{id:232,q:"Freezing food stops bacterial activity but:",opts:["Permanently kills all bacteria","Only slows bacteria","Has no effect on bacteria","Does not kill bacteria"],ans:3},
+{id:233,q:"Common sources of spoilage microorganisms include:",opts:["Only raw meat","Only water","Only contaminated packaging","Air, soil, sewage, and animal waste"],ans:3},
+{id:234,q:"Factors that influence the rate of food spoilage include:",opts:["Only temperature","Only moisture","Only bacteria type","Water activity, temperature, nutrient availability, pH, and oxygen"],ans:3},
+{id:235,q:"Antioxidant preservatives slow the natural oxidation of:",opts:["Proteins and carbohydrates","Vitamins and minerals","Water and salts","Fats and oils in food"],ans:3},
+{id:236,q:"Oxidation of unsaturated fatty acids causes:",opts:["Freezing of food","Better preservation","Rancidity — foul odor and flavor","Improved color"],ans:2},
+{id:237,q:"The three active components in apple browning are:",opts:["Sugar, acid, and water","Heat, light, and moisture","Salt, enzymes, and air","Tyrosine, phenolase (enzyme), and oxygen"],ans:3},
+{id:238,q:"High doses of sodium benzoate combined with vitamin C may pose a small risk of:",opts:["Allergic reactions only","Digestive issues only","Heart disease only","Cancers including leukemia (WHO animal studies)"],ans:3},
+{id:239,q:"Despite health concerns, preservatives are essential because:",opts:["They replace natural ingredients","They make food cheaper to produce","They are required by all laws","They maintain flavor, color, texture, and aroma and enable mass food distribution"],ans:3},
+{id:240,q:"Food safety is a legislative framework that governs:",opts:["Only restaurant owners","Only large food companies","Only government inspectors","All people who produce and serve food"],ans:3},
+{id:241,q:"Spirits and alcohol are covered by:",opts:["Separate alcohol legislation only","No food safety legislation","Licensing laws only","The same food safety legislation as food"],ans:3},
+{id:242,q:"Staff must be properly trained in the food safety policy and that training must be:",opts:["Done only once","Only verbal","Not necessary to document","Regularly updated and documented"],ans:3},
+{id:243,q:"A paper trail in food safety is essential because:",opts:["It is only for large businesses","It is optional for compliance","It impresses customers","Regulators expect documented evidence that every possible step has been taken"],ans:3},
+{id:244,q:"Ancient Romans and Egyptians preserved food using:",opts:["Refrigeration and canning","Pasteurization and sterilization","Chemical preservatives","Salting, sugaring, smoking, and drying"],ans:3},
+{id:245,q:"Antimicrobial preservatives include:",opts:["Vitamin C and E","Sugar and salt only","Oil and vinegar only","Nitrates, sulfates, sorbates, and benzoates"],ans:3},
+{id:246,q:"When washing hands, backs of hands, between fingers, and forearms must be scrubbed — this is step:",opts:["Step 2","Step 3","Step 5","Step 4"],ans:3},
+{id:247,q:"Proper hand-washing step 2 is:",opts:["Wet hands","Rinse with cold water","Dry with towel","Apply soap and start scrubbing"],ans:3},
+{id:248,q:"Foods must be cooked and held at correct temperatures — the best indicator of this is:",opts:["Color of the food","Smell of the food","Time since cooking","A calibrated food thermometer"],ans:3},
+{id:249,q:"Three-compartment sink sanitation requires dishes to air dry — towel drying is wrong because:",opts:["Towels are too expensive","Towels take too long","Towels leave lint","It breeds bacteria and can contaminate dishes"],ans:3},
+{id:250,q:"Food workers must inform customers about:",opts:["Pricing and portion sizes","Only allergen information","Recipe details only","The risks of certain foods and ask about foods that might make them ill"],ans:3},
+{id:251,q:"When cooling food with the two-phase method, the total time from cooking temperature to 41°F is:",opts:["2 hours","4 hours","8 hours","6 hours"],ans:3},
+{id:252,q:"Work quickly and in small batches when preparing food to:",opts:["Improve presentation","Speed up service","Reduce waste","Keep food out of the temperature danger zone"],ans:3},
+{id:253,q:"If food has been left at room temperature for an unknown amount of time, you should:",opts:["Refrigerate it immediately","Test it with a thermometer","Reheat it to 165°F","Throw it away"],ans:3},
+{id:254,q:"Hot holding units must be heated up:",opts:["After adding hot food","While adding hot food","It does not matter when","Before hot food is placed in them"],ans:3},
+{id:255,q:"Raw meats must be thawed on:",opts:["The top shelf of the refrigerator","Any available shelf","The counter covered with plastic","The bottom shelf to avoid cross-contamination"],ans:3},
+{id:256,q:"Improper cooling is:",opts:["Rarely a problem in professional kitchens","Only a risk with poultry","Always safe if food is covered","A leading contributor to foodborne illness"],ans:3},
+{id:257,q:"The three components required for cleaning are:",opts:["Gloves, apron, and boots","Bleach, water, and time","A mop, bucket, and detergent","Water, soap/detergent, and energy (pressure/scrubbing)"],ans:3},
+{id:258,q:"Wash water should be changed when:",opts:["It looks clean still","It reaches room temperature","After every 4 hours","Visible food particles are present — at minimum before each meal"],ans:3},
+{id:259,q:"Three types of chemical sanitizers are:",opts:["Bleach, vinegar, and alcohol","Acid, base, and neutral","Liquid, powder, and spray","Quaternary ammonium (quats), chlorine, and iodine"],ans:3},
+{id:260,q:"Higher concentration of sanitizer is not better because:",opts:["It leaves a residue on dishes","It is more expensive","It requires longer contact time","Too high a concentration can cause toxicity"],ans:3},
+{id:261,q:"Campylobacter thrives in the digestive tracts of:",opts:["Pigs","Cattle","Fish","Chickens"],ans:3},
+{id:262,q:"In the US, nearly how many people suffer Campylobacter infection every year?",opts:["500,000","500 million","10 million","2.5 million"],ans:3},
+{id:263,q:"The Foodworker's Top 10 rule about handwashing is:",opts:["Wash hands only before cooking","Wash hands at the start and end of shift only","Wash hands only after handling raw meat","Wash hands thoroughly and often"],ans:3},
+{id:264,q:"The Foodworker's Top 10 rule about ready-to-eat foods is:",opts:["Touch them only with clean hands","Handle them after washing hands","Rinse them before touching","Don't touch ready-to-eat foods with bare hands"],ans:3},
+{id:265,q:"The Foodworker's Top 10 rule about temperature is:",opts:["Keep all food at room temperature for service","Check temperatures only once per day","Store all food at one standard temperature","Keep food hot above 135°F or cold below 41°F"],ans:3},
+{id:266,q:"The Foodworker's Top 10 rule about cooling is:",opts:["Cool food within 8 hours","Cool food by leaving on counter","Cool food overnight in the refrigerator","Cool hot food from 135°F to 41°F within 6 hours"],ans:3},
+{id:267,q:"The Foodworker's Top 10 rule about cleaning sequence is:",opts:["Sanitize, wash, rinse, air dry","Wash, sanitize, rinse, dry","Rinse, wash, sanitize, dry","Wash, rinse, sanitize, air dry — always in this order"],ans:3},
+{id:268,q:"The Foodworker's Top 10 rule if you are unsure about food safety is:",opts:["Search the internet","Ask a coworker","Make your best judgment","Always ask your Person-in-Charge any questions about food safety"],ans:3},
+{id:269,q:"Divide food from large containers into smaller ones to:",opts:["Save storage space","Reduce cleaning time","Improve presentation","Keep food out of the danger zone more efficiently"],ans:3},
+{id:270,q:"The Pathogen Reduction Rule places responsibility on:",opts:["Only the government","Only restaurants","Only consumers","Food manufacturers, distributors, and transporters throughout the food chain"],ans:3},
+{id:271,q:"Large production facilities began implementing HACCP in:",opts:["1993","2000","2001","1998"],ans:3},
+{id:272,q:"Verification procedures for HACCP compliance began in:",opts:["1996","1998","2000","2001"],ans:3},
+{id:273,q:"The 4 steps of food hazard risk assessment in the correct order are:",opts:["Plan, do, check, act","Identify, report, fix, verify","Buy, store, cook, serve","Hazard Identification → Hazard Characterization → Exposure Assessment → Risk Characterization"],ans:3},
+{id:274,q:"Exposure Assessment in food safety means:",opts:["Assessing kitchen cleanliness","Identifying chemical types","Reviewing staff training records","Evaluating the degree of intake of a hazard likely to occur"],ans:3},
+{id:275,q:"Risk Characterization integrates:",opts:["Only hazard identification","Only staff reports","Chemical analysis only","All four steps into an estimation of adverse effects in a given population"],ans:3},
+{id:276,q:"Transportation plays a significant role:",opts:["Only for international trade","Only for fresh produce","Only from farm to distributor","At every step of the food chain"],ans:3},
+{id:277,q:"Every temperature-sensitive product has:",opts:["The same ideal temperature","Only two temperature options","No ideal temperature","Its own ideal temperature to preserve quality and maximize shelf life"],ans:3},
+{id:278,q:"Security plays an increasingly important role in food safety because:",opts:["It replaces HACCP","It reduces the need for cleaning","It is now legally required as a food safety category","It helps keep food safe alongside the three main categories"],ans:3},
+{id:279,q:"Food prep surfaces, floors, utensils, and transport vehicles can sustain harmful organisms:",opts:["For only a few minutes","Only when wet","Only at warm temperatures","For long periods if not cleaned properly"],ans:3},
+{id:280,q:"80% of businesses that experience a serious fire:",opts:["Recover within 1 month","Recover immediately","Recover within 1 year","Never fully recover"],ans:3},
+{id:281,q:"A Fire Warden is also called:",opts:["Safety Manager","Emergency Officer","Health and Safety Representative","A Fire Marshal"],ans:3},
+{id:282,q:"From 1st March 2017, penalties for using a phone while driving increased to:",opts:["3 penalty points and £100 fine","4 penalty points and £150 fine","5 penalty points and £180 fine","6 penalty points and £200 fine"],ans:3},
+{id:283,q:"New drivers caught using a phone at the wheel will:",opts:["Receive a warning only","Pay double the fine","Attend a safety course","Lose their license"],ans:3},
+{id:284,q:"Using a phone at the wheel includes:",opts:["Only making calls","Only texting","Only using apps","Following a map, reading a text, or checking social media even when stopped at traffic lights"],ans:3},
+{id:285,q:"Lone working means:",opts:["Working without colleagues nearby","Working on night shifts","Working from home","Working by yourself without close or direct supervision, unable to be seen or heard by another person"],ans:3},
+{id:286,q:"Poorly managed wires and cables create:",opts:["Only aesthetic problems","Only minor inconvenience","Only equipment damage","Safety hazards and disorganization in the workplace"],ans:3},
+{id:287,q:"An irregular sleeping pattern can have:",opts:["No health consequences","Only minor effects on mood","Benefits for shift workers","Profound consequences on health"],ans:3},
+{id:288,q:"Prehistoric humans slept approximately:",opts:["6 hours per night","7 hours per night","8 hours per night","9 to 10 hours per night"],ans:3},
+{id:289,q:"The electric light bulb was invented around:",opts:["1800","1920","1950","1880"],ans:3},
+{id:290,q:"Shift workers may get only how many hours of sleep?",opts:["6–7 hours","7–8 hours","5–6 hours","4–5 hours — nearly 50% less than needed"],ans:3},
+{id:291,q:"You cannot simply make up lost sleep because:",opts:["Sleep is not important enough","The body adapts to less sleep","Extra sleep has no benefit","Irregular patterns cause cumulative health damage"],ans:3},
+{id:292,q:"A Do Not Carry Out on a pan fire includes:",opts:["Sliding a lid over the pan","Turning off the burner","Moving it off the heat","Attempting to carry a burning pan outside"],ans:3},
+{id:293,q:"A dry chemical fire extinguisher should not be used on a pan fire because:",opts:["It is ineffective against grease","It creates toxic fumes","It is too heavy","The pressure can tip the pan and spread burning grease"],ans:3},
+{id:294,q:"The meat that should be stored below another in the refrigerator due to a higher required cooking temperature is:",opts:["Beef below pork","Fish below beef","Lamb below beef","Chicken below fish or beef"],ans:3},
+{id:295,q:"Bacteria in the temperature danger zone between 4°C and 60°C:",opts:["Cannot survive","Are killed","Are inactive","Multiply rapidly"],ans:3},
+{id:296,q:"Food must not be left in the danger zone — if left unattended for too long you should:",opts:["Refrigerate immediately","Reheat to serving temperature","Add preservatives","Discard the food"],ans:3},
+{id:297,q:"Hazard Characterization in food safety involves:",opts:["Identifying where hazards exist","Testing recipes","Conducting staff training","Qualitative and quantitative evaluation of adverse effects of biological, chemical, and physical agents"],ans:3},
+{id:298,q:"The Hazard Identification step of food safety risk assessment involves:",opts:["Calculating how much hazard is present","Characterizing the severity of effects","Estimating population exposure","Identifying known or potential health effects of a particular contaminating agent"],ans:3},
+{id:299,q:"Food safety is a shared responsibility of:",opts:["Only trained chefs","Only management","Only the food safety officer","Every person in the kitchen and food chain"],ans:3},
+{id:300,q:"HACCP is described as universally accepted because:",opts:["It is required only in the USA","It was created by the government","It only applies to large kitchens","It is internationally recognized for reducing food safety hazards"],ans:3},
+];
+
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function buildSession(){
+  const seen=getSeenIds();
+  // Split into unseen and seen
+  const unseen=shuffle(BANK.filter(q=>!seen.includes(q.id)));
+  const seenQ=shuffle(BANK.filter(q=>seen.includes(q.id)));
+  // Fill up to TOTAL_Q with unseen first, then seen
+  const combined=unseen.concat(seenQ);
+  const picked=combined.slice(0,TOTAL_Q);
+  // Mark these as seen
+  const newSeen=[...new Set([...seen,...picked.map(q=>q.id)])];
+  // If all 300 seen, reset cycle
+  saveSeenIds(newSeen.length>=BANK.length?[]:newSeen);
+  updateSessionBadge();
+  return picked.map(q=>{
+    const ct=q.opts[q.ans];
+    const so=shuffle(q.opts.slice());
+    return{q:q.q,opts:so,ans:so.indexOf(ct)};
+  });
+}
+
+function startQuiz(){
+  playerName=nameInput.value.trim();
+  if(playerName.length<2)return;
+  if(playerName==='1994'){isGhost=true;playerName='Ghost';}
+  sessionQ=buildSession();
+  userAnswers=new Array(TOTAL_Q).fill(null);
+  current=0;
+  document.getElementById('nameScreen').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  document.getElementById('playerLabel').textContent=isGhost?'👻 Playing anonymously':'Playing as '+playerName;
+  render();
+}
+
+function render(){
+  const q=sessionQ[current];
+  document.getElementById('qNumber').textContent='QUESTION '+(current<9?'0':'')+(current+1);
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('progressText').textContent='Question '+(current+1)+' of '+TOTAL_Q;
+  document.getElementById('progressFill').style.width=((current+1)/TOTAL_Q*100)+'%';
+  document.getElementById('answeredCount').textContent=userAnswers.filter(a=>a!==null).length;
+  document.getElementById('liveScore').textContent='Score: '+userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').textContent=current===TOTAL_Q-1?'Last →':'Next →';
+  const container=document.getElementById('optionsContainer');
+  container.innerHTML='';
+  const letters=['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option';
+    btn.innerHTML='<span class="opt-letter">'+letters[i]+'</span>'+opt;
+    btn.onclick=()=>selectAnswer(i);
+    if(userAnswers[current]!==null){
+      btn.disabled=true;
+      if(i===q.ans)btn.classList.add('correct');
+      else if(i===userAnswers[current])btn.classList.add('wrong');
+    }
+    container.appendChild(btn);
+  });
+  const fb=document.getElementById('feedback');
+  fb.className='feedback';
+  if(userAnswers[current]!==null){
+    const correct=userAnswers[current]===q.ans;
+    fb.textContent=correct?'Correct! "'+q.opts[q.ans]+'" is the right answer.':'Wrong. The correct answer is: "'+q.opts[q.ans]+'"';
+    fb.className='feedback show '+(correct?'correct-fb':'wrong-fb');
+  }
+  const card=document.getElementById('questionCard');
+  card.style.animation='none';card.offsetHeight;card.style.animation='fadeSlide 0.3s ease';
+}
+
+function selectAnswer(i){if(userAnswers[current]!==null)return;userAnswers[current]=i;render();}
+function navigate(dir){current=Math.max(0,Math.min(TOTAL_Q-1,current+dir));render();}
+
+async function submitQuiz(){
+  const score=userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  const wrong=userAnswers.filter((a,i)=>a!==null&&a!==sessionQ[i].ans).length;
+  const skipped=userAnswers.filter(a=>a===null).length;
+  const pct=Math.round(score/TOTAL_Q*100);
+  document.getElementById('rScore').textContent=score;
+  document.getElementById('rCorrect').textContent=score;
+  document.getElementById('rWrong').textContent=wrong;
+  document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('rPercent').textContent=pct+'%';
+  let grade,msg;
+  if(pct>=90){grade='Outstanding! 🏆';msg='Excellent mastery of Food Safety!';}
+  else if(pct>=75){grade='Great Work! ✨';msg='Strong performance — review a few weak spots.';}
+  else if(pct>=60){grade='Good Effort! 👍';msg='Keep practising.';}
+  else if(pct>=40){grade='Keep Going! 💪';msg='Review your notes and try again.';}
+  else{grade='More Practice Needed';msg='Go over the study content carefully.';}
+  document.getElementById('rGrade').textContent=grade;
+  document.getElementById('rMsg').textContent=msg;
+  const savedMsg=document.getElementById('savedMsg');
+  if(isGhost){savedMsg.textContent='👻 Ghost Mode — score not saved';savedMsg.style.color='#f5c542';}
+  else{
+    try{
+      const existing=await window.storage.get(STORAGE_KEY,true).catch(()=>null);
+      const scores=existing?JSON.parse(existing.value):[];
+      scores.push({name:playerName,score,total:TOTAL_Q,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(STORAGE_KEY,JSON.stringify(scores),true);
+      savedMsg.textContent='Score saved as "'+playerName+'"';
+    }catch(e){savedMsg.textContent='Score could not be saved.';savedMsg.style.color='#888';}
+  }
+  const rc=document.getElementById('reviewContainer');
+  rc.innerHTML='';
+  sessionQ.forEach((q,i)=>{
+    const ua=userAnswers[i],correct=ua===q.ans;
+    const div=document.createElement('div');
+    div.className='review-item '+(ua===null?'':correct?'r-correct':'r-wrong');
+    let detail='';
+    if(ua===null)detail='<div class="r-skip">Skipped — Answer: <b>'+q.opts[q.ans]+'</b></div>';
+    else if(correct)detail='<div class="r-ans">✓ '+q.opts[q.ans]+'</div>';
+    else detail='<div class="r-your">✗ Your answer: '+q.opts[ua]+'</div><div class="r-ans">✓ Correct: '+q.opts[q.ans]+'</div>';
+    div.innerHTML='<div class="r-q">Q'+(i+1)+'. '+q.q+'</div>'+detail;
+    rc.appendChild(div);
+  });
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('resultsScreen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+  updateSessionBadge();
+}
+
+function restartQuiz(){
+  sessionQ=buildSession();
+  userAnswers=new Array(TOTAL_Q).fill(null);
+  current=0;
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizScreen').style.display='block';
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
