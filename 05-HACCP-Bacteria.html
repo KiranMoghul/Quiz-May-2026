@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦠</text></svg>">
+<title>HACCP, Bacteria & Temperature — Quiz Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0d;--surface:#1a1a1a;--card:#222;--border:#333;--accent:#00e5a0;--accent2:#ff6b35;--wrong:#ff4444;--text:#f0f0f0;--muted:#888;--correct-bg:rgba(0,229,160,0.12);--wrong-bg:rgba(255,68,68,0.1);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;padding:20px;}
+.container{max-width:780px;margin:0 auto;}
+.name-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;animation:fadeSlide 0.4s ease;}
+.name-screen h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
+.name-screen h2 span{color:var(--accent);}
+.name-screen p{color:var(--muted);font-size:0.82rem;margin-bottom:28px;line-height:1.8;}
+.name-input-wrap{width:100%;max-width:380px;}
+.name-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--text);outline:none;transition:border-color 0.2s;text-align:center;margin-bottom:14px;}
+.name-input:focus{border-color:var(--accent);}
+.name-input::placeholder{color:var(--muted);}
+.btn-start{width:100%;padding:15px;background:var(--accent);color:#000;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:transform 0.15s,opacity 0.2s;letter-spacing:0.5px;}
+.btn-start:hover{transform:translateY(-2px);}
+.btn-start:disabled{opacity:0.4;cursor:default;transform:none;}
+.ghost-notice{margin-top:14px;font-size:0.72rem;color:#f5c542;display:none;}
+.ghost-notice.show{display:block;}
+.bank-info{margin-top:14px;font-size:0.7rem;color:var(--muted);line-height:1.9;}
+.bank-info span{color:var(--accent);}
+.session-badge{margin-top:10px;font-size:0.72rem;padding:5px 14px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);display:inline-block;}
+.back-link{margin-top:30px;font-size:0.75rem;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--text);}
+.header{text-align:center;padding:40px 0 30px;}
+.header h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-1px;line-height:1.1;}
+.header h1 span{color:var(--accent);}
+.progress-bar-wrap{background:var(--border);border-radius:999px;height:6px;margin:20px 0 10px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:999px;transition:width 0.4s ease;}
+.progress-label{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-bottom:24px;}
+.question-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px;animation:fadeSlide 0.3s ease;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.q-number{font-size:0.7rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.q-text{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;line-height:1.5;margin-bottom:20px;}
+.options{display:flex;flex-direction:column;gap:10px;}
+.option{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--text);text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.1s;display:flex;align-items:center;gap:12px;}
+.option:hover:not(:disabled){border-color:var(--accent);transform:translateX(4px);}
+.option .opt-letter{font-weight:500;color:var(--muted);min-width:18px;}
+.option.correct{background:var(--correct-bg);border-color:var(--accent);color:var(--accent);}
+.option.correct .opt-letter{color:var(--accent);}
+.option.wrong{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong);}
+.option.wrong .opt-letter{color:var(--wrong);}
+.option:disabled{cursor:default;}
+.feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-size:0.82rem;line-height:1.5;display:none;}
+.feedback.show{display:block;}
+.feedback.correct-fb{background:var(--correct-bg);border:1px solid var(--accent);color:var(--accent);}
+.feedback.wrong-fb{background:var(--wrong-bg);border:1px solid var(--wrong);color:#ff8888;}
+.nav{display:flex;justify-content:space-between;align-items:center;margin:20px 0 40px;gap:12px;}
+.btn{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;padding:12px 28px;border-radius:10px;border:none;cursor:pointer;transition:transform 0.15s,opacity 0.15s;letter-spacing:0.5px;}
+.btn:hover{transform:translateY(-2px);}
+.btn:disabled{opacity:0.3;cursor:default;transform:none;}
+.btn-prev{background:var(--surface);color:var(--text);border:1.5px solid var(--border);}
+.btn-next{background:var(--accent);color:#000;}
+.btn-submit{background:var(--accent2);color:#fff;}
+.score-chip{font-size:0.78rem;color:var(--muted);text-align:center;}
+.score-chip span{color:var(--accent);font-weight:bold;}
+.results-screen{display:none;text-align:center;padding:60px 20px;animation:fadeSlide 0.4s ease;}
+.results-screen.show{display:block;}
+.result-score-ring{width:160px;height:160px;border-radius:50%;border:6px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 30px;}
+.result-score-ring .big{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--accent);}
+.result-score-ring .small{font-size:0.75rem;color:var(--muted);}
+.results-screen h2{font-family:'Syne',sans-serif;font-size:1.8rem;margin-bottom:10px;}
+.result-breakdown{display:flex;justify-content:center;gap:30px;margin:20px 0 10px;flex-wrap:wrap;}
+.rb-item{text-align:center;}
+.rb-item .val{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;}
+.rb-item .lbl{font-size:0.72rem;color:var(--muted);}
+.grade-msg{color:var(--muted);font-size:0.9rem;margin-bottom:10px;}
+.saved-msg{font-size:0.75rem;color:var(--accent);margin-bottom:16px;min-height:20px;}
+.results-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+.review-section{margin-top:40px;text-align:left;}
+.review-section h3{font-family:'Syne',sans-serif;font-size:1.1rem;margin-bottom:16px;text-align:center;color:var(--muted);letter-spacing:1px;}
+.review-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;font-size:0.82rem;}
+.review-item.r-correct{border-left:3px solid var(--accent);}
+.review-item.r-wrong{border-left:3px solid var(--wrong);}
+.review-item .r-q{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:8px;font-size:0.88rem;}
+.review-item .r-your{color:var(--wrong);}
+.review-item .r-ans{color:var(--accent);}
+.review-item .r-skip{color:var(--muted);font-style:italic;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="name-screen" id="nameScreen">
+    <h2>HACCP, Bacteria<br><span>&amp; Temperature</span></h2>
+    <p>7 HACCP Principles · Hazard Types · Danger Zone · YOPI · Waste Disposal<br>Enter your name to start.</p>
+    <div class="name-input-wrap">
+      <input type="text" class="name-input" id="nameInput" placeholder="Your name..." maxlength="30">
+      <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>Start Quiz →</button>
+      <div class="ghost-notice" id="ghostNotice">👻 Ghost Mode — score won't be saved</div>
+    </div>
+    <div class="bank-info">🎲 <span>30 questions</span> in Session 1 · <span>45 questions</span> in Session 2<br>Starred topics prioritised · Full bank of <span>75</span> in 2 sessions</div>
+    <div class="session-badge" id="sessionBadge">Session 1 of 2</div>
+    <a href="index.html" class="back-link">← Back to all quizzes</a>
+  </div>
+
+  <div id="quizScreen" style="display:none">
+    <div class="header">
+      <h1>HACCP, Bacteria<br><span>&amp; Temperature</span></h1>
+      <p id="playerLabel" style="color:var(--accent);font-size:0.8rem;"></p>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label"><span id="progressText">Question 1 of 30</span><span id="liveScore">Score: 0</span></div>
+    <div class="question-card" id="questionCard">
+      <div class="q-number" id="qNumber">QUESTION 01</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
+      <div class="score-chip">Answered: <span id="answeredCount">0</span>/<span id="totalQLabel">30</span></div>
+      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </div>
+    <div style="text-align:center;margin-bottom:40px;">
+      <button class="btn btn-submit" onclick="submitQuiz()">Submit &amp; See Results</button>
+    </div>
+  </div>
+
+  <div class="results-screen" id="resultsScreen">
+    <div class="result-score-ring"><div class="big" id="rScore">0</div><div class="small" id="rOutOf">out of 30</div></div>
+    <h2 id="rGrade"></h2>
+    <div class="grade-msg" id="rMsg"></div>
+    <div class="saved-msg" id="savedMsg"></div>
+    <div class="result-breakdown">
+      <div class="rb-item"><div class="val" id="rCorrect" style="color:var(--accent)">0</div><div class="lbl">Correct</div></div>
+      <div class="rb-item"><div class="val" id="rWrong" style="color:var(--wrong)">0</div><div class="lbl">Wrong</div></div>
+      <div class="rb-item"><div class="val" id="rSkipped" style="color:var(--muted)">0</div><div class="lbl">Skipped</div></div>
+      <div class="rb-item"><div class="val" id="rPercent" style="color:var(--accent2)">0%</div><div class="lbl">Percentage</div></div>
+    </div>
+    <div class="results-btns">
+      <button class="btn btn-next" id="nextSessionBtn" onclick="nextSession()">↺ Session 2 →</button>
+      <a href="index.html" class="btn btn-prev" style="text-decoration:none;display:inline-flex;align-items:center;">🏠 Home</a>
+    </div>
+    <div class="review-section"><h3>— REVIEW ALL ANSWERS —</h3><div id="reviewContainer"></div></div>
+  </div>
+
+</div>
+<script>
+const QUIZ_ID='culinary-05', LS_KEY='culinary05_seen', STORAGE_KEY='leaderboard-scores';
+const S1_COUNT=30, BANK_SIZE=75;
+
+const BANK=[
+  {id:1,p:1,q:"HACCP stands for:",opts:["Hazard Analysis and Critical Control Plan","Hazard Analysis and Critical Control Point","Health Analysis and Contamination Control Point","Hygiene Assessment and Critical Control Protocol"],ans:1},
+  {id:2,p:1,q:"HACCP was originally developed by:",opts:["The World Health Organisation (WHO) alone","NASA, the US Army and the Pillsbury Company in the 1960s to ensure safe food for astronauts","The European Food Safety Authority in 1990","The UK Food Standards Agency in 1995"],ans:1},
+  {id:3,p:1,q:"HACCP became mandatory in the EU food industry in:",opts:["1975","1985","1993","2006"],ans:2},
+  {id:4,p:1,q:"How many principles does the HACCP system have?",opts:["5","6","7","9"],ans:2},
+  {id:5,p:1,q:"HACCP Principle 1 is:",opts:["Establish monitoring procedures","Conduct a Hazard Analysis — identify all potential food safety hazards","Establish critical limits","Establish corrective actions"],ans:1},
+  {id:6,p:1,q:"HACCP Principle 2 is:",opts:["Establish record-keeping procedures","Identify Critical Control Points (CCPs) — stages where controls are essential to prevent hazards","Verify the HACCP system is working","Establish corrective actions"],ans:1},
+  {id:7,p:1,q:"HACCP Principle 3 is:",opts:["Identify CCPs","Establish Critical Limits for each CCP — the maximum/minimum value to which a hazard must be controlled","Conduct corrective actions","Verify the system"],ans:1},
+  {id:8,p:1,q:"HACCP Principle 4 is:",opts:["Establish record keeping","Establish Monitoring Procedures — how each CCP will be monitored and by whom","Identify hazards","Establish corrective actions"],ans:1},
+  {id:9,p:1,q:"HACCP Principle 5 is:",opts:["Identify CCPs","Establish Corrective Actions — what to do when a CCP is not met","Conduct hazard analysis","Establish monitoring"],ans:1},
+  {id:10,p:1,q:"HACCP Principle 6 is:",opts:["Establish corrective actions","Establish Verification Procedures — confirm the HACCP system is working effectively","Identify CCPs","Establish record keeping"],ans:1},
+  {id:11,p:1,q:"HACCP Principle 7 is:",opts:["Identify hazards","Establish Record-Keeping and Documentation — maintaining records to prove the system is working","Establish corrective actions","Monitor CCPs"],ans:1},
+  {id:12,p:1,q:"A Critical Control Point (CCP) is:",opts:["Any step in food preparation","A specific step in the food production process where a control measure can be applied to prevent or eliminate a food safety hazard","The final temperature check before service","Only applicable to meat products"],ans:1},
+  {id:13,p:1,q:"A critical limit is:",opts:["The number of bacteria allowed in food","The maximum or minimum value (e.g. temperature or time) that must be met at a CCP to ensure food safety","The legal limit for food waste","The minimum shelf life of a product"],ans:1},
+  {id:14,p:1,q:"Which is an example of a critical limit?",opts:["Cooking chicken until it looks golden","Cooking chicken to a minimum internal temperature of 75°C for 2 minutes","Checking that the chicken smells fresh","Storing chicken in a cool area"],ans:1},
+  {id:15,p:1,q:"The three types of food hazards covered by HACCP are:",opts:["Temperature, time and moisture","Biological, chemical and physical","Bacterial, viral and fungal","Storage, handling and preparation"],ans:1},
+  {id:16,p:1,q:"A biological hazard in food includes:",opts:["Glass, metal or bone fragments","Bacteria, viruses, parasites and fungi","Cleaning chemicals and pesticides","Allergens only"],ans:1},
+  {id:17,p:1,q:"A chemical hazard in food includes:",opts:["Insects and rodents","Cleaning product residues, pesticides, food additives and allergens","Glass and metal fragments","Bacteria and viruses"],ans:1},
+  {id:18,p:1,q:"A physical hazard in food includes:",opts:["Bacteria, viruses and moulds","Foreign objects — glass, metal, bone, packaging material, hair or stones","Chemicals and cleaning products","Allergens"],ans:1},
+  {id:19,p:1,q:"YOPI refers to:",opts:["A type of food safety certification","Vulnerable groups — Young children, the Old (elderly), Pregnant women and the Immunocompromised","A category of food additives","A type of fermented food"],ans:1},
+  {id:20,p:1,q:"Why are YOPI groups at higher risk from food borne illness?",opts:["They eat more food","Their immune systems are weaker or developing — making them less able to fight off pathogens","They are allergic to more foods","They eat faster"],ans:1},
+  {id:21,p:1,q:"Foods that YOPI groups should avoid include:",opts:["Well-cooked meat and pasteurised dairy","Raw or lightly cooked eggs, unpasteurised dairy, raw shellfish, raw meat and soft cheeses","Well-cooked vegetables","Bottled water"],ans:1},
+  {id:22,p:1,q:"The temperature danger zone is:",opts:["0°C to 4°C","5°C to 60°C — the range where bacteria multiply most rapidly","10°C to 100°C","-18°C to 0°C"],ans:1},
+  {id:23,p:1,q:"Food should not remain in the temperature danger zone for more than:",opts:["30 minutes","2 hours total — beyond this, the risk of harmful bacterial levels increases significantly","4 hours","8 hours"],ans:1},
+  {id:24,p:1,q:"Bacteria multiply most rapidly at:",opts:["0°C","37°C (body temperature)","63°C","100°C"],ans:1},
+  {id:25,p:1,q:"At what temperature does most bacterial growth effectively stop (refrigerator)?",opts:["10°C","Below 5°C (fridge temperature 1–4°C)","20°C","0°C"],ans:1},
+  {id:26,p:1,q:"At what temperature are most bacteria killed during cooking?",opts:["55°C","63°C for 2 minutes or 75°C for 30 seconds","45°C","100°C only"],ans:1},
+  {id:27,p:1,q:"Freezing food at -18°C:",opts:["Kills all bacteria","Stops bacterial multiplication but does not kill bacteria — they can become active again when thawed","Makes food permanently safe","Eliminates all pathogens"],ans:1},
+  {id:28,p:1,q:"Hot food should be kept at a minimum temperature of:",opts:["55°C","63°C","70°C","75°C"],ans:1},
+  {id:29,p:1,q:"Refrigerated food should be stored at:",opts:["5–10°C","1–4°C","0°C","-5°C"],ans:1},
+  {id:30,p:1,q:"The correct temperature for deep frying is:",opts:["100–120°C","160–200°C","220–300°C","80–100°C"],ans:1},
+  {id:31,p:1,q:"What does a food probe thermometer measure?",opts:["Surface temperature only","The internal core temperature of food to verify it has reached a safe temperature","The ambient temperature of the kitchen","The temperature of cooking oil only"],ans:1},
+  {id:32,p:1,q:"A probe thermometer should be sanitised:",opts:["Once a week","Before and between each use to prevent cross-contamination","Only when it looks dirty","After every 10 readings"],ans:1},
+  {id:33,p:1,q:"Cross-contamination occurs when:",opts:["Food is cooked at the wrong temperature","Harmful bacteria or allergens are transferred from one food to another via hands, equipment or surfaces","Food is stored at too low a temperature","Food is over-seasoned"],ans:1},
+  {id:34,p:1,q:"The most effective way to prevent cross-contamination is:",opts:["Keeping the kitchen tidy","Separating raw and ready-to-eat foods, using colour-coded equipment and washing hands between tasks","Cooking all food thoroughly","Using strong disinfectant on all surfaces daily"],ans:1},
+  {id:35,p:1,q:"What is the difference between cleaning and sanitising?",opts:["They mean the same thing","Cleaning removes visible dirt; sanitising reduces bacteria to a safe level — both steps are necessary","Sanitising removes visible dirt; cleaning kills bacteria","Only one step is needed in a commercial kitchen"],ans:1},
+  {id:36,p:1,q:"Sterilisation differs from sanitising because:",opts:["It uses cold water only","Sterilisation removes all microorganisms including spores; sanitising reduces bacteria to a safe level","Sanitising is more thorough","They achieve the same result"],ans:1},
+  {id:37,p:1,q:"Decomposition in food is caused by:",opts:["Only bacteria","Bacteria, moulds, yeasts and enzymes — causing food to break down and become unsafe or unpalatable","Only improper storage temperature","Only moisture"],ans:1},
+  {id:38,p:1,q:"Signs of food decomposition include:",opts:["Normal colour, smell and texture","Off-odours, discolouration, slimy texture, mould growth and gas production in packaging","Only visible mould","Only a change in colour"],ans:1},
+  {id:39,p:1,q:"Enzymatic browning most commonly affects:",opts:["Meat and poultry","Cut fruits and vegetables — such as apples, avocados and bananas turning brown when exposed to air","Dairy products","Dry goods and cereals"],ans:1},
+  {id:40,p:1,q:"Pasteurisation is a process that:",opts:["Sterilises food completely","Heats food to a specific temperature for a specific time to kill harmful bacteria without fully sterilising","Freezes food to kill pathogens","Adds chemicals to food to extend shelf life"],ans:1},
+  {id:41,p:2,q:"UHT (Ultra High Temperature) processing:",opts:["Slightly heats milk to 63°C","Heats food to above 135°C for a short time — killing all microorganisms and giving a long shelf life without refrigeration","Freezes food at -40°C","Treats food with UV light"],ans:1},
+  {id:42,p:1,q:"Vacuum packing extends shelf life by:",opts:["Adding preservatives to food","Removing oxygen — slowing the growth of aerobic bacteria and preventing oxidation","Lowering the temperature of food","Adding antibacterial gases"],ans:1},
+  {id:43,p:1,q:"The colour-coded chopping board system uses which colour for raw poultry?",opts:["Red","Blue","Yellow","Green"],ans:2},
+  {id:44,p:1,q:"Food waste management in a professional kitchen includes:",opts:["Throwing all waste into one bin","Separating waste into food waste, recyclables, packaging and general waste — and minimising waste through FIFO and stock control","Disposing of everything in the same skip","Only managing food past its use-by date"],ans:1},
+  {id:45,p:1,q:"FIFO is used in food storage to:",opts:["Speed up the cooking process","Ensure the oldest stock is used first — preventing products from expiring and reducing waste","Cool food quickly","Label all food products"],ans:1},
+  {id:46,p:1,q:"Used cooking oil should be:",opts:["Poured down the sink","Collected in sealed containers and disposed of through a licensed waste oil contractor — it can be recycled into biodiesel","Reused multiple times without concern","Added to the compost bin"],ans:1},
+  {id:47,p:1,q:"Food waste in professional kitchens can be reduced by:",opts:["Ordering more food than needed as a buffer","Accurate stock management, FIFO rotation, portion control, menu planning and using trim for stocks and sauces","Cooking all food at once","Reducing portion sizes without informing guests"],ans:1},
+  {id:48,p:1,q:"Which of the following practices contributes to sustainable kitchen management?",opts:["Leaving equipment running when not in use","Reducing energy and water consumption, minimising food waste and sourcing seasonal local produce","Using single-use plastic for all food storage","Ordering maximum quantities to ensure availability"],ans:1},
+  {id:49,p:2,q:"Personal protective equipment (PPE) in a kitchen includes:",opts:["A hat and smart shoes only","Appropriate chef's uniform, apron, oven gloves, non-slip shoes and cut-resistant gloves where relevant","Only a hairnet","Only an apron"],ans:1},
+  {id:50,p:1,q:"What conditions do bacteria need to grow?",opts:["Cold temperatures only","Food, moisture, warmth (37°C ideal), time and neutral pH","Oxygen only","Light and warmth only"],ans:1},
+  {id:51,p:1,q:"The process of cooling hot food quickly is important because:",opts:["It improves the flavour","Food must pass through the danger zone (5–60°C) as quickly as possible to limit bacterial growth","It makes food easier to reheat","It prevents food from drying out"],ans:1},
+  {id:52,p:1,q:"Cooked food should be cooled to below 8°C within:",opts:["30 minutes","90 minutes","4 hours","24 hours"],ans:1},
+  {id:53,p:1,q:"Allergen management in a professional kitchen requires:",opts:["Only a list of ingredients on the menu","Clear identification of all 14 major allergens, staff training, preventing cross-contact and informing guests accurately","Removing all allergenic foods from the menu","Only labelling pre-packed foods"],ans:1},
+  {id:54,p:1,q:"The 14 major allergens (UK/EU) include:",opts:["Only nuts and dairy","Celery, cereals with gluten, crustaceans, eggs, fish, lupin, milk, molluscs, mustard, tree nuts, peanuts, sesame, soya and sulphites","Only the top 5 most common allergies","Only animal-derived products"],ans:1},
+  {id:55,p:1,q:"An anaphylactic reaction requires:",opts:["A glass of water and rest","Immediate administration of epinephrine (EpiPen) and emergency medical services","Antihistamine only","Eating more of the allergen to build tolerance"],ans:1},
+  {id:56,p:1,q:"Food labelling regulations require:",opts:["Only the product name and price","Ingredient list, allergen declaration, use-by or best-before date, storage instructions and nutritional information","Only the country of origin","Only the manufacturer's name"],ans:1},
+  {id:57,p:1,q:"Which bacteria is associated with severe illness from improperly canned foods?",opts:["Salmonella","Clostridium botulinum — produces the botulism toxin in anaerobic (no oxygen) conditions","E. coli","Staphylococcus aureus"],ans:1},
+  {id:58,p:1,q:"Salmonella is destroyed by:",opts:["Refrigeration","Thorough cooking to 75°C — heat kills the bacteria","Freezing","Adding salt to food"],ans:1},
+  {id:59,p:1,q:"Which bacterium is particularly associated with ready-to-eat foods and can grow at refrigerator temperatures?",opts:["Salmonella","Listeria monocytogenes","E. coli","Campylobacter"],ans:1},
+  {id:60,p:1,q:"Norovirus (the winter vomiting bug) is best prevented by:",opts:["Cooking all food to 75°C","Strict handwashing — especially after using the toilet — and excluding infected staff from food handling","Refrigerating all food","Using strong antibiotics"],ans:1},
+  {id:61,p:1,q:"HACCP is a preventive rather than reactive approach because:",opts:["It checks food after it has been served","It identifies hazards before they occur and puts controls in place to prevent harm","It only applies after a food poisoning outbreak","It relies on visual inspection of the finished product"],ans:1},
+  {id:62,p:1,q:"Hazard analysis (Principle 1 of HACCP) involves:",opts:["Only checking for physical hazards","Listing all steps in the food production process and identifying potential biological, chemical and physical hazards at each step","Training staff in food hygiene","Recording temperatures only"],ans:1},
+  {id:63,p:1,q:"A HACCP plan should be:",opts:["Created once and never reviewed","Reviewed regularly — especially when there are changes to ingredients, processes, equipment or legislation","Only reviewed after a food poisoning incident","Optional for small food businesses"],ans:1},
+  {id:64,p:1,q:"Which industry sectors are required to follow HACCP principles?",opts:["Only large food manufacturers","All organisations involved in the food chain — from farming to processing, manufacturing, catering, retail and transportation","Only restaurants and hotels","Only food exporters"],ans:1},
+  {id:65,p:1,q:"Temperature records in a HACCP system are:",opts:["Optional and only kept if requested by inspectors","A legal requirement — they form part of the documentation proving the system is working","Only kept for meat products","Only kept for one week"],ans:1},
+  {id:66,p:1,q:"A corrective action (Principle 5) is taken when:",opts:["A CCP is met successfully","A critical limit is exceeded — the action taken to correct the deviation and prevent unsafe food reaching consumers","A new menu is introduced","Staff training is updated"],ans:1},
+  {id:67,p:1,q:"The verification process (Principle 6) confirms:",opts:["That food looks and smells good","That the HACCP system is working as intended through testing, auditing and review","That staff have eaten the food","That the kitchen is clean"],ans:1},
+  {id:68,p:1,q:"Which of the following temperatures must not be exceeded when displaying chilled high-risk food in a buffet?",opts:["4°C","8°C — chilled food can legally be displayed above 8°C for a maximum of 4 hours total in the UK","15°C","20°C"],ans:1},
+  {id:69,p:1,q:"Which of the following food items is considered high-risk?",opts:["Flour and dried pasta","Cooked poultry, cooked rice, dairy products, seafood and eggs","Sugar and salt","Tinned tomatoes"],ans:1},
+  {id:70,p:1,q:"Dry storage areas should be maintained at:",opts:["0–4°C","10–15°C — cool, dry and well-ventilated","20–25°C","-5°C"],ans:1},
+  {id:71,p:1,q:"Food stored in a fridge should be:",opts:["Stored in any order on any shelf","Covered, labelled with date, stored in correct order — cooked/ready-to-eat on top, raw meat on the bottom","Stored in open containers for easy access","Stored in the same containers as during cooking"],ans:1},
+  {id:72,p:1,q:"What does the Health and Safety at Work Act 1974 require of employers?",opts:["Only to pay staff fairly","To ensure, as far as reasonably practicable, the health, safety and welfare of all employees and the public","Only to provide food safety training","To provide PPE regardless of cost"],ans:1},
+  {id:73,p:1,q:"Waste disposal regulations in catering require:",opts:["All waste to be disposed of in one general bin","Correct segregation of food waste, recyclables, hazardous waste and general waste — and use of licensed waste contractors","Only the disposal of food waste","Weekly disposal only"],ans:1},
+  {id:74,p:1,q:"The purpose of a food safety management system is:",opts:["To document recipes for the kitchen","To identify, control and monitor food safety hazards — ensuring food is safe for consumption and legal compliance is met","To manage kitchen finances","To train chefs in cooking techniques"],ans:1},
+  {id:75,p:1,q:"Bacteria need which conditions to multiply rapidly?",opts:["Cold, dry and acidic conditions","Warmth (37°C ideal), moisture, food (nutrition), time and neutral to slightly acidic pH","Freezing temperatures and no moisture","Strong UV light and dry conditions"],ans:1},
+];
+
+let isGhost=sessionStorage.getItem('ghostMode')==='1';
+if(isGhost)document.getElementById('ghostNotice').classList.add('show');
+const nameInput=document.getElementById('nameInput'),startBtn=document.getElementById('startBtn');
+nameInput.addEventListener('input',()=>{startBtn.disabled=nameInput.value.trim().length<2;});
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&nameInput.value.trim().length>=2)startQuiz();});
+
+let playerName='',current=0,sessionQ=[],userAnswers=[],currentSessionNum=1;
+
+function getSeenIds(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch{return[];}}
+function saveSeenIds(ids){try{localStorage.setItem(LS_KEY,JSON.stringify(ids));}catch{}}
+function getSessionNum(){const seen=getSeenIds().length;if(seen===0)return 1;if(seen<BANK_SIZE)return 2;return 1;}
+function updateSessionBadge(){document.getElementById('sessionBadge').textContent='Session '+getSessionNum()+' of 2';}
+updateSessionBadge();
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function buildSession(){
+  const seen=getSeenIds(),sessionNum=getSessionNum();
+  currentSessionNum=sessionNum;
+  let picked;
+  if(sessionNum===1){
+    const unseen=BANK.filter(q=>!seen.includes(q.id));
+    picked=[...shuffle(unseen.filter(q=>q.p===1)),...shuffle(unseen.filter(q=>q.p===2))].slice(0,S1_COUNT);
+  } else {
+    const unseen=BANK.filter(q=>!seen.includes(q.id));
+    picked=[...shuffle(unseen.filter(q=>q.p===1)),...shuffle(unseen.filter(q=>q.p===2))];
+    if(picked.length===0){saveSeenIds([]);return buildSession();}
+  }
+  const newSeen=[...new Set([...seen,...picked.map(q=>q.id)])];
+  saveSeenIds(newSeen);updateSessionBadge();
+  return picked.map(q=>{const ct=q.opts[q.ans];const so=shuffle(q.opts.slice());return{q:q.q,opts:so,ans:so.indexOf(ct)};});
+}
+
+function startQuiz(){
+  playerName=nameInput.value.trim();
+  if(playerName.length<2)return;
+  if(playerName==='1994'){isGhost=true;playerName='Ghost';}
+  sessionQ=buildSession();userAnswers=new Array(sessionQ.length).fill(null);current=0;
+  document.getElementById('nameScreen').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  document.getElementById('playerLabel').textContent=isGhost?'👻 Playing anonymously':'Playing as '+playerName;
+  document.getElementById('totalQLabel').textContent=sessionQ.length;
+  document.getElementById('rOutOf').textContent='out of '+sessionQ.length;
+  document.getElementById('nextSessionBtn').textContent=currentSessionNum===1?'↺ Session 2 →':'↺ Start Over';
+  render();
+}
+
+function render(){
+  const q=sessionQ[current],tot=sessionQ.length;
+  document.getElementById('qNumber').textContent='QUESTION '+(current<9?'0':'')+(current+1);
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('progressText').textContent='Question '+(current+1)+' of '+tot;
+  document.getElementById('progressFill').style.width=((current+1)/tot*100)+'%';
+  document.getElementById('answeredCount').textContent=userAnswers.filter(a=>a!==null).length;
+  document.getElementById('liveScore').textContent='Score: '+userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').textContent=current===tot-1?'Last →':'Next →';
+  const container=document.getElementById('optionsContainer');
+  container.innerHTML='';
+  const letters=['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option';
+    btn.innerHTML='<span class="opt-letter">'+letters[i]+'</span>'+opt;
+    btn.onclick=()=>selectAnswer(i);
+    if(userAnswers[current]!==null){btn.disabled=true;if(i===q.ans)btn.classList.add('correct');else if(i===userAnswers[current])btn.classList.add('wrong');}
+    container.appendChild(btn);
+  });
+  const fb=document.getElementById('feedback');
+  fb.className='feedback';
+  if(userAnswers[current]!==null){
+    const correct=userAnswers[current]===q.ans;
+    fb.textContent=correct?'Correct! "'+q.opts[q.ans]+'" is the right answer.':'Wrong. The correct answer is: "'+q.opts[q.ans]+'"';
+    fb.className='feedback show '+(correct?'correct-fb':'wrong-fb');
+  }
+  const card=document.getElementById('questionCard');
+  card.style.animation='none';card.offsetHeight;card.style.animation='fadeSlide 0.3s ease';
+}
+
+function selectAnswer(i){if(userAnswers[current]!==null)return;userAnswers[current]=i;render();}
+function navigate(dir){current=Math.max(0,Math.min(sessionQ.length-1,current+dir));render();}
+
+async function submitQuiz(){
+  const tot=sessionQ.length;
+  const score=userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  const wrong=userAnswers.filter((a,i)=>a!==null&&a!==sessionQ[i].ans).length;
+  const skipped=userAnswers.filter(a=>a===null).length;
+  const pct=Math.round(score/tot*100);
+  document.getElementById('rScore').textContent=score;
+  document.getElementById('rOutOf').textContent='out of '+tot;
+  document.getElementById('rCorrect').textContent=score;
+  document.getElementById('rWrong').textContent=wrong;
+  document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('rPercent').textContent=pct+'%';
+  let grade,msg;
+  if(pct>=90){grade='Outstanding! 🏆';msg='Excellent mastery of HACCP & Food Safety!';}
+  else if(pct>=75){grade='Great Work! ✨';msg='Strong performance — review a few weak spots.';}
+  else if(pct>=60){grade='Good Effort! 👍';msg='Keep practising.';}
+  else if(pct>=40){grade='Keep Going! 💪';msg='Review your notes and try again.';}
+  else{grade='More Practice Needed';msg='Go over the study content carefully.';}
+  document.getElementById('rGrade').textContent=grade;
+  document.getElementById('rMsg').textContent=msg;
+  const sn=getSessionNum();
+  document.getElementById('nextSessionBtn').textContent=sn===2?'↺ Session 2 →':'↺ Start Over';
+  const savedMsg=document.getElementById('savedMsg');
+  if(isGhost){savedMsg.textContent='👻 Ghost Mode — score not saved';savedMsg.style.color='#f5c542';}
+  else{
+    try{
+      const existing=await window.storage.get(STORAGE_KEY,true).catch(()=>null);
+      const scores=existing?JSON.parse(existing.value):[];
+      scores.push({name:playerName,score,total:tot,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(STORAGE_KEY,JSON.stringify(scores),true);
+      savedMsg.textContent='Score saved as "'+playerName+'"';
+    }catch(e){savedMsg.textContent='Score could not be saved.';savedMsg.style.color='#888';}
+  }
+  const rc=document.getElementById('reviewContainer');
+  rc.innerHTML='';
+  sessionQ.forEach((q,i)=>{
+    const ua=userAnswers[i],correct=ua===q.ans;
+    const div=document.createElement('div');
+    div.className='review-item '+(ua===null?'':correct?'r-correct':'r-wrong');
+    let detail='';
+    if(ua===null)detail='<div class="r-skip">Skipped — Answer: <b>'+q.opts[q.ans]+'</b></div>';
+    else if(correct)detail='<div class="r-ans">&#10003; '+q.opts[q.ans]+'</div>';
+    else detail='<div class="r-your">&#10007; Your answer: '+q.opts[ua]+'</div><div class="r-ans">&#10003; Correct: '+q.opts[q.ans]+'</div>';
+    div.innerHTML='<div class="r-q">Q'+(i+1)+'. '+q.q+'</div>'+detail;
+    rc.appendChild(div);
+  });
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('resultsScreen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function nextSession(){
+  sessionQ=buildSession();userAnswers=new Array(sessionQ.length).fill(null);current=0;
+  document.getElementById('totalQLabel').textContent=sessionQ.length;
+  document.getElementById('rOutOf').textContent='out of '+sessionQ.length;
+  document.getElementById('nextSessionBtn').textContent=currentSessionNum===1?'↺ Session 2 →':'↺ Start Over';
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizScreen').style.display='block';
+  render();window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

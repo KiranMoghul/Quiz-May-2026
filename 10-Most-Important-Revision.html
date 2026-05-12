@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⭐</text></svg>">
+<title>Most Important Revision — Quiz Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0d;--surface:#1a1a1a;--card:#222;--border:#333;--accent:#00e5a0;--accent2:#ff6b35;--wrong:#ff4444;--text:#f0f0f0;--muted:#888;--correct-bg:rgba(0,229,160,0.12);--wrong-bg:rgba(255,68,68,0.1);--gold:#f5c542;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;padding:20px;}
+.container{max-width:780px;margin:0 auto;}
+
+/* NAME SCREEN */
+.name-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;animation:fadeSlide 0.4s ease;}
+.name-screen h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
+.name-screen h2 span{color:var(--gold);}
+.name-screen p{color:var(--muted);font-size:0.82rem;margin-bottom:28px;line-height:1.8;}
+.name-input-wrap{width:100%;max-width:380px;}
+.name-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--text);outline:none;transition:border-color 0.2s;text-align:center;margin-bottom:14px;}
+.name-input:focus{border-color:var(--gold);}
+.name-input::placeholder{color:var(--muted);}
+.btn-start{width:100%;padding:15px;background:var(--gold);color:#000;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:transform 0.15s,opacity 0.2s;letter-spacing:0.5px;}
+.btn-start:hover{transform:translateY(-2px);}
+.btn-start:disabled{opacity:0.4;cursor:default;transform:none;}
+.ghost-notice{margin-top:14px;font-size:0.72rem;color:#f5c542;display:none;}
+.ghost-notice.show{display:block;}
+.bank-info{margin-top:14px;font-size:0.7rem;color:var(--muted);line-height:1.9;}
+.bank-info span{color:var(--gold);}
+.fixed-badge{margin-top:10px;font-size:0.72rem;padding:5px 14px;border-radius:999px;border:1px solid var(--gold);color:var(--gold);display:inline-block;}
+.sources-list{margin-top:16px;font-size:0.68rem;color:var(--muted);line-height:2;max-width:340px;}
+.sources-list span{color:var(--gold);}
+.back-link{margin-top:30px;font-size:0.75rem;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--text);}
+
+/* QUIZ SCREEN */
+.header{text-align:center;padding:40px 0 30px;}
+.header h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-1px;line-height:1.1;}
+.header h1 span{color:var(--gold);}
+.progress-bar-wrap{background:var(--border);border-radius:999px;height:6px;margin:20px 0 10px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--gold);border-radius:999px;transition:width 0.4s ease;}
+.progress-label{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-bottom:24px;}
+.question-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px;animation:fadeSlide 0.3s ease;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.q-number{font-size:0.7rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.q-source{font-size:0.65rem;color:var(--muted);margin-bottom:12px;letter-spacing:0.5px;}
+.q-source span{color:var(--gold);opacity:0.7;}
+.q-text{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;line-height:1.5;margin-bottom:20px;}
+.options{display:flex;flex-direction:column;gap:10px;}
+.option{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--text);text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.1s;display:flex;align-items:center;gap:12px;}
+.option:hover:not(:disabled){border-color:var(--gold);transform:translateX(4px);}
+.option .opt-letter{font-weight:500;color:var(--muted);min-width:18px;}
+.option.correct{background:var(--correct-bg);border-color:var(--accent);color:var(--accent);}
+.option.correct .opt-letter{color:var(--accent);}
+.option.wrong{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong);}
+.option.wrong .opt-letter{color:var(--wrong);}
+.option:disabled{cursor:default;}
+.feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-size:0.82rem;line-height:1.5;display:none;}
+.feedback.show{display:block;}
+.feedback.correct-fb{background:var(--correct-bg);border:1px solid var(--accent);color:var(--accent);}
+.feedback.wrong-fb{background:var(--wrong-bg);border:1px solid var(--wrong);color:#ff8888;}
+.nav{display:flex;justify-content:space-between;align-items:center;margin:20px 0 40px;gap:12px;}
+.btn{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;padding:12px 28px;border-radius:10px;border:none;cursor:pointer;transition:transform 0.15s,opacity 0.15s;letter-spacing:0.5px;}
+.btn:hover{transform:translateY(-2px);}
+.btn:disabled{opacity:0.3;cursor:default;transform:none;}
+.btn-prev{background:var(--surface);color:var(--text);border:1.5px solid var(--border);}
+.btn-next{background:var(--gold);color:#000;}
+.btn-submit{background:var(--accent2);color:#fff;}
+.score-chip{font-size:0.78rem;color:var(--muted);text-align:center;}
+.score-chip span{color:var(--gold);font-weight:bold;}
+
+/* RESULTS */
+.results-screen{display:none;text-align:center;padding:60px 20px;animation:fadeSlide 0.4s ease;}
+.results-screen.show{display:block;}
+.result-score-ring{width:160px;height:160px;border-radius:50%;border:6px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 30px;}
+.result-score-ring .big{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--gold);}
+.result-score-ring .small{font-size:0.75rem;color:var(--muted);}
+.results-screen h2{font-family:'Syne',sans-serif;font-size:1.8rem;margin-bottom:10px;}
+.result-breakdown{display:flex;justify-content:center;gap:30px;margin:20px 0 10px;flex-wrap:wrap;}
+.rb-item{text-align:center;}
+.rb-item .val{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;}
+.rb-item .lbl{font-size:0.72rem;color:var(--muted);}
+.grade-msg{color:var(--muted);font-size:0.9rem;margin-bottom:10px;}
+.saved-msg{font-size:0.75rem;color:var(--gold);margin-bottom:16px;min-height:20px;}
+.results-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+.review-section{margin-top:40px;text-align:left;}
+.review-section h3{font-family:'Syne',sans-serif;font-size:1.1rem;margin-bottom:16px;text-align:center;color:var(--muted);letter-spacing:1px;}
+.review-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;font-size:0.82rem;}
+.review-item.r-correct{border-left:3px solid var(--accent);}
+.review-item.r-wrong{border-left:3px solid var(--wrong);}
+.review-item .r-q{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:4px;font-size:0.88rem;}
+.review-item .r-src{font-size:0.65rem;color:var(--muted);margin-bottom:8px;}
+.review-item .r-your{color:var(--wrong);}
+.review-item .r-ans{color:var(--accent);}
+.review-item .r-skip{color:var(--muted);font-style:italic;}
+
+/* Perfect score animation */
+.perfect-badge{display:none;margin:10px auto 0;font-size:0.8rem;color:var(--gold);border:1px solid var(--gold);border-radius:999px;padding:6px 18px;width:fit-content;}
+.perfect-badge.show{display:block;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="name-screen" id="nameScreen">
+    <h2>Most Important<br><span>Revision ⭐</span></h2>
+    <p>The 20 questions that appear across every test paper.<br>These are the ones you <em>must</em> know.</p>
+    <div class="name-input-wrap">
+      <input type="text" class="name-input" id="nameInput" placeholder="Your name..." maxlength="30">
+      <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>Start Revision →</button>
+      <div class="ghost-notice" id="ghostNotice">👻 Ghost Mode — score won't be saved</div>
+    </div>
+    <div class="bank-info">⭐ <span>All 20 questions</span> appear every time · No randomisation<br>Answer options shuffled to keep it honest</div>
+    <div class="fixed-badge">Fixed Set · 20 Questions</div>
+    <div class="sources-list">
+      Questions drawn from: <span>CPC Test 1</span> · <span>GDICA Test</span> · <span>300 MCQ Paper</span> · <span>Verbal MCQs</span>
+    </div>
+    <a href="index.html" class="back-link">← Back to all quizzes</a>
+  </div>
+
+  <div id="quizScreen" style="display:none">
+    <div class="header">
+      <h1>Most Important<br><span>Revision ⭐</span></h1>
+      <p id="playerLabel" style="color:var(--gold);font-size:0.8rem;"></p>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label"><span id="progressText">Question 1 of 20</span><span id="liveScore">Score: 0</span></div>
+    <div class="question-card" id="questionCard">
+      <div class="q-number" id="qNumber">QUESTION 01</div>
+      <div class="q-source" id="qSource"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
+      <div class="score-chip">Answered: <span id="answeredCount">0</span>/20</div>
+      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </div>
+    <div style="text-align:center;margin-bottom:40px;">
+      <button class="btn btn-submit" onclick="submitQuiz()">Submit &amp; See Results</button>
+    </div>
+  </div>
+
+  <div class="results-screen" id="resultsScreen">
+    <div class="result-score-ring"><div class="big" id="rScore">0</div><div class="small">out of 20</div></div>
+    <h2 id="rGrade"></h2>
+    <div class="grade-msg" id="rMsg"></div>
+    <div class="perfect-badge" id="perfectBadge">⭐ PERFECT SCORE — Exam Ready!</div>
+    <div class="saved-msg" id="savedMsg"></div>
+    <div class="result-breakdown">
+      <div class="rb-item"><div class="val" id="rCorrect" style="color:var(--accent)">0</div><div class="lbl">Correct</div></div>
+      <div class="rb-item"><div class="val" id="rWrong" style="color:var(--wrong)">0</div><div class="lbl">Wrong</div></div>
+      <div class="rb-item"><div class="val" id="rSkipped" style="color:var(--muted)">0</div><div class="lbl">Skipped</div></div>
+      <div class="rb-item"><div class="val" id="rPercent" style="color:var(--accent2)">0%</div><div class="lbl">Percentage</div></div>
+    </div>
+    <div class="results-btns">
+      <button class="btn btn-next" onclick="restartQuiz()">↺ Try Again</button>
+      <a href="index.html" class="btn btn-prev" style="text-decoration:none;display:inline-flex;align-items:center;">🏠 Home</a>
+    </div>
+    <div class="review-section"><h3>— REVIEW ALL ANSWERS —</h3><div id="reviewContainer"></div></div>
+  </div>
+
+</div>
+<script>
+const QUIZ_ID='culinary-10', STORAGE_KEY='leaderboard-scores';
+const TOTAL = 20;
+
+// Fixed question bank — all 20 appear every time, in this order
+// Answer options are shuffled on each attempt to prevent position memorisation
+const QUESTIONS = [
+  {
+    q: "What is the first thing you should do before you start working with food?",
+    opts: ["Put on your apron", "Wash your hands", "Check the temperature of the fridge", "Put on gloves"],
+    ans: 1,
+    src: "CPC Test 1 · GDICA Test · 300 MCQ Paper"
+  },
+  {
+    q: "If you drop a knife in the kitchen, what should you do?",
+    opts: ["Catch it quickly before it hits the floor", "Use your foot to stop it", "Step back and let it fall — never try to catch a falling knife", "Grab it with a cloth"],
+    ans: 2,
+    src: "CPC Test 1 · GDICA Test · Verbal MCQs"
+  },
+  {
+    q: "Cross-contamination is best described as:",
+    opts: ["Food going off due to improper storage", "Bacteria or allergens spreading from raw foods to other foods via hands, surfaces or equipment", "Using the wrong chopping board colour", "Storing food above the correct temperature"],
+    ans: 1,
+    src: "CPC Test 1 · GDICA Test · 300 MCQ Paper"
+  },
+  {
+    q: "Blanching is defined as:",
+    opts: ["Slow cooking in liquid at low temperature", "Cooking quickly in boiling liquid then immediately cooling in ice water to stop cooking", "Frying food briefly then draining on paper", "Steaming food in a sealed parcel"],
+    ans: 1,
+    src: "CPC Test 1 · GDICA Test · 300 MCQ Paper"
+  },
+  {
+    q: "The correct mirepoix ratio is:",
+    opts: ["Equal thirds of onion, carrot and celery", "25% onion, 50% carrot, 25% celery", "50% onion, 25% carrot, 25% celery", "75% onion, 12.5% carrot, 12.5% celery"],
+    ans: 2,
+    src: "CPC Test 1 · 300 MCQ Paper"
+  },
+  {
+    q: "What does 'mince' mean as a knife cut?",
+    opts: ["A rough chop into large irregular pieces", "A diagonal cut across the vegetable", "Thin ribbon-like strips from leafy herbs", "The finest possible cut — very small irregular pieces smaller than a fine dice"],
+    ans: 3,
+    src: "CPC Test 4 · GDICA Test · 300 MCQ Paper"
+  },
+  {
+    q: "Sautéing is best described as:",
+    opts: ["Slow cooking in a small amount of liquid in a covered pot", "Cooking food submerged in fat at high temperature", "Cooking food quickly in a small amount of fat over high heat with frequent movement", "Cooking food in a sealed parcel in the oven"],
+    ans: 2,
+    src: "CPC Test 1 · 300 MCQ Paper"
+  },
+  {
+    q: "Dice as a knife technique means:",
+    opts: ["Long thin matchstick strips", "Thin ribbon cuts from leafy vegetables", "Cutting into uniform cubes of consistent size", "A diagonal roll cut producing irregular pieces"],
+    ans: 2,
+    src: "CPC Test 1 · 300 MCQ Paper"
+  },
+  {
+    q: "Chiffonade is the knife technique used to produce:",
+    opts: ["Very small uniform cubes (3mm × 3mm)", "Short uniform sticks (batons)", "Thin ribbon cuts from soft leafy herbs and greens", "Round cross-section slices of cylindrical vegetables"],
+    ans: 2,
+    src: "CPC Test 1 · 300 MCQ Paper"
+  },
+  {
+    q: "Batonnet produces:",
+    opts: ["Very small cubes (brunoise)", "Short uniform sticks approximately 6mm × 6mm × 5–6cm — like a thick French fry", "Thin ribbons from leafy vegetables", "A football shape with 7 equal sides"],
+    ans: 1,
+    src: "CPC Test 1 · 300 MCQ Paper"
+  },
+  {
+    q: "Tourner (turned vegetables) produces:",
+    opts: ["Long thin julienne strips", "Round cross-section slices", "Small uniform 5mm cubes", "A football or barrel shape with 7 equal sides and blunt ends"],
+    ans: 3,
+    src: "CPC Test 1 · 300 MCQ Paper"
+  },
+  {
+    q: "How long can food remain in the temperature danger zone before it must be discarded?",
+    opts: ["30 minutes", "4 hours", "2 hours cumulative", "8 hours"],
+    ans: 2,
+    src: "CPC Test 1 · 300 MCQ Paper"
+  },
+  {
+    q: "HACCP stands for:",
+    opts: ["Health Analysis and Contamination Control Point", "Hygiene Assessment and Critical Control Protocol", "Hazard Analysis and Critical Control Point", "Handling and Catering Control Procedures"],
+    ans: 2,
+    src: "GDICA Test · 300 MCQ Paper · Verbal MCQs"
+  },
+  {
+    q: "Bacteria multiply fastest at which temperature?",
+    opts: ["0°C", "100°C", "63°C", "37°C (body temperature)"],
+    ans: 3,
+    src: "GDICA Test · 300 MCQ Paper"
+  },
+  {
+    q: "The ideal refrigerator temperature is:",
+    opts: ["5–10°C", "1–4°C", "0°C exactly", "-5°C"],
+    ans: 1,
+    src: "GDICA Test · 300 MCQ Paper"
+  },
+  {
+    q: "Frozen food should be kept at:",
+    opts: ["0°C", "-5°C", "-10°C", "-18°C or lower"],
+    ans: 3,
+    src: "GDICA Test · 300 MCQ Paper"
+  },
+  {
+    q: "How many times can you safely reheat leftover food?",
+    opts: ["Three times if it reaches 75°C each time", "As many times as needed if temperature is correct", "Once only", "Twice if cooled quickly between reheats"],
+    ans: 2,
+    src: "GDICA Test · 300 MCQ Paper"
+  },
+  {
+    q: "Why must hands be dried after washing before handling food?",
+    opts: ["Wet hands feel uncomfortable when working", "It is a legal requirement only", "Wet hands make it harder to grip tools", "Germs spread more easily with wet hands — wet surfaces transfer bacteria faster"],
+    ans: 3,
+    src: "GDICA Test · 300 MCQ Paper"
+  },
+  {
+    q: "The boiling point of water is:",
+    opts: ["90°C", "120°C", "80°C", "100°C"],
+    ans: 3,
+    src: "GDICA Test · 300 MCQ Paper · Verbal MCQs"
+  },
+  {
+    q: "Stock rotation (FIFO) helps to:",
+    opts: ["Increase the speed of service", "Reduce the number of staff needed in the kitchen", "Identify slow-moving stock and ensure oldest stock is used first — reducing waste and spoilage", "Make the storeroom look more organised"],
+    ans: 2,
+    src: "Verbal MCQs · 300 MCQ Paper (FIFO concept)"
+  },
+];
+
+let isGhost = sessionStorage.getItem('ghostMode') === '1';
+if (isGhost) document.getElementById('ghostNotice').classList.add('show');
+
+const nameInput = document.getElementById('nameInput');
+const startBtn  = document.getElementById('startBtn');
+nameInput.addEventListener('input', () => { startBtn.disabled = nameInput.value.trim().length < 2; });
+nameInput.addEventListener('keydown', e => { if (e.key === 'Enter' && nameInput.value.trim().length >= 2) startQuiz(); });
+
+let playerName = '', current = 0, sessionQ = [], userAnswers = [];
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildSession() {
+  // Fixed order — shuffle options only, not questions
+  return QUESTIONS.map(q => {
+    const correctText = q.opts[q.ans];
+    const shuffledOpts = shuffle(q.opts.slice());
+    return { q: q.q, opts: shuffledOpts, ans: shuffledOpts.indexOf(correctText), src: q.src };
+  });
+}
+
+function startQuiz() {
+  playerName = nameInput.value.trim();
+  if (playerName.length < 2) return;
+  if (playerName === '1994') { isGhost = true; playerName = 'Ghost'; }
+  sessionQ    = buildSession();
+  userAnswers = new Array(TOTAL).fill(null);
+  current     = 0;
+  document.getElementById('nameScreen').style.display = 'none';
+  document.getElementById('quizScreen').style.display = 'block';
+  document.getElementById('playerLabel').textContent = isGhost ? '👻 Playing anonymously' : 'Playing as ' + playerName;
+  render();
+}
+
+function render() {
+  const q   = sessionQ[current];
+  const tot = TOTAL;
+  document.getElementById('qNumber').textContent    = 'QUESTION ' + (current < 9 ? '0' : '') + (current + 1);
+  document.getElementById('qSource').innerHTML      = '📋 <span>Appeared in:</span> ' + q.src;
+  document.getElementById('qText').textContent      = q.q;
+  document.getElementById('progressText').textContent = 'Question ' + (current + 1) + ' of ' + tot;
+  document.getElementById('progressFill').style.width = ((current + 1) / tot * 100) + '%';
+  document.getElementById('answeredCount').textContent = userAnswers.filter(a => a !== null).length;
+  document.getElementById('liveScore').textContent  = 'Score: ' + userAnswers.reduce((s, a, i) => s + (a !== null && a === sessionQ[i].ans ? 1 : 0), 0);
+  document.getElementById('prevBtn').disabled       = current === 0;
+  document.getElementById('nextBtn').textContent    = current === tot - 1 ? 'Last →' : 'Next →';
+
+  const container = document.getElementById('optionsContainer');
+  container.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.innerHTML = '<span class="opt-letter">' + letters[i] + '</span>' + opt;
+    btn.onclick = () => selectAnswer(i);
+    if (userAnswers[current] !== null) {
+      btn.disabled = true;
+      if (i === q.ans) btn.classList.add('correct');
+      else if (i === userAnswers[current]) btn.classList.add('wrong');
+    }
+    container.appendChild(btn);
+  });
+
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback';
+  if (userAnswers[current] !== null) {
+    const correct = userAnswers[current] === q.ans;
+    fb.textContent = correct
+      ? 'Correct! "' + q.opts[q.ans] + '" is the right answer.'
+      : 'Wrong. The correct answer is: "' + q.opts[q.ans] + '"';
+    fb.className = 'feedback show ' + (correct ? 'correct-fb' : 'wrong-fb');
+  }
+
+  const card = document.getElementById('questionCard');
+  card.style.animation = 'none'; card.offsetHeight; card.style.animation = 'fadeSlide 0.3s ease';
+}
+
+function selectAnswer(i) {
+  if (userAnswers[current] !== null) return;
+  userAnswers[current] = i;
+  render();
+}
+
+function navigate(dir) {
+  current = Math.max(0, Math.min(TOTAL - 1, current + dir));
+  render();
+}
+
+async function submitQuiz() {
+  const score   = userAnswers.reduce((s, a, i) => s + (a !== null && a === sessionQ[i].ans ? 1 : 0), 0);
+  const wrong   = userAnswers.filter((a, i) => a !== null && a !== sessionQ[i].ans).length;
+  const skipped = userAnswers.filter(a => a === null).length;
+  const pct     = Math.round(score / TOTAL * 100);
+
+  document.getElementById('rScore').textContent   = score;
+  document.getElementById('rCorrect').textContent = score;
+  document.getElementById('rWrong').textContent   = wrong;
+  document.getElementById('rSkipped').textContent = skipped;
+  document.getElementById('rPercent').textContent = pct + '%';
+
+  let grade, msg;
+  if (pct === 100) { grade = 'Perfect Score! ⭐';  msg = 'You know every one of these cold. Exam ready.'; }
+  else if (pct >= 90) { grade = 'Outstanding! 🏆'; msg = 'Almost perfect — one more go and you have it.'; }
+  else if (pct >= 75) { grade = 'Great Work! ✨';  msg = 'Strong — review the ones you missed.'; }
+  else if (pct >= 60) { grade = 'Good Effort! 👍'; msg = 'Keep drilling these — they come up every time.'; }
+  else if (pct >= 40) { grade = 'Keep Going! 💪';  msg = 'These are the must-know questions. Study and retry.'; }
+  else                { grade = 'More Practice Needed'; msg = 'Go back to the relevant quiz sections and return here.'; }
+
+  document.getElementById('rGrade').textContent = grade;
+  document.getElementById('rMsg').textContent   = msg;
+  if (pct === 100) document.getElementById('perfectBadge').classList.add('show');
+
+  const savedMsg = document.getElementById('savedMsg');
+  if (isGhost) {
+    savedMsg.textContent = '👻 Ghost Mode — score not saved';
+    savedMsg.style.color = '#f5c542';
+  } else {
+    try {
+      const existing = await window.storage.get(STORAGE_KEY, true).catch(() => null);
+      const scores   = existing ? JSON.parse(existing.value) : [];
+      scores.push({
+        name: playerName, score, total: TOTAL, pct, quiz: QUIZ_ID,
+        date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+      });
+      await window.storage.set(STORAGE_KEY, JSON.stringify(scores), true);
+      savedMsg.textContent = 'Score saved as "' + playerName + '"';
+    } catch (e) {
+      savedMsg.textContent = 'Score could not be saved.';
+      savedMsg.style.color = '#888';
+    }
+  }
+
+  // Build review
+  const rc = document.getElementById('reviewContainer');
+  rc.innerHTML = '';
+  sessionQ.forEach((q, i) => {
+    const ua = userAnswers[i], correct = ua === q.ans;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (ua === null ? '' : correct ? 'r-correct' : 'r-wrong');
+    let detail = '';
+    if (ua === null)    detail = '<div class="r-skip">Skipped — Answer: <b>' + q.opts[q.ans] + '</b></div>';
+    else if (correct)  detail = '<div class="r-ans">&#10003; ' + q.opts[q.ans] + '</div>';
+    else               detail = '<div class="r-your">&#10007; Your answer: ' + q.opts[ua] + '</div><div class="r-ans">&#10003; Correct: ' + q.opts[q.ans] + '</div>';
+    div.innerHTML = '<div class="r-q">Q' + (i + 1) + '. ' + q.q + '</div><div class="r-src">' + q.src + '</div>' + detail;
+    rc.appendChild(div);
+  });
+
+  document.getElementById('quizScreen').style.display = 'none';
+  document.getElementById('resultsScreen').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartQuiz() {
+  sessionQ    = buildSession();
+  userAnswers = new Array(TOTAL).fill(null);
+  current     = 0;
+  document.getElementById('perfectBadge').classList.remove('show');
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizScreen').style.display = 'block';
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

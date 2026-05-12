@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔪</text></svg>">
+<title>Knife Handling & Vegetable Cutting — Quiz Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0d;--surface:#1a1a1a;--card:#222;--border:#333;--accent:#00e5a0;--accent2:#ff6b35;--wrong:#ff4444;--text:#f0f0f0;--muted:#888;--correct-bg:rgba(0,229,160,0.12);--wrong-bg:rgba(255,68,68,0.1);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;padding:20px;}
+.container{max-width:780px;margin:0 auto;}
+.name-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;animation:fadeSlide 0.4s ease;}
+.name-screen h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
+.name-screen h2 span{color:var(--accent);}
+.name-screen p{color:var(--muted);font-size:0.82rem;margin-bottom:28px;line-height:1.8;}
+.name-input-wrap{width:100%;max-width:380px;}
+.name-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--text);outline:none;transition:border-color 0.2s;text-align:center;margin-bottom:14px;}
+.name-input:focus{border-color:var(--accent);}
+.name-input::placeholder{color:var(--muted);}
+.btn-start{width:100%;padding:15px;background:var(--accent);color:#000;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:transform 0.15s,opacity 0.2s;letter-spacing:0.5px;}
+.btn-start:hover{transform:translateY(-2px);}
+.btn-start:disabled{opacity:0.4;cursor:default;transform:none;}
+.ghost-notice{margin-top:14px;font-size:0.72rem;color:#f5c542;display:none;}
+.ghost-notice.show{display:block;}
+.bank-info{margin-top:14px;font-size:0.7rem;color:var(--muted);line-height:1.9;}
+.bank-info span{color:var(--accent);}
+.session-badge{margin-top:10px;font-size:0.72rem;padding:5px 14px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);display:inline-block;}
+.back-link{margin-top:30px;font-size:0.75rem;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--text);}
+.header{text-align:center;padding:40px 0 30px;}
+.header h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-1px;line-height:1.1;}
+.header h1 span{color:var(--accent);}
+.progress-bar-wrap{background:var(--border);border-radius:999px;height:6px;margin:20px 0 10px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:999px;transition:width 0.4s ease;}
+.progress-label{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-bottom:24px;}
+.question-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px;animation:fadeSlide 0.3s ease;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.q-number{font-size:0.7rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.q-text{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;line-height:1.5;margin-bottom:20px;}
+.options{display:flex;flex-direction:column;gap:10px;}
+.option{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--text);text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.1s;display:flex;align-items:center;gap:12px;}
+.option:hover:not(:disabled){border-color:var(--accent);transform:translateX(4px);}
+.option .opt-letter{font-weight:500;color:var(--muted);min-width:18px;}
+.option.correct{background:var(--correct-bg);border-color:var(--accent);color:var(--accent);}
+.option.correct .opt-letter{color:var(--accent);}
+.option.wrong{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong);}
+.option.wrong .opt-letter{color:var(--wrong);}
+.option:disabled{cursor:default;}
+.feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-size:0.82rem;line-height:1.5;display:none;}
+.feedback.show{display:block;}
+.feedback.correct-fb{background:var(--correct-bg);border:1px solid var(--accent);color:var(--accent);}
+.feedback.wrong-fb{background:var(--wrong-bg);border:1px solid var(--wrong);color:#ff8888;}
+.nav{display:flex;justify-content:space-between;align-items:center;margin:20px 0 40px;gap:12px;}
+.btn{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;padding:12px 28px;border-radius:10px;border:none;cursor:pointer;transition:transform 0.15s,opacity 0.15s;letter-spacing:0.5px;}
+.btn:hover{transform:translateY(-2px);}
+.btn:disabled{opacity:0.3;cursor:default;transform:none;}
+.btn-prev{background:var(--surface);color:var(--text);border:1.5px solid var(--border);}
+.btn-next{background:var(--accent);color:#000;}
+.btn-submit{background:var(--accent2);color:#fff;}
+.score-chip{font-size:0.78rem;color:var(--muted);text-align:center;}
+.score-chip span{color:var(--accent);font-weight:bold;}
+.results-screen{display:none;text-align:center;padding:60px 20px;animation:fadeSlide 0.4s ease;}
+.results-screen.show{display:block;}
+.result-score-ring{width:160px;height:160px;border-radius:50%;border:6px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 30px;}
+.result-score-ring .big{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--accent);}
+.result-score-ring .small{font-size:0.75rem;color:var(--muted);}
+.results-screen h2{font-family:'Syne',sans-serif;font-size:1.8rem;margin-bottom:10px;}
+.result-breakdown{display:flex;justify-content:center;gap:30px;margin:20px 0 10px;flex-wrap:wrap;}
+.rb-item{text-align:center;}
+.rb-item .val{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;}
+.rb-item .lbl{font-size:0.72rem;color:var(--muted);}
+.grade-msg{color:var(--muted);font-size:0.9rem;margin-bottom:10px;}
+.saved-msg{font-size:0.75rem;color:var(--accent);margin-bottom:16px;min-height:20px;}
+.results-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+.review-section{margin-top:40px;text-align:left;}
+.review-section h3{font-family:'Syne',sans-serif;font-size:1.1rem;margin-bottom:16px;text-align:center;color:var(--muted);letter-spacing:1px;}
+.review-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;font-size:0.82rem;}
+.review-item.r-correct{border-left:3px solid var(--accent);}
+.review-item.r-wrong{border-left:3px solid var(--wrong);}
+.review-item .r-q{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:8px;font-size:0.88rem;}
+.review-item .r-your{color:var(--wrong);}
+.review-item .r-ans{color:var(--accent);}
+.review-item .r-skip{color:var(--muted);font-style:italic;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="name-screen" id="nameScreen">
+    <h2>Knife Handling,<br><span>Sharpening &amp; Cuts</span></h2>
+    <p>Knife Anatomy · Types of Knives · Classic Cuts · Sharpening Techniques<br>Enter your name to start.</p>
+    <div class="name-input-wrap">
+      <input type="text" class="name-input" id="nameInput" placeholder="Your name..." maxlength="30">
+      <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>Start Quiz →</button>
+      <div class="ghost-notice" id="ghostNotice">👻 Ghost Mode — score won't be saved</div>
+    </div>
+    <div class="bank-info">🎲 <span>30 questions</span> in Session 1 · <span>45 questions</span> in Session 2<br>Starred topics prioritised · Full bank of <span>75</span> in 2 sessions</div>
+    <div class="session-badge" id="sessionBadge">Session 1 of 2</div>
+    <a href="index.html" class="back-link">← Back to all quizzes</a>
+  </div>
+
+  <div id="quizScreen" style="display:none">
+    <div class="header">
+      <h1>Knife Handling,<br><span>Sharpening &amp; Cuts</span></h1>
+      <p id="playerLabel" style="color:var(--accent);font-size:0.8rem;"></p>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label"><span id="progressText">Question 1 of 30</span><span id="liveScore">Score: 0</span></div>
+    <div class="question-card" id="questionCard">
+      <div class="q-number" id="qNumber">QUESTION 01</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
+      <div class="score-chip">Answered: <span id="answeredCount">0</span>/<span id="totalQLabel">30</span></div>
+      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </div>
+    <div style="text-align:center;margin-bottom:40px;">
+      <button class="btn btn-submit" onclick="submitQuiz()">Submit &amp; See Results</button>
+    </div>
+  </div>
+
+  <div class="results-screen" id="resultsScreen">
+    <div class="result-score-ring"><div class="big" id="rScore">0</div><div class="small" id="rOutOf">out of 30</div></div>
+    <h2 id="rGrade"></h2>
+    <div class="grade-msg" id="rMsg"></div>
+    <div class="saved-msg" id="savedMsg"></div>
+    <div class="result-breakdown">
+      <div class="rb-item"><div class="val" id="rCorrect" style="color:var(--accent)">0</div><div class="lbl">Correct</div></div>
+      <div class="rb-item"><div class="val" id="rWrong" style="color:var(--wrong)">0</div><div class="lbl">Wrong</div></div>
+      <div class="rb-item"><div class="val" id="rSkipped" style="color:var(--muted)">0</div><div class="lbl">Skipped</div></div>
+      <div class="rb-item"><div class="val" id="rPercent" style="color:var(--accent2)">0%</div><div class="lbl">Percentage</div></div>
+    </div>
+    <div class="results-btns">
+      <button class="btn btn-next" id="nextSessionBtn" onclick="nextSession()">↺ Session 2 →</button>
+      <a href="index.html" class="btn btn-prev" style="text-decoration:none;display:inline-flex;align-items:center;">🏠 Home</a>
+    </div>
+    <div class="review-section"><h3>— REVIEW ALL ANSWERS —</h3><div id="reviewContainer"></div></div>
+  </div>
+
+</div>
+<script>
+const QUIZ_ID='culinary-03', LS_KEY='culinary03_seen', STORAGE_KEY='leaderboard-scores';
+const S1_COUNT=30, BANK_SIZE=75;
+
+const BANK=[
+  {id:1,p:1,q:"The most versatile knife in the kitchen is:",opts:["The paring knife","The bread knife","The chef's knife (cook's knife)","The boning knife"],ans:2},
+  {id:2,p:1,q:"What is the correct grip when using a chef's knife?",opts:["Hold the handle only with all fingers wrapped around it","Pinch grip — thumb and forefinger pinching the blade at the heel, remaining fingers on the handle","Hold the tip of the blade with all fingers","Rest the index finger along the top of the blade spine"],ans:1},
+  {id:3,p:1,q:"The 'claw grip' when cutting protects the fingers by:",opts:["Gripping the knife tightly","Curling the fingertips under so the knuckles guide the blade","Holding the food loosely","Gripping the spine of the knife"],ans:1},
+  {id:4,p:1,q:"The correct motion when chopping is:",opts:["An aggressive straight-down chopping action","A rocking forward motion — the tip stays on the board and the heel rocks up and forward","A sawing back-and-forth motion","A scooping motion towards the body"],ans:1},
+  {id:5,p:1,q:"Brunoise is a cut that results in:",opts:["Long thin matchstick strips","Very small uniform cubes approximately 3mm × 3mm × 3mm","Thin ribbon-like shreds","Rough irregular pieces"],ans:1},
+  {id:6,p:1,q:"Brunoise is derived from which other cut?",opts:["Batonnet","Julienne","Chiffonade","Paysanne"],ans:1},
+  {id:7,p:1,q:"Julienne describes:",opts:["Small cubes","Thin matchstick strips approximately 3mm × 3mm × 6cm","Thin ribbon shreds of leafy vegetables","A diagonal cut"],ans:1},
+  {id:8,p:1,q:"Chiffonade is used to cut:",opts:["Root vegetables","Soft leafy herbs and greens — resulting in thin ribbons","Onions and shallots","Carrots and celery"],ans:1},
+  {id:9,p:1,q:"The correct technique for chiffonade is:",opts:["Stack leaves, roll tightly and slice across to create thin ribbons","Dice the leaves into small squares","Tear leaves by hand","Blanch and then shred"],ans:0},
+  {id:10,p:1,q:"Batonnet is a cut that produces:",opts:["Very small cubes","Short uniform sticks approximately 6mm × 6mm × 5–6cm (similar to a thick French fry)","Paper-thin slices","Triangular pieces"],ans:1},
+  {id:11,p:1,q:"Large dice measures approximately:",opts:["3mm × 3mm","6mm × 6mm","20mm × 20mm","10mm × 10mm"],ans:2},
+  {id:12,p:1,q:"Medium dice measures approximately:",opts:["3mm","6mm","12mm","20mm"],ans:2},
+  {id:13,p:1,q:"Small dice measures approximately:",opts:["3mm","6mm","9mm","15mm"],ans:1},
+  {id:14,p:1,q:"Mirepoix is:",opts:["A very fine dice used in garnishes","A rough-cut mixture of onion (50%), carrot (25%) and celery (25%) used as a flavour base","A French term for matchstick cuts","A thin slice of vegetable"],ans:1},
+  {id:15,p:1,q:"Paysanne is a cut that produces:",opts:["Long thin strips","Flat irregular shapes approximately 12mm × 12mm × 3mm — used in rustic soups","Small fine cubes","Paper-thin rounds"],ans:1},
+  {id:16,p:1,q:"Tourner (turned vegetables) produces:",opts:["Round slices","A football or barrel shape with 7 equal sides and blunt ends","Long ribbons","Small cubes"],ans:1},
+  {id:17,p:1,q:"Macédoine is a cut that produces:",opts:["Thin strips","Medium uniform cubes approximately 5mm × 5mm","Rough pieces","Diagonal slices"],ans:1},
+  {id:18,p:1,q:"Rondelle cuts produce:",opts:["Long strips","Round circular slices (cross-sections of cylindrical vegetables like carrots)","Triangular pieces","Irregular chunks"],ans:1},
+  {id:19,p:1,q:"The oblique cut (roll cut) produces:",opts:["Uniform cubes","Irregular diagonal pieces of similar size — made by rolling the vegetable between cuts","Thin ribbons","Long batons"],ans:1},
+  {id:20,p:1,q:"Mincing produces:",opts:["Thick rough cuts","The finest possible cut — very small irregular pieces smaller than a fine dice","Long thin strips","Uniform cubes"],ans:1},
+  {id:21,p:1,q:"To 'pare' a vegetable means:",opts:["To cut it into small cubes","To peel the outer skin using a paring knife","To blanch it in hot water","To slice it thinly"],ans:1},
+  {id:22,p:1,q:"Uniform cuts are important because:",opts:["They look more decorative only","Uniform pieces cook at the same rate — ensuring even cooking and consistent results","They are easier to cut","They reduce the amount of seasoning needed"],ans:1},
+  {id:23,p:1,q:"The spine of a knife is:",opts:["The sharp cutting edge","The blunt top edge (back) of the blade — opposite to the cutting edge","The tip of the blade","The part that fits into the handle"],ans:1},
+  {id:24,p:1,q:"The heel of a knife is:",opts:["The tip of the blade","The widest and thickest part of the blade closest to the handle — used for heavy cutting tasks","The sharp cutting edge","The flat side of the blade"],ans:1},
+  {id:25,p:1,q:"The bolster of a knife is:",opts:["The cutting edge","The thick metal collar between the blade and the handle — provides balance and protects fingers","The tip of the blade","The full length of the cutting edge"],ans:1},
+  {id:26,p:1,q:"The tang of a knife refers to:",opts:["The sharp edge of the blade","The extension of the blade that runs into the handle — determines strength and balance","The sharpening angle","The cutting tip"],ans:1},
+  {id:27,p:1,q:"A full-tang knife means:",opts:["The blade extends only halfway into the handle","The blade steel runs the full length of the handle — offering superior strength and balance","The knife has no handle","The blade has a curved spine"],ans:1},
+  {id:28,p:1,q:"A paring knife is best used for:",opts:["Breaking down large joints of meat","Intricate small tasks — peeling, trimming and detail work","Slicing bread","Filleting fish"],ans:1},
+  {id:29,p:1,q:"A bread knife has a serrated edge because:",opts:["It is easier to store","The serrations allow slicing through hard crusts without crushing the soft interior","It is used for cutting raw meat","It is decorative only"],ans:1},
+  {id:30,p:1,q:"A boning knife is designed for:",opts:["Slicing bread and pastry","Removing bones from meat, poultry and fish — it has a thin, flexible and pointed blade","Turning and shaping vegetables","Cutting large watermelons"],ans:1},
+  {id:31,p:1,q:"A filleting knife differs from a boning knife because:",opts:["It is thicker and heavier","It is thinner and more flexible — specifically designed for delicate fish filleting","It has a serrated edge","It is used only for vegetables"],ans:1},
+  {id:32,p:2,q:"A palette knife (offset spatula) is used for:",opts:["Cutting meat","Lifting, spreading and turning — not for cutting","Filleting fish","Chopping herbs"],ans:1},
+  {id:33,p:2,q:"A santoku knife originates from:",opts:["France","Germany","Japan","Spain"],ans:2},
+  {id:34,p:1,q:"Which knife is preferred for slicing raw fish in Japanese cuisine?",opts:["Cleaver","Yanagiba (sashimi knife)","Bread knife","Paring knife"],ans:1},
+  {id:35,p:2,q:"A cleaver is used for:",opts:["Fine herb chopping","Chopping through bones and dense materials","Filleting fish","Peeling fruit"],ans:1},
+  {id:36,p:1,q:"Japanese knives are generally:",opts:["Thicker and heavier than European knives","Thinner, harder and sharper — requiring more careful maintenance","Made exclusively from stainless steel","Only suitable for vegetables"],ans:1},
+  {id:37,p:2,q:"German/European chef's knives are generally:",opts:["Harder and more brittle","Heavier with a more curved belly — designed for a rocking cutting motion","Thinner and more fragile","Only used for fish"],ans:1},
+  {id:38,p:1,q:"Carbon steel knives compared to stainless steel:",opts:["Are rust-resistant and require no special care","Are easier to sharpen and hold an edge longer but require more maintenance — they can rust and patina","Are only used by professional chefs","Cannot be used for vegetables"],ans:1},
+  {id:39,p:1,q:"A whetstone (sharpening stone) should be used:",opts:["Dry — never with water","With water or oil to lubricate the surface and remove metal particles","Only once a year","After each use with soap"],ans:1},
+  {id:40,p:1,q:"Wet stones for knife sharpening are categorised by:",opts:["Colour only","Grit number — lower grit (coarser) removes more metal; higher grit (finer) polishes the edge","Size and weight","Country of origin"],ans:1},
+  {id:41,p:1,q:"Which grit stone would you use first on a very dull knife?",opts:["6000 grit (fine)","8000 grit (ultra fine)","220 grit (coarse)","1200 grit (medium)"],ans:2},
+  {id:42,p:1,q:"The correct sharpening angle for most Western chef's knives is approximately:",opts:["5–8 degrees","15–20 degrees","30–45 degrees","50–60 degrees"],ans:1},
+  {id:43,p:1,q:"Japanese knives are typically sharpened at a:",opts:["Wider angle of 25–30 degrees","Narrower angle of 10–15 degrees — producing a sharper, more delicate edge","Angle of 45 degrees","No specific angle — it varies randomly"],ans:1},
+  {id:44,p:1,q:"A honing steel (sharpening steel) is used to:",opts:["Remove large amounts of metal to create a new edge","Realign the microscopic edge of the blade — it does not sharpen but maintains the edge between sharpenings","Polish the surface of the blade only","Remove rust from old knives"],ans:1},
+  {id:45,p:1,q:"The difference between honing and sharpening is:",opts:["They are the same process","Honing realigns the edge; sharpening removes metal to create a new edge","Sharpening realigns the edge; honing removes metal","Neither is necessary for professional knives"],ans:1},
+  {id:46,p:1,q:"A stropping motion after sharpening is used to:",opts:["Further sharpen the blade","Remove the burr (wire edge) and polish the edge to final sharpness","Roughen the edge for grip","Cool down the blade after sharpening"],ans:1},
+  {id:47,p:1,q:"The burr (wire edge) that forms during sharpening indicates:",opts:["The knife is damaged","A new edge has been formed — the burr is then removed by stropping or fine stones","The stone is worn out","The angle is too steep"],ans:1},
+  {id:48,p:1,q:"To test if a knife is sharp, a professional would:",opts:["Run their finger across the edge","Slice a sheet of paper — a sharp knife cuts cleanly with no tearing","Tap the blade on the cutting board","Look at the reflection in the blade"],ans:1},
+  {id:49,p:1,q:"Knives should be stored:",opts:["In a drawer mixed with other utensils","On a magnetic strip, in a knife block or individual blade guards — never loose in a drawer","In a bucket of water","Under the cutting board"],ans:1},
+  {id:50,p:1,q:"A stable cutting board is essential because:",opts:["It looks more professional","An unstable board causes the knife to slip and increases the risk of injury","It keeps the food warmer","It prevents the knife from becoming blunt"],ans:1},
+  {id:51,p:1,q:"Which cutting board material is most sanitary for a professional kitchen?",opts:["Wood — it has natural antibacterial properties","Plastic — it can be sanitised in a dishwasher at high temperatures","Bamboo — it is the most durable","Marble — it is the hardest surface"],ans:1},
+  {id:52,p:1,q:"A damp cloth or non-slip mat is placed under the cutting board to:",opts:["Keep the board warm","Prevent the board from sliding during use","Absorb food juices","Protect the work surface from scratches"],ans:1},
+  {id:53,p:1,q:"If a knife falls from the work surface, you should:",opts:["Try to catch it quickly","Step back and let it fall — never try to catch a falling knife","Use your foot to stop it","Grab it with a cloth"],ans:1},
+  {id:54,p:1,q:"When passing a knife to a colleague, you should:",opts:["Throw it carefully with the blade pointing down","Place it on the work surface for them to pick up, or pass it handle-first pointing away","Hold the blade and pass the handle first","Slide it across the floor"],ans:1},
+  {id:55,p:1,q:"The correct way to walk with a knife in a kitchen is:",opts:["Hold the knife above your head for visibility","Hold the knife at your side with the blade pointing down, tip backward and announce your presence","Keep it hidden under a cloth","Point the blade forward to warn others"],ans:1},
+  {id:56,p:2,q:"What is the purpose of blanching onions before dicing?",opts:["To add more flavour","To loosen the skin and reduce sharpness — making them easier to peel and handle","To caramelise them","To remove water content"],ans:1},
+  {id:57,p:1,q:"When dicing an onion, why is the root end kept intact?",opts:["To use as a garnish afterwards","The root holds the layers together — preventing the onion from falling apart during cutting","To test freshness","To make it easier to peel"],ans:1},
+  {id:58,p:1,q:"The three knife cuts most commonly tested in culinary exams are:",opts:["Rondelle, peel and core","Brunoise, julienne and chiffonade","Rough chop, mince and quarter","Dice, slice and halve"],ans:1},
+  {id:59,p:1,q:"Which knife cut is most appropriate for stir-fried vegetables?",opts:["Brunoise","Julienne or batonnet","Macédoine","Tourner"],ans:1},
+  {id:60,p:1,q:"Which knife cut is used to prepare coleslaw?",opts:["Brunoise","Julienne or chiffonade","Rondelle","Tourner"],ans:1},
+  {id:61,p:1,q:"The classic knife cut for mirepoix is:",opts:["A fine brunoise","A rough chop — pieces should be large enough to withstand long cooking (approximately 1–2cm)","A julienne","A tourner"],ans:1},
+  {id:62,p:2,q:"A mandoline slicer in the kitchen is used for:",opts:["Mixing sauces","Producing very thin, consistent slices of vegetables rapidly","Sharpening knives","Cutting meat into strips"],ans:1},
+  {id:63,p:1,q:"'Supremes' in fruit cutting refers to:",opts:["Cutting fruit in half only","Cutting citrus segments free from all pith and membrane","Peeling fruit with a peeler","A decorative carving technique"],ans:1},
+  {id:64,p:1,q:"A turning knife (tourné knife) has a:",opts:["Straight blade for slicing","Short curved blade — used specifically for turning and shaping vegetables","Serrated edge for bread","Flexible blade for filleting"],ans:1},
+  {id:65,p:2,q:"The handle material most recommended for professional kitchens is:",opts:["Wood — for traditional aesthetics","Man-made composite or plastic — it is hygienic, dishwasher-safe and does not warp","Bone — for durability","Rubber — for grip only"],ans:1},
+  {id:66,p:1,q:"Single bevel knives are used primarily by:",opts:["Home cooks for everyday tasks","Japanese sushi chefs — for precise fish cutting where one flat side prevents the food from sticking","Pastry chefs for rolling","Butchers for breaking down carcasses"],ans:1},
+  {id:67,p:1,q:"Double bevel knives are:",opts:["Only used in Japanese kitchens","Ground on both sides — more durable and easier to sharpen — used in most Western kitchens","Always serrated","Made from carbon steel only"],ans:1},
+  {id:68,p:1,q:"Knife balance refers to:",opts:["The weight of the knife only","The point at which the knife feels neither blade-heavy nor handle-heavy — usually near the first finger","The handle colour matching the kitchen uniform","The sharpness of the blade"],ans:1},
+  {id:69,p:1,q:"The ideal length of a chef's knife for all-round professional kitchen use is:",opts:["4–5 inches","8–10 inches (20–25cm)","12–14 inches","2–3 inches"],ans:1},
+  {id:70,p:1,q:"A knife should be cleaned by:",opts:["Soaking in water overnight","Wiping immediately with a damp cloth after use — never placed in a dishwasher if possible","Placing in a dishwasher after every use","Scrubbing with a steel wool pad"],ans:1},
+  {id:71,p:1,q:"Flat stones for sharpening need to be periodically 'flattened' because:",opts:["They are used to sharpen other tools","They develop low spots from repeated use — a flat stone ensures consistent angle and edge","They are too sharp after regular use","They absorb water and expand"],ans:1},
+  {id:72,p:2,q:"The Wüsthof and Henckels brands are examples of:",opts:["Japanese knife manufacturers","German/European knife manufacturers known for heavier, curved-belly chef's knives","Budget kitchen tool manufacturers","Plastic handle specialist manufacturers"],ans:1},
+  {id:73,p:1,q:"Which grit progression is correct when sharpening a very dull knife on wet stones?",opts:["Start at 6000, move to 1200, finish at 220","Start at 220 (coarse), progress to 1200 (medium), finish at 6000–8000 (fine)","Start at 1200, move to 220, finish at 6000","Any grit in any order produces the same result"],ans:1},
+  {id:74,p:1,q:"After sharpening, the knife should be:",opts:["Stored wet to prevent rust","Wiped clean and dried before storage","Placed immediately in a bucket of water","Sharpened again immediately"],ans:1},
+  {id:75,p:1,q:"The most important reason for keeping knives sharp in a professional kitchen is:",opts:["Sharp knives look more impressive on the workstation","A sharp knife requires less force — reducing slipping and injury risk — and produces cleaner, more precise cuts","Sharp knives last longer without any maintenance","Blunt knives are not allowed by law in commercial kitchens"],ans:1},
+];
+
+let isGhost=sessionStorage.getItem('ghostMode')==='1';
+if(isGhost)document.getElementById('ghostNotice').classList.add('show');
+const nameInput=document.getElementById('nameInput'),startBtn=document.getElementById('startBtn');
+nameInput.addEventListener('input',()=>{startBtn.disabled=nameInput.value.trim().length<2;});
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&nameInput.value.trim().length>=2)startQuiz();});
+
+let playerName='',current=0,sessionQ=[],userAnswers=[],currentSessionNum=1;
+
+function getSeenIds(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch{return[];}}
+function saveSeenIds(ids){try{localStorage.setItem(LS_KEY,JSON.stringify(ids));}catch{}}
+function getSessionNum(){const seen=getSeenIds().length;if(seen===0)return 1;if(seen<BANK_SIZE)return 2;return 1;}
+function updateSessionBadge(){document.getElementById('sessionBadge').textContent='Session '+getSessionNum()+' of 2';}
+updateSessionBadge();
+
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function buildSession(){
+  const seen=getSeenIds(),sessionNum=getSessionNum();
+  currentSessionNum=sessionNum;
+  let picked;
+  if(sessionNum===1){
+    const unseen=BANK.filter(q=>!seen.includes(q.id));
+    picked=[...shuffle(unseen.filter(q=>q.p===1)),...shuffle(unseen.filter(q=>q.p===2))].slice(0,S1_COUNT);
+  } else {
+    const unseen=BANK.filter(q=>!seen.includes(q.id));
+    picked=[...shuffle(unseen.filter(q=>q.p===1)),...shuffle(unseen.filter(q=>q.p===2))];
+    if(picked.length===0){saveSeenIds([]);return buildSession();}
+  }
+  const newSeen=[...new Set([...seen,...picked.map(q=>q.id)])];
+  saveSeenIds(newSeen);
+  updateSessionBadge();
+  return picked.map(q=>{const ct=q.opts[q.ans];const so=shuffle(q.opts.slice());return{q:q.q,opts:so,ans:so.indexOf(ct)};});
+}
+
+function startQuiz(){
+  playerName=nameInput.value.trim();
+  if(playerName.length<2)return;
+  if(playerName==='1994'){isGhost=true;playerName='Ghost';}
+  sessionQ=buildSession();userAnswers=new Array(sessionQ.length).fill(null);current=0;
+  document.getElementById('nameScreen').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  document.getElementById('playerLabel').textContent=isGhost?'👻 Playing anonymously':'Playing as '+playerName;
+  document.getElementById('totalQLabel').textContent=sessionQ.length;
+  document.getElementById('rOutOf').textContent='out of '+sessionQ.length;
+  document.getElementById('nextSessionBtn').textContent=currentSessionNum===1?'↺ Session 2 →':'↺ Start Over';
+  render();
+}
+
+function render(){
+  const q=sessionQ[current],tot=sessionQ.length;
+  document.getElementById('qNumber').textContent='QUESTION '+(current<9?'0':'')+(current+1);
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('progressText').textContent='Question '+(current+1)+' of '+tot;
+  document.getElementById('progressFill').style.width=((current+1)/tot*100)+'%';
+  document.getElementById('answeredCount').textContent=userAnswers.filter(a=>a!==null).length;
+  document.getElementById('liveScore').textContent='Score: '+userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').textContent=current===tot-1?'Last →':'Next →';
+  const container=document.getElementById('optionsContainer');
+  container.innerHTML='';
+  const letters=['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option';
+    btn.innerHTML='<span class="opt-letter">'+letters[i]+'</span>'+opt;
+    btn.onclick=()=>selectAnswer(i);
+    if(userAnswers[current]!==null){btn.disabled=true;if(i===q.ans)btn.classList.add('correct');else if(i===userAnswers[current])btn.classList.add('wrong');}
+    container.appendChild(btn);
+  });
+  const fb=document.getElementById('feedback');
+  fb.className='feedback';
+  if(userAnswers[current]!==null){
+    const correct=userAnswers[current]===q.ans;
+    fb.textContent=correct?'Correct! "'+q.opts[q.ans]+'" is the right answer.':'Wrong. The correct answer is: "'+q.opts[q.ans]+'"';
+    fb.className='feedback show '+(correct?'correct-fb':'wrong-fb');
+  }
+  const card=document.getElementById('questionCard');
+  card.style.animation='none';card.offsetHeight;card.style.animation='fadeSlide 0.3s ease';
+}
+
+function selectAnswer(i){if(userAnswers[current]!==null)return;userAnswers[current]=i;render();}
+function navigate(dir){current=Math.max(0,Math.min(sessionQ.length-1,current+dir));render();}
+
+async function submitQuiz(){
+  const tot=sessionQ.length;
+  const score=userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  const wrong=userAnswers.filter((a,i)=>a!==null&&a!==sessionQ[i].ans).length;
+  const skipped=userAnswers.filter(a=>a===null).length;
+  const pct=Math.round(score/tot*100);
+  document.getElementById('rScore').textContent=score;
+  document.getElementById('rOutOf').textContent='out of '+tot;
+  document.getElementById('rCorrect').textContent=score;
+  document.getElementById('rWrong').textContent=wrong;
+  document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('rPercent').textContent=pct+'%';
+  let grade,msg;
+  if(pct>=90){grade='Outstanding! 🏆';msg='Excellent mastery of Knife Skills & Cuts!';}
+  else if(pct>=75){grade='Great Work! ✨';msg='Strong performance — review a few weak spots.';}
+  else if(pct>=60){grade='Good Effort! 👍';msg='Keep practising.';}
+  else if(pct>=40){grade='Keep Going! 💪';msg='Review your notes and try again.';}
+  else{grade='More Practice Needed';msg='Go over the study content carefully.';}
+  document.getElementById('rGrade').textContent=grade;
+  document.getElementById('rMsg').textContent=msg;
+  const sn=getSessionNum();
+  document.getElementById('nextSessionBtn').textContent=sn===2?'↺ Session 2 →':'↺ Start Over';
+  const savedMsg=document.getElementById('savedMsg');
+  if(isGhost){savedMsg.textContent='👻 Ghost Mode — score not saved';savedMsg.style.color='#f5c542';}
+  else{
+    try{
+      const existing=await window.storage.get(STORAGE_KEY,true).catch(()=>null);
+      const scores=existing?JSON.parse(existing.value):[];
+      scores.push({name:playerName,score,total:tot,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(STORAGE_KEY,JSON.stringify(scores),true);
+      savedMsg.textContent='Score saved as "'+playerName+'"';
+    }catch(e){savedMsg.textContent='Score could not be saved.';savedMsg.style.color='#888';}
+  }
+  const rc=document.getElementById('reviewContainer');
+  rc.innerHTML='';
+  sessionQ.forEach((q,i)=>{
+    const ua=userAnswers[i],correct=ua===q.ans;
+    const div=document.createElement('div');
+    div.className='review-item '+(ua===null?'':correct?'r-correct':'r-wrong');
+    let detail='';
+    if(ua===null)detail='<div class="r-skip">Skipped — Answer: <b>'+q.opts[q.ans]+'</b></div>';
+    else if(correct)detail='<div class="r-ans">&#10003; '+q.opts[q.ans]+'</div>';
+    else detail='<div class="r-your">&#10007; Your answer: '+q.opts[ua]+'</div><div class="r-ans">&#10003; Correct: '+q.opts[q.ans]+'</div>';
+    div.innerHTML='<div class="r-q">Q'+(i+1)+'. '+q.q+'</div>'+detail;
+    rc.appendChild(div);
+  });
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('resultsScreen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function nextSession(){
+  sessionQ=buildSession();userAnswers=new Array(sessionQ.length).fill(null);current=0;
+  document.getElementById('totalQLabel').textContent=sessionQ.length;
+  document.getElementById('rOutOf').textContent='out of '+sessionQ.length;
+  document.getElementById('nextSessionBtn').textContent=currentSessionNum===1?'↺ Session 2 →':'↺ Start Over';
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizScreen').style.display='block';
+  render();window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

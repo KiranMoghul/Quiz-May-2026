@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍🍳</text></svg>">
+<title>Cooking Methods — Quiz Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0d;--surface:#1a1a1a;--card:#222;--border:#333;--accent:#00e5a0;--accent2:#ff6b35;--wrong:#ff4444;--text:#f0f0f0;--muted:#888;--correct-bg:rgba(0,229,160,0.12);--wrong-bg:rgba(255,68,68,0.1);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;padding:20px;}
+.container{max-width:780px;margin:0 auto;}
+.name-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;animation:fadeSlide 0.4s ease;}
+.name-screen h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
+.name-screen h2 span{color:var(--accent);}
+.name-screen p{color:var(--muted);font-size:0.82rem;margin-bottom:28px;line-height:1.8;}
+.name-input-wrap{width:100%;max-width:380px;}
+.name-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--text);outline:none;transition:border-color 0.2s;text-align:center;margin-bottom:14px;}
+.name-input:focus{border-color:var(--accent);}
+.name-input::placeholder{color:var(--muted);}
+.btn-start{width:100%;padding:15px;background:var(--accent);color:#000;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:transform 0.15s,opacity 0.2s;letter-spacing:0.5px;}
+.btn-start:hover{transform:translateY(-2px);}
+.btn-start:disabled{opacity:0.4;cursor:default;transform:none;}
+.ghost-notice{margin-top:14px;font-size:0.72rem;color:#f5c542;display:none;}
+.ghost-notice.show{display:block;}
+.bank-info{margin-top:14px;font-size:0.7rem;color:var(--muted);line-height:1.9;}
+.bank-info span{color:var(--accent);}
+.session-badge{margin-top:10px;font-size:0.72rem;padding:5px 14px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);display:inline-block;}
+.back-link{margin-top:30px;font-size:0.75rem;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--text);}
+.header{text-align:center;padding:40px 0 30px;}
+.header h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-1px;line-height:1.1;}
+.header h1 span{color:var(--accent);}
+.progress-bar-wrap{background:var(--border);border-radius:999px;height:6px;margin:20px 0 10px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:999px;transition:width 0.4s ease;}
+.progress-label{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-bottom:24px;}
+.question-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px;animation:fadeSlide 0.3s ease;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.q-number{font-size:0.7rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.q-text{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;line-height:1.5;margin-bottom:20px;}
+.options{display:flex;flex-direction:column;gap:10px;}
+.option{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--text);text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.1s;display:flex;align-items:center;gap:12px;}
+.option:hover:not(:disabled){border-color:var(--accent);transform:translateX(4px);}
+.option .opt-letter{font-weight:500;color:var(--muted);min-width:18px;}
+.option.correct{background:var(--correct-bg);border-color:var(--accent);color:var(--accent);}
+.option.correct .opt-letter{color:var(--accent);}
+.option.wrong{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong);}
+.option.wrong .opt-letter{color:var(--wrong);}
+.option:disabled{cursor:default;}
+.feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-size:0.82rem;line-height:1.5;display:none;}
+.feedback.show{display:block;}
+.feedback.correct-fb{background:var(--correct-bg);border:1px solid var(--accent);color:var(--accent);}
+.feedback.wrong-fb{background:var(--wrong-bg);border:1px solid var(--wrong);color:#ff8888;}
+.nav{display:flex;justify-content:space-between;align-items:center;margin:20px 0 40px;gap:12px;}
+.btn{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;padding:12px 28px;border-radius:10px;border:none;cursor:pointer;transition:transform 0.15s,opacity 0.15s;letter-spacing:0.5px;}
+.btn:hover{transform:translateY(-2px);}
+.btn:disabled{opacity:0.3;cursor:default;transform:none;}
+.btn-prev{background:var(--surface);color:var(--text);border:1.5px solid var(--border);}
+.btn-next{background:var(--accent);color:#000;}
+.btn-submit{background:var(--accent2);color:#fff;}
+.score-chip{font-size:0.78rem;color:var(--muted);text-align:center;}
+.score-chip span{color:var(--accent);font-weight:bold;}
+.results-screen{display:none;text-align:center;padding:60px 20px;animation:fadeSlide 0.4s ease;}
+.results-screen.show{display:block;}
+.result-score-ring{width:160px;height:160px;border-radius:50%;border:6px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 30px;}
+.result-score-ring .big{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--accent);}
+.result-score-ring .small{font-size:0.75rem;color:var(--muted);}
+.results-screen h2{font-family:'Syne',sans-serif;font-size:1.8rem;margin-bottom:10px;}
+.result-breakdown{display:flex;justify-content:center;gap:30px;margin:20px 0 10px;flex-wrap:wrap;}
+.rb-item{text-align:center;}
+.rb-item .val{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;}
+.rb-item .lbl{font-size:0.72rem;color:var(--muted);}
+.grade-msg{color:var(--muted);font-size:0.9rem;margin-bottom:10px;}
+.saved-msg{font-size:0.75rem;color:var(--accent);margin-bottom:16px;min-height:20px;}
+.results-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+.review-section{margin-top:40px;text-align:left;}
+.review-section h3{font-family:'Syne',sans-serif;font-size:1.1rem;margin-bottom:16px;text-align:center;color:var(--muted);letter-spacing:1px;}
+.review-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;font-size:0.82rem;}
+.review-item.r-correct{border-left:3px solid var(--accent);}
+.review-item.r-wrong{border-left:3px solid var(--wrong);}
+.review-item .r-q{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:8px;font-size:0.88rem;}
+.review-item .r-your{color:var(--wrong);}
+.review-item .r-ans{color:var(--accent);}
+.review-item .r-skip{color:var(--muted);font-style:italic;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="name-screen" id="nameScreen">
+    <h2>Cooking<br><span>Methods</span></h2>
+    <p>Dry Heat · Moist Heat · Frying · Temperatures · Maillard Reaction<br>Enter your name to start.</p>
+    <div class="name-input-wrap">
+      <input type="text" class="name-input" id="nameInput" placeholder="Your name..." maxlength="30">
+      <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>Start Quiz →</button>
+      <div class="ghost-notice" id="ghostNotice">👻 Ghost Mode — score won't be saved</div>
+    </div>
+    <div class="bank-info">🎲 <span>30 questions</span> in Session 1 · <span>45 questions</span> in Session 2<br>Starred topics prioritised · Full bank of <span>75</span> in 2 sessions</div>
+    <div class="session-badge" id="sessionBadge">Session 1 of 2</div>
+    <a href="index.html" class="back-link">← Back to all quizzes</a>
+  </div>
+
+  <div id="quizScreen" style="display:none">
+    <div class="header">
+      <h1>Cooking<br><span>Methods</span></h1>
+      <p id="playerLabel" style="color:var(--accent);font-size:0.8rem;"></p>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label"><span id="progressText">Question 1 of 30</span><span id="liveScore">Score: 0</span></div>
+    <div class="question-card" id="questionCard">
+      <div class="q-number" id="qNumber">QUESTION 01</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
+      <div class="score-chip">Answered: <span id="answeredCount">0</span>/<span id="totalQLabel">30</span></div>
+      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </div>
+    <div style="text-align:center;margin-bottom:40px;">
+      <button class="btn btn-submit" onclick="submitQuiz()">Submit &amp; See Results</button>
+    </div>
+  </div>
+
+  <div class="results-screen" id="resultsScreen">
+    <div class="result-score-ring"><div class="big" id="rScore">0</div><div class="small" id="rOutOf">out of 30</div></div>
+    <h2 id="rGrade"></h2>
+    <div class="grade-msg" id="rMsg"></div>
+    <div class="saved-msg" id="savedMsg"></div>
+    <div class="result-breakdown">
+      <div class="rb-item"><div class="val" id="rCorrect" style="color:var(--accent)">0</div><div class="lbl">Correct</div></div>
+      <div class="rb-item"><div class="val" id="rWrong" style="color:var(--wrong)">0</div><div class="lbl">Wrong</div></div>
+      <div class="rb-item"><div class="val" id="rSkipped" style="color:var(--muted)">0</div><div class="lbl">Skipped</div></div>
+      <div class="rb-item"><div class="val" id="rPercent" style="color:var(--accent2)">0%</div><div class="lbl">Percentage</div></div>
+    </div>
+    <div class="results-btns">
+      <button class="btn btn-next" id="nextSessionBtn" onclick="nextSession()">↺ Session 2 →</button>
+      <a href="index.html" class="btn btn-prev" style="text-decoration:none;display:inline-flex;align-items:center;">🏠 Home</a>
+    </div>
+    <div class="review-section"><h3>— REVIEW ALL ANSWERS —</h3><div id="reviewContainer"></div></div>
+  </div>
+
+</div>
+<script>
+const QUIZ_ID='culinary-06', LS_KEY='culinary06_seen', STORAGE_KEY='leaderboard-scores';
+const S1_COUNT=30, BANK_SIZE=75;
+
+const BANK=[
+  {id:1,p:1,q:"Cooking methods are primarily classified into how many categories?",opts:["Two — wet and dry","Three — dry heat, moist heat and frying","Four — bake, boil, fry and steam","Five based on heat source"],ans:1},
+  {id:2,p:1,q:"Which of the following is a dry heat cooking method?",opts:["Poaching","Braising","Roasting","Steaming"],ans:2},
+  {id:3,p:1,q:"Which of the following is a moist heat cooking method?",opts:["Grilling","Roasting","Sautéing","Poaching"],ans:3},
+  {id:4,p:1,q:"Baking involves:",opts:["Cooking food in oil in a pan","Cooking food in an enclosed oven using dry, circulating hot air","Cooking food on an open flame","Cooking food submerged in boiling water"],ans:1},
+  {id:5,p:1,q:"Roasting differs from baking primarily because:",opts:["Roasting uses water","Roasting is used for meats, poultry and vegetables at high temperatures; baking is used for bread, pastries and cakes","Baking uses an open flame","There is no difference"],ans:1},
+  {id:6,p:1,q:"Grilling uses heat from:",opts:["Below the food — from hot coals or a gas flame under a grate","Above the food only","Surrounding hot air","Hot liquid"],ans:0},
+  {id:7,p:1,q:"Broiling (or oven grilling) differs from grilling because:",opts:["It uses more oil","The heat source is above the food rather than below","It uses liquid","It is always done outdoors"],ans:1},
+  {id:8,p:1,q:"Barbecuing (BBQ) is:",opts:["The same as grilling","A slow cooking method using indirect heat and smoke at low temperatures (110–130°C) for long periods","Deep frying outdoors","Roasting in an outdoor oven"],ans:1},
+  {id:9,p:1,q:"Sautéing means:",opts:["Cooking food submerged in fat","Cooking food quickly in a small amount of fat over high heat with frequent movement","Cooking food in liquid below boiling point","Cooking food in an oven with no fat"],ans:1},
+  {id:10,p:1,q:"The Maillard reaction is responsible for:",opts:["Food going soggy in water","The brown colour and complex flavour when proteins and sugars are heated together — occurs in roasting, grilling, sautéing","Food becoming blue when overheated","The white colour of steamed food"],ans:1},
+  {id:11,p:1,q:"Searing is used to:",opts:["Slowly break down connective tissue","Create a flavourful brown crust on the surface of meat through the Maillard reaction before further cooking","Preserve food through dehydration","Add moisture to dry foods"],ans:1},
+  {id:12,p:1,q:"Boiling uses water at:",opts:["60°C","80°C","100°C","120°C"],ans:2},
+  {id:13,p:1,q:"Simmering is different from boiling because:",opts:["It uses more water","The liquid is maintained just below boiling point (85–95°C) with gentle bubbles","It requires a lid always","It uses no liquid"],ans:1},
+  {id:14,p:1,q:"Poaching uses liquid at what temperature?",opts:["100°C (full rolling boil)","70–80°C (gentle — small bubbles, no turbulence)","50°C","120°C"],ans:1},
+  {id:15,p:1,q:"Steaming is considered healthier than boiling because:",opts:["It cooks food faster","Food does not contact the water — vitamins and minerals are not leached into the cooking liquid","It uses higher temperatures","It browns the food"],ans:1},
+  {id:16,p:1,q:"Steaming requires water to be:",opts:["Ice cold","Boiling to produce the steam that cooks the food by convection","At 60°C only","Mixed with oil"],ans:1},
+  {id:17,p:1,q:"Braising is best described as:",opts:["Cooking food in a large amount of water at high temperature","Searing food first then cooking slowly in a small amount of liquid in a covered pot at low temperature","Frying food in deep oil","Cooking food over direct high flame"],ans:1},
+  {id:18,p:1,q:"Braising is suitable for:",opts:["Only delicate fish and vegetables","Tougher, more flavourful cuts of meat — the slow moist heat breaks down collagen into gelatin making them tender","Pastry and baked goods","Eggs and dairy"],ans:1},
+  {id:19,p:1,q:"Stewing differs from braising because:",opts:["They are the same method","In stewing, the food is cut into smaller pieces and fully submerged in liquid; in braising, the food is larger and partially covered","Braising uses more liquid","Stewing always uses no liquid"],ans:1},
+  {id:20,p:1,q:"Blanching involves:",opts:["Cooking food at low heat for a long time","Briefly boiling food then immediately plunging it into ice water to stop cooking and preserve colour and texture","Frying food in oil then cooling","Dehydrating food at low temperatures"],ans:1},
+  {id:21,p:1,q:"Why is ice water used after blanching?",opts:["To add flavour","To rapidly stop the cooking process and set the chlorophyll — preserving the bright green colour","To sterilise the food","To remove excess salt"],ans:1},
+  {id:22,p:1,q:"Deep frying requires food to be:",opts:["Partially covered in oil","Fully submerged in oil at 160–200°C","Coated in water before frying","Cooked in a dry pan without oil"],ans:1},
+  {id:23,p:1,q:"The smoke point of oil refers to:",opts:["The temperature at which oil starts bubbling","The temperature at which oil begins to smoke and break down — producing harmful compounds","The flavour profile of the oil","The temperature at which oil solidifies"],ans:1},
+  {id:24,p:1,q:"Which oil has the highest smoke point — making it best for deep frying?",opts:["Extra virgin olive oil","Refined vegetable oil, peanut oil or refined coconut oil","Butter","Sesame oil"],ans:1},
+  {id:25,p:1,q:"Overcrowding the deep fryer causes:",opts:["The food to cook more evenly","The oil temperature to drop — resulting in oil-soaked, greasy food rather than crispy results","The food to cook faster","The oil to smoke more"],ans:1},
+  {id:26,p:1,q:"Shallow frying uses:",opts:["Food fully submerged in oil","A small amount of oil — enough to cover approximately half the depth of the food","No oil at all","Water instead of oil"],ans:1},
+  {id:27,p:1,q:"Stir frying originates from:",opts:["France","China — using a wok over extremely high heat with a small amount of oil and constant movement","India","Italy"],ans:1},
+  {id:28,p:1,q:"Stir frying requires:",opts:["Low heat and slow cooking","Extremely high heat, a wok or large pan, small amount of oil, uniform bite-sized pieces and constant rapid movement","Large amounts of oil","Food to be marinated for 24 hours minimum"],ans:1},
+  {id:29,p:1,q:"Convection baking differs from conventional baking because:",opts:["It uses steam instead of hot air","A fan circulates the hot air — cooking food more evenly and often faster","It requires more fat","It uses lower temperatures"],ans:1},
+  {id:30,p:1,q:"When roasting a whole chicken, the recommended oven temperature is:",opts:["150°C for 3 hours","Around 180–200°C (375°F), approximately 1 hour for a standard bird","220°C for 30 minutes only","100°C for 5 hours"],ans:1},
+  {id:31,p:1,q:"Resting meat after roasting is important because:",opts:["It allows the meat to cool completely","It allows the juices to redistribute throughout the meat — cutting immediately causes the juices to run out","It improves the colour","It kills remaining bacteria"],ans:1},
+  {id:32,p:1,q:"Deglazing a pan means:",opts:["Removing the pan from the heat","Adding liquid (wine, stock or water) to a hot pan after searing to dissolve the browned bits (fond) — forming a sauce base","Adding flour to the pan to thicken it","Cleaning the pan with a cloth"],ans:1},
+  {id:33,p:1,q:"The fond (or sucs) in a pan after searing refers to:",opts:["The burnt residue to be discarded","The caramelised flavourful browned bits stuck to the pan — used to make sauces through deglazing","The leftover oil","The steam from the pan"],ans:1},
+  {id:34,p:1,q:"Smoking as a cooking method works by:",opts:["Submerging food in flavoured water","Exposing food to smoke from burning wood — adding flavour and acting as a mild preservative","Frying food in very hot oil until charred","Cooking food in a sealed pressure vessel"],ans:1},
+  {id:35,p:1,q:"En papillote means:",opts:["Cooking food in a clay pot","Cooking food sealed in a parcel of parchment paper (or foil) — the food steams in its own juices","Cooking food in a bag of ice","A style of presenting food in small portions"],ans:1},
+  {id:36,p:1,q:"Pressure cooking uses:",opts:["Very low temperature and long cooking time","Increased pressure inside a sealed pot — raising the boiling point of water above 100°C to cook food faster","No water at all","Electrical current to heat food"],ans:1},
+  {id:37,p:1,q:"Sous vide cooking involves:",opts:["Cooking food in boiling water without a bag","Vacuum-sealing food and cooking it in a water bath at a precise, low temperature for an extended time","Cooking food in a microwave","Frying food at very low temperature"],ans:1},
+  {id:38,p:1,q:"The main advantage of sous vide is:",opts:["It cooks food very quickly","Precise temperature control — producing consistently cooked food without the risk of over or undercooking","It is the cheapest cooking method","It produces the best browning and crust"],ans:1},
+  {id:39,p:1,q:"Which cooking method is best for tough cuts of meat such as brisket and short ribs?",opts:["Quick grilling at very high heat","Slow moist heat — braising or stewing — which breaks down collagen over time into gelatin","Deep frying at 180°C","Blanching in hot water for 10 minutes"],ans:1},
+  {id:40,p:1,q:"Poaching is ideal for which of the following foods?",opts:["Hard root vegetables and tough meats","Delicate foods — eggs, fish, fruit and poultry — where gentle heat prevents toughening","Bread and pastry","Foods that require a crispy exterior"],ans:1},
+  {id:41,p:1,q:"Blanching potatoes starts them in cold water because:",opts:["It is faster than starting in hot water","Starting in cold water ensures the starch on the outside cooks evenly — allowing seasoning to penetrate the centre","It prevents the skin from splitting","Cold water removes toxins from potatoes"],ans:1},
+  {id:42,p:2,q:"Steaming sweet potatoes takes approximately:",opts:["5–8 minutes","25–35 minutes","1 hour","10–12 minutes"],ans:1},
+  {id:43,p:1,q:"When blanching green vegetables, they should be:",opts:["Cooked until fully soft then removed","Cooked briefly until just tender then immediately plunged into ice water to preserve colour and stop cooking","Cooked at low heat for a long time","Dried before being added to the water"],ans:1},
+  {id:44,p:1,q:"Grilling vegetables gives them:",opts:["A steamed, soft texture","Char marks and concentrated caramelised flavour — from direct high-heat contact with the grill","A boiled, flavourless result","A deep-fried crispy coating"],ans:1},
+  {id:45,p:1,q:"When sautéing, if the pan is overcrowded, the food will:",opts:["Cook faster due to the heat being shared","Steam rather than sauté — releasing moisture and preventing browning","Burn more easily","Cook more evenly"],ans:1},
+  {id:46,p:1,q:"Caramelisation occurs when:",opts:["Proteins react with sugars during heating","Sugars are heated above their melting point — producing a range of brown colours and complex sweet flavours","Gluten develops in dough","Starch absorbs water during boiling"],ans:1},
+  {id:47,p:1,q:"Which cooking method best preserves water-soluble vitamins?",opts:["Boiling for a long time","Steaming or stir frying — minimal water contact and short cooking time","Stewing in large amounts of water","Pressure cooking for extended times"],ans:1},
+  {id:48,p:1,q:"The key difference between a sauté and a pan fry is:",opts:["The type of oil used","In sautéing, food is cut small and moved constantly over high heat; in pan frying, larger pieces are cooked with less movement","Pan frying uses more seasoning","Sautéing uses water"],ans:1},
+  {id:49,p:2,q:"Tempura is an example of:",opts:["A braising technique","A light batter deep-frying technique originating from Japanese cuisine (adapted from Portuguese influence)","A steaming technique","A dry heat roasting method"],ans:1},
+  {id:50,p:1,q:"A bain-marie (water bath) is used for:",opts:["Deep frying food safely","Gentle, even heat transfer — used for cooking egg custards, crème brûlée and melting chocolate without burning","Poaching large cuts of meat","Blanching vegetables"],ans:1},
+  {id:51,p:1,q:"Which cooking method is used to cook Crème Brûlée?",opts:["Deep frying","Baking in a bain-marie (water bath) in the oven","Steaming under pressure","Grilling under the salamander only"],ans:1},
+  {id:52,p:1,q:"A salamander in a professional kitchen is:",opts:["A large stock pot","An overhead high-heat grill used for browning, glazing and finishing dishes","A type of deep fat fryer","A cold storage unit"],ans:1},
+  {id:53,p:1,q:"Which method of cooking uses electromagnetic waves to heat food from within?",opts:["Induction cooking","Microwaving","Infrared cooking","Convection cooking"],ans:1},
+  {id:54,p:2,q:"Induction cooking works by:",opts:["Gas flames heating the pan directly","Creating an electromagnetic field that directly heats the metal cookware — not the hob surface","Heating a coil that transfers heat to the pan","Microwaves heating the food directly"],ans:1},
+  {id:55,p:1,q:"Conduction as a method of heat transfer means:",opts:["Heat travels through air currents to the food","Heat transfers directly through contact — from a hot pan to the food touching it","Heat radiates from a hot coil to food","Heat is generated within the food itself"],ans:1},
+  {id:56,p:1,q:"Convection as heat transfer means:",opts:["Direct contact between a hot surface and food","Heat is carried by the movement of hot air or liquid currents around the food","Heat generated electrically inside the food","Heat from radiation"],ans:1},
+  {id:57,p:1,q:"Radiation as heat transfer in cooking means:",opts:["Heat travels through direct contact","Heat energy is emitted as electromagnetic waves from a heat source — such as grilling or broiling","Heat travels through circulating liquid","Heat generated by electrical current"],ans:1},
+  {id:58,p:1,q:"Blanching as a technique is used before freezing vegetables to:",opts:["Soften them completely for use","Destroy the enzymes that would cause deterioration in colour and texture during frozen storage","Add salt before freezing","Remove pesticide residue"],ans:1},
+  {id:59,p:1,q:"Which of the following is true about boiling and steaming?",opts:["Both methods produce the same nutritional results","Boiling can leach water-soluble vitamins into the water; steaming retains more nutrients as food does not contact the water","Steaming takes longer than boiling for all foods","Boiling always produces better flavour than steaming"],ans:1},
+  {id:60,p:2,q:"Slow cooking (in a slow cooker or crockpot) uses:",opts:["High heat for a short time","Low heat (around 80–95°C) for 6–10 hours — ideal for tough cuts and casseroles","Microwave energy","Deep fat frying at low temperature"],ans:1},
+  {id:61,p:1,q:"When making stock, bones should be:",opts:["Added raw to cold water only, never browned","Either blanched to remove impurities (white stock) or roasted first to develop deep colour and flavour (brown stock)","Always boiled at full rolling boil for maximum flavour","Added to hot oil before water"],ans:1},
+  {id:62,p:2,q:"Which cooking method is most appropriate for cooking eggs en cocotte?",opts:["Deep frying","Baking in a bain-marie in the oven","Grilling","Poaching in salted water"],ans:1},
+  {id:63,p:2,q:"'Cooking à point' refers to:",opts:["Cooking food to the point of burning","Cooking to the exact right point of doneness — particularly used for meat (medium-rare)","Cooking with a sharp implement","Starting cooking from a cold state"],ans:1},
+  {id:64,p:2,q:"Which cooking method is associated with the term 'Wok Hei'?",opts:["Slow braising","High-heat stir frying in a wok — producing a distinctive smoky, slightly charred flavour from intense heat","Steaming in a bamboo basket","Poaching in broth"],ans:1},
+  {id:65,p:2,q:"Dry brining (salting) before roasting meat:",opts:["Makes the meat dry and tough","Draws out moisture initially then allows it to be reabsorbed — seasoning the meat deeply and helping to create a crispy exterior","Has no effect on the final result","Is only done for fish"],ans:1},
+  {id:66,p:1,q:"Blanching tomatoes before peeling is done to:",opts:["Cook them before use","Loosen the skin so it can be removed easily — the skin splits during blanching","Add flavour through the hot water","Remove bacteria from the surface"],ans:1},
+  {id:67,p:1,q:"Which cooking method is most associated with producing a fond (browned residue) for sauce making?",opts:["Steaming","Sautéing or pan roasting — the Maillard reaction creates the fond which is deglazed for sauce","Poaching","Boiling"],ans:1},
+  {id:68,p:1,q:"Foaming butter (beurre noisette) refers to:",opts:["Butter that has been refrigerated until solid","Butter cooked until the milk solids turn golden brown — producing a nutty flavour and aroma","Butter blended with cream","Clarified butter with no solids"],ans:1},
+  {id:69,p:1,q:"Clarified butter (ghee) differs from whole butter because:",opts:["It contains more fat","The water and milk solids have been removed — leaving pure butterfat with a higher smoke point","It has been salted","It is made from cream only"],ans:1},
+  {id:70,p:1,q:"Which of the following accurately describes 'rendering' fat?",opts:["Adding fat to a cold dish","Slowly cooking fatty meat over low heat to melt and release the fat from the tissue — used with bacon, duck or pork belly","Whipping fat to add air","Removing fat from stock by freezing"],ans:1},
+  {id:71,p:1,q:"En croûte means:",opts:["Cooking food in a clay pot","Wrapping food in pastry before baking — e.g. Beef Wellington","Coating food in breadcrumbs before frying","Serving food in a bread bowl"],ans:1},
+  {id:72,p:1,q:"Marinating food before cooking primarily:",opts:["Changes the colour of the food","Tenderises the food (through acid or enzyme action) and adds flavour by allowing ingredients to penetrate the surface","Kills bacteria on the surface","Replaces the cooking process"],ans:1},
+  {id:73,p:1,q:"Which of the following statements about frying oil is correct?",opts:["Oil can be reused indefinitely","Reusing oil repeatedly degrades it — lowering its smoke point, producing harmful compounds and affecting flavour","Adding water to used oil refreshes it","Cold oil is always safer to use"],ans:1},
+  {id:74,p:1,q:"The term 'fork tender' means:",opts:["Food that can be eaten with a fork only","Food that is cooked until soft enough to be easily pierced or broken apart with a fork — used to test doneness of braised meats and vegetables","Food cut into fork-sized pieces","A specific cutting technique"],ans:1},
+  {id:75,p:1,q:"Which of the following is the correct order of heat methods from gentlest to most intense?",opts:["Deep fry → poach → grill","Poach → simmer → boil → sauté → grill/deep fry","Grill → boil → poach","Boil → grill → poach"],ans:1},
+];
+
+let isGhost=sessionStorage.getItem('ghostMode')==='1';
+if(isGhost)document.getElementById('ghostNotice').classList.add('show');
+const nameInput=document.getElementById('nameInput'),startBtn=document.getElementById('startBtn');
+nameInput.addEventListener('input',()=>{startBtn.disabled=nameInput.value.trim().length<2;});
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&nameInput.value.trim().length>=2)startQuiz();});
+
+let playerName='',current=0,sessionQ=[],userAnswers=[],currentSessionNum=1;
+
+function getSeenIds(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch{return[];}}
+function saveSeenIds(ids){try{localStorage.setItem(LS_KEY,JSON.stringify(ids));}catch{}}
+function getSessionNum(){const seen=getSeenIds().length;if(seen===0)return 1;if(seen<BANK_SIZE)return 2;return 1;}
+function updateSessionBadge(){document.getElementById('sessionBadge').textContent='Session '+getSessionNum()+' of 2';}
+updateSessionBadge();
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function buildSession(){
+  const seen=getSeenIds(),sessionNum=getSessionNum();
+  currentSessionNum=sessionNum;
+  let picked;
+  if(sessionNum===1){
+    const unseen=BANK.filter(q=>!seen.includes(q.id));
+    picked=[...shuffle(unseen.filter(q=>q.p===1)),...shuffle(unseen.filter(q=>q.p===2))].slice(0,S1_COUNT);
+  } else {
+    const unseen=BANK.filter(q=>!seen.includes(q.id));
+    picked=[...shuffle(unseen.filter(q=>q.p===1)),...shuffle(unseen.filter(q=>q.p===2))];
+    if(picked.length===0){saveSeenIds([]);return buildSession();}
+  }
+  const newSeen=[...new Set([...seen,...picked.map(q=>q.id)])];
+  saveSeenIds(newSeen);updateSessionBadge();
+  return picked.map(q=>{const ct=q.opts[q.ans];const so=shuffle(q.opts.slice());return{q:q.q,opts:so,ans:so.indexOf(ct)};});
+}
+
+function startQuiz(){
+  playerName=nameInput.value.trim();
+  if(playerName.length<2)return;
+  if(playerName==='1994'){isGhost=true;playerName='Ghost';}
+  sessionQ=buildSession();userAnswers=new Array(sessionQ.length).fill(null);current=0;
+  document.getElementById('nameScreen').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  document.getElementById('playerLabel').textContent=isGhost?'👻 Playing anonymously':'Playing as '+playerName;
+  document.getElementById('totalQLabel').textContent=sessionQ.length;
+  document.getElementById('rOutOf').textContent='out of '+sessionQ.length;
+  document.getElementById('nextSessionBtn').textContent=currentSessionNum===1?'↺ Session 2 →':'↺ Start Over';
+  render();
+}
+
+function render(){
+  const q=sessionQ[current],tot=sessionQ.length;
+  document.getElementById('qNumber').textContent='QUESTION '+(current<9?'0':'')+(current+1);
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('progressText').textContent='Question '+(current+1)+' of '+tot;
+  document.getElementById('progressFill').style.width=((current+1)/tot*100)+'%';
+  document.getElementById('answeredCount').textContent=userAnswers.filter(a=>a!==null).length;
+  document.getElementById('liveScore').textContent='Score: '+userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').textContent=current===tot-1?'Last →':'Next →';
+  const container=document.getElementById('optionsContainer');
+  container.innerHTML='';
+  const letters=['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option';
+    btn.innerHTML='<span class="opt-letter">'+letters[i]+'</span>'+opt;
+    btn.onclick=()=>selectAnswer(i);
+    if(userAnswers[current]!==null){btn.disabled=true;if(i===q.ans)btn.classList.add('correct');else if(i===userAnswers[current])btn.classList.add('wrong');}
+    container.appendChild(btn);
+  });
+  const fb=document.getElementById('feedback');
+  fb.className='feedback';
+  if(userAnswers[current]!==null){
+    const correct=userAnswers[current]===q.ans;
+    fb.textContent=correct?'Correct! "'+q.opts[q.ans]+'" is the right answer.':'Wrong. The correct answer is: "'+q.opts[q.ans]+'"';
+    fb.className='feedback show '+(correct?'correct-fb':'wrong-fb');
+  }
+  const card=document.getElementById('questionCard');
+  card.style.animation='none';card.offsetHeight;card.style.animation='fadeSlide 0.3s ease';
+}
+
+function selectAnswer(i){if(userAnswers[current]!==null)return;userAnswers[current]=i;render();}
+function navigate(dir){current=Math.max(0,Math.min(sessionQ.length-1,current+dir));render();}
+
+async function submitQuiz(){
+  const tot=sessionQ.length;
+  const score=userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  const wrong=userAnswers.filter((a,i)=>a!==null&&a!==sessionQ[i].ans).length;
+  const skipped=userAnswers.filter(a=>a===null).length;
+  const pct=Math.round(score/tot*100);
+  document.getElementById('rScore').textContent=score;
+  document.getElementById('rOutOf').textContent='out of '+tot;
+  document.getElementById('rCorrect').textContent=score;
+  document.getElementById('rWrong').textContent=wrong;
+  document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('rPercent').textContent=pct+'%';
+  let grade,msg;
+  if(pct>=90){grade='Outstanding! 🏆';msg='Excellent mastery of Cooking Methods!';}
+  else if(pct>=75){grade='Great Work! ✨';msg='Strong performance — review a few weak spots.';}
+  else if(pct>=60){grade='Good Effort! 👍';msg='Keep practising.';}
+  else if(pct>=40){grade='Keep Going! 💪';msg='Review your notes and try again.';}
+  else{grade='More Practice Needed';msg='Go over the study content carefully.';}
+  document.getElementById('rGrade').textContent=grade;
+  document.getElementById('rMsg').textContent=msg;
+  const sn=getSessionNum();
+  document.getElementById('nextSessionBtn').textContent=sn===2?'↺ Session 2 →':'↺ Start Over';
+  const savedMsg=document.getElementById('savedMsg');
+  if(isGhost){savedMsg.textContent='👻 Ghost Mode — score not saved';savedMsg.style.color='#f5c542';}
+  else{
+    try{
+      const existing=await window.storage.get(STORAGE_KEY,true).catch(()=>null);
+      const scores=existing?JSON.parse(existing.value):[];
+      scores.push({name:playerName,score,total:tot,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(STORAGE_KEY,JSON.stringify(scores),true);
+      savedMsg.textContent='Score saved as "'+playerName+'"';
+    }catch(e){savedMsg.textContent='Score could not be saved.';savedMsg.style.color='#888';}
+  }
+  const rc=document.getElementById('reviewContainer');
+  rc.innerHTML='';
+  sessionQ.forEach((q,i)=>{
+    const ua=userAnswers[i],correct=ua===q.ans;
+    const div=document.createElement('div');
+    div.className='review-item '+(ua===null?'':correct?'r-correct':'r-wrong');
+    let detail='';
+    if(ua===null)detail='<div class="r-skip">Skipped — Answer: <b>'+q.opts[q.ans]+'</b></div>';
+    else if(correct)detail='<div class="r-ans">&#10003; '+q.opts[q.ans]+'</div>';
+    else detail='<div class="r-your">&#10007; Your answer: '+q.opts[ua]+'</div><div class="r-ans">&#10003; Correct: '+q.opts[q.ans]+'</div>';
+    div.innerHTML='<div class="r-q">Q'+(i+1)+'. '+q.q+'</div>'+detail;
+    rc.appendChild(div);
+  });
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('resultsScreen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function nextSession(){
+  sessionQ=buildSession();userAnswers=new Array(sessionQ.length).fill(null);current=0;
+  document.getElementById('totalQLabel').textContent=sessionQ.length;
+  document.getElementById('rOutOf').textContent='out of '+sessionQ.length;
+  document.getElementById('nextSessionBtn').textContent=currentSessionNum===1?'↺ Session 2 →':'↺ Start Over';
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizScreen').style.display='block';
+  render();window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
