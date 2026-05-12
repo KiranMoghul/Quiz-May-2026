@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍽️</text></svg>">
+<title>Hospitality, Chef & Hotels — Quiz Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0d;--surface:#1a1a1a;--card:#222;--border:#333;--accent:#00e5a0;--accent2:#ff6b35;--wrong:#ff4444;--text:#f0f0f0;--muted:#888;--correct-bg:rgba(0,229,160,0.12);--wrong-bg:rgba(255,68,68,0.1);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;padding:20px;}
+.container{max-width:780px;margin:0 auto;}
+.name-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;animation:fadeSlide 0.4s ease;}
+.name-screen h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
+.name-screen h2 span{color:var(--accent);}
+.name-screen p{color:var(--muted);font-size:0.82rem;margin-bottom:28px;line-height:1.8;}
+.name-input-wrap{width:100%;max-width:380px;}
+.name-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--text);outline:none;transition:border-color 0.2s;text-align:center;margin-bottom:14px;}
+.name-input:focus{border-color:var(--accent);}
+.name-input::placeholder{color:var(--muted);}
+.btn-start{width:100%;padding:15px;background:var(--accent);color:#000;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:transform 0.15s,opacity 0.2s;letter-spacing:0.5px;}
+.btn-start:hover{transform:translateY(-2px);}
+.btn-start:disabled{opacity:0.4;cursor:default;transform:none;}
+.ghost-notice{margin-top:14px;font-size:0.72rem;color:#f5c542;display:none;}
+.ghost-notice.show{display:block;}
+.bank-info{margin-top:14px;font-size:0.7rem;color:var(--muted);line-height:1.9;}
+.bank-info span{color:var(--accent);}
+.session-badge{margin-top:10px;font-size:0.72rem;padding:5px 14px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);display:inline-block;}
+.back-link{margin-top:30px;font-size:0.75rem;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--text);}
+.header{text-align:center;padding:40px 0 30px;}
+.header h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-1px;line-height:1.1;}
+.header h1 span{color:var(--accent);}
+.header p{color:var(--muted);margin-top:10px;font-size:0.85rem;}
+.progress-bar-wrap{background:var(--border);border-radius:999px;height:6px;margin:20px 0 10px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:999px;transition:width 0.4s ease;}
+.progress-label{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-bottom:24px;}
+.question-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px;animation:fadeSlide 0.3s ease;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.q-number{font-size:0.7rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.q-text{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;line-height:1.5;margin-bottom:20px;}
+.options{display:flex;flex-direction:column;gap:10px;}
+.option{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--text);text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.1s;display:flex;align-items:center;gap:12px;}
+.option:hover:not(:disabled){border-color:var(--accent);transform:translateX(4px);}
+.option .opt-letter{font-weight:500;color:var(--muted);min-width:18px;}
+.option.correct{background:var(--correct-bg);border-color:var(--accent);color:var(--accent);}
+.option.correct .opt-letter{color:var(--accent);}
+.option.wrong{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong);}
+.option.wrong .opt-letter{color:var(--wrong);}
+.option:disabled{cursor:default;}
+.feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-size:0.82rem;line-height:1.5;display:none;}
+.feedback.show{display:block;}
+.feedback.correct-fb{background:var(--correct-bg);border:1px solid var(--accent);color:var(--accent);}
+.feedback.wrong-fb{background:var(--wrong-bg);border:1px solid var(--wrong);color:#ff8888;}
+.nav{display:flex;justify-content:space-between;align-items:center;margin:20px 0 40px;gap:12px;}
+.btn{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;padding:12px 28px;border-radius:10px;border:none;cursor:pointer;transition:transform 0.15s,opacity 0.15s;letter-spacing:0.5px;}
+.btn:hover{transform:translateY(-2px);}
+.btn:disabled{opacity:0.3;cursor:default;transform:none;}
+.btn-prev{background:var(--surface);color:var(--text);border:1.5px solid var(--border);}
+.btn-next{background:var(--accent);color:#000;}
+.btn-submit{background:var(--accent2);color:#fff;}
+.score-chip{font-size:0.78rem;color:var(--muted);text-align:center;}
+.score-chip span{color:var(--accent);font-weight:bold;}
+.results-screen{display:none;text-align:center;padding:60px 20px;animation:fadeSlide 0.4s ease;}
+.results-screen.show{display:block;}
+.result-score-ring{width:160px;height:160px;border-radius:50%;border:6px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 30px;}
+.result-score-ring .big{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--accent);}
+.result-score-ring .small{font-size:0.75rem;color:var(--muted);}
+.results-screen h2{font-family:'Syne',sans-serif;font-size:1.8rem;margin-bottom:10px;}
+.result-breakdown{display:flex;justify-content:center;gap:30px;margin:20px 0 10px;flex-wrap:wrap;}
+.rb-item{text-align:center;}
+.rb-item .val{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;}
+.rb-item .lbl{font-size:0.72rem;color:var(--muted);}
+.grade-msg{color:var(--muted);font-size:0.9rem;margin-bottom:10px;}
+.saved-msg{font-size:0.75rem;color:var(--accent);margin-bottom:16px;min-height:20px;}
+.results-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+.review-section{margin-top:40px;text-align:left;}
+.review-section h3{font-family:'Syne',sans-serif;font-size:1.1rem;margin-bottom:16px;text-align:center;color:var(--muted);letter-spacing:1px;}
+.review-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;font-size:0.82rem;}
+.review-item.r-correct{border-left:3px solid var(--accent);}
+.review-item.r-wrong{border-left:3px solid var(--wrong);}
+.review-item .r-q{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:8px;font-size:0.88rem;}
+.review-item .r-your{color:var(--wrong);}
+.review-item .r-ans{color:var(--accent);}
+.review-item .r-skip{color:var(--muted);font-style:italic;}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="name-screen" id="nameScreen">
+    <h2>Hospitality, Chef<br><span>&amp; Hotels</span></h2>
+    <p>What is Hospitality? · What is a Chef? · Hotel Categories &amp; Departments<br>Enter your name to start.</p>
+    <div class="name-input-wrap">
+      <input type="text" class="name-input" id="nameInput" placeholder="Your name..." maxlength="30">
+      <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>Start Quiz →</button>
+      <div class="ghost-notice" id="ghostNotice">👻 Ghost Mode — score won't be saved</div>
+    </div>
+    <div class="bank-info">🎲 <span>30 questions</span> in Session 1 · <span>45 questions</span> in Session 2<br>Starred topics prioritised · Full bank of <span>75</span> in 2 sessions</div>
+    <div class="session-badge" id="sessionBadge">Session 1 of 2</div>
+    <a href="index.html" class="back-link">← Back to all quizzes</a>
+  </div>
+
+  <div id="quizScreen" style="display:none">
+    <div class="header">
+      <h1>Hospitality, Chef<br><span>&amp; Hotels</span></h1>
+      <p id="playerLabel" style="color:var(--accent);font-size:0.8rem;"></p>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label"><span id="progressText">Question 1 of 30</span><span id="liveScore">Score: 0</span></div>
+    <div class="question-card" id="questionCard">
+      <div class="q-number" id="qNumber">QUESTION 01</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
+      <div class="score-chip">Answered: <span id="answeredCount">0</span>/<span id="totalQLabel">30</span></div>
+      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next →</button>
+    </div>
+    <div style="text-align:center;margin-bottom:40px;">
+      <button class="btn btn-submit" onclick="submitQuiz()">Submit &amp; See Results</button>
+    </div>
+  </div>
+
+  <div class="results-screen" id="resultsScreen">
+    <div class="result-score-ring"><div class="big" id="rScore">0</div><div class="small" id="rOutOf">out of 30</div></div>
+    <h2 id="rGrade"></h2>
+    <div class="grade-msg" id="rMsg"></div>
+    <div class="saved-msg" id="savedMsg"></div>
+    <div class="result-breakdown">
+      <div class="rb-item"><div class="val" id="rCorrect" style="color:var(--accent)">0</div><div class="lbl">Correct</div></div>
+      <div class="rb-item"><div class="val" id="rWrong" style="color:var(--wrong)">0</div><div class="lbl">Wrong</div></div>
+      <div class="rb-item"><div class="val" id="rSkipped" style="color:var(--muted)">0</div><div class="lbl">Skipped</div></div>
+      <div class="rb-item"><div class="val" id="rPercent" style="color:var(--accent2)">0%</div><div class="lbl">Percentage</div></div>
+    </div>
+    <div class="results-btns">
+      <button class="btn btn-next" id="nextSessionBtn" onclick="nextSession()">↺ Session 2 →</button>
+      <a href="index.html" class="btn btn-prev" style="text-decoration:none;display:inline-flex;align-items:center;">🏠 Home</a>
+    </div>
+    <div class="review-section"><h3>— REVIEW ALL ANSWERS —</h3><div id="reviewContainer"></div></div>
+  </div>
+
+</div>
+<script>
+const QUIZ_ID='culinary-01', LS_KEY='culinary01_seen', STORAGE_KEY='leaderboard-scores';
+const S1_COUNT=30, BANK_SIZE=75;
+
+const BANK=[
+  {id:1,p:1,q:"What is the primary definition of hospitality?",opts:["The business of providing accommodation only","The friendly and generous reception and entertainment of guests","A government department that regulates hotels","A form of food manufacturing"],ans:1},
+  {id:2,p:1,q:"Which of the following best describes the hospitality industry?",opts:["Only hotels and restaurants","Only airlines and cruise ships","Any business that provides food, accommodation or entertainment to guests","Only five-star establishments"],ans:2},
+  {id:3,p:1,q:"A chef is best defined as:",opts:["A person who washes dishes","A professionally trained cook who manages food preparation","A restaurant owner","A food delivery driver"],ans:1},
+  {id:4,p:2,q:"The word 'chef' originates from which language?",opts:["Italian","Spanish","French","German"],ans:2},
+  {id:5,p:1,q:"What does the French word 'chef' literally mean?",opts:["Cook","Master","Head or chief","Artist"],ans:2},
+  {id:6,p:1,q:"Which type of hotel offers the most luxurious services and facilities?",opts:["1-star hotel","3-star hotel","Budget motel","5-star hotel"],ans:3},
+  {id:7,p:2,q:"A 1-star hotel is best described as:",opts:["Luxury with full services","Basic accommodation with limited services","Mid-range with pool and gym","Extended stay apartments"],ans:1},
+  {id:8,p:2,q:"Which of the following is NOT a typical hotel department?",opts:["Housekeeping","Food & Beverage","Marketing consultancy","Front Office"],ans:2},
+  {id:9,p:1,q:"The Front of House (FOH) in a hotel refers to:",opts:["The kitchen and storage areas","Areas where guests directly interact with staff","The back office and accounting","The laundry and maintenance areas"],ans:1},
+  {id:10,p:1,q:"The Back of House (BOH) includes:",opts:["Reception and concierge","Restaurant dining room","Kitchen, laundry and maintenance areas","The hotel lobby"],ans:2},
+  {id:11,p:1,q:"Which department is responsible for guest check-in and check-out?",opts:["Housekeeping","Food & Beverage","Front Office","Engineering"],ans:2},
+  {id:12,p:2,q:"The Housekeeping department is responsible for:",opts:["Cooking meals for guests","Cleaning and maintaining guest rooms and public areas","Managing restaurant reservations","Security and fire safety"],ans:1},
+  {id:13,p:1,q:"F&B stands for:",opts:["Food and Beverages","Front and Back","Finance and Banking","Facilities and Buildings"],ans:0},
+  {id:14,p:2,q:"Which of the following is a Food & Beverage outlet within a hotel?",opts:["The front desk","The laundry room","The hotel restaurant","The concierge"],ans:2},
+  {id:15,p:2,q:"A boutique hotel is best described as:",opts:["A large chain hotel with hundreds of rooms","A small, individually styled hotel with unique character","A government-owned accommodation","A hostel for budget travellers"],ans:1},
+  {id:16,p:2,q:"A motel differs from a hotel primarily because:",opts:["It does not serve food","It is designed for motorists with easy parking access to rooms","It only accepts long-term guests","It does not have a reception area"],ans:1},
+  {id:17,p:2,q:"Which department handles hotel security?",opts:["Concierge","Housekeeping","Security/Loss Prevention","Sales and Marketing"],ans:2},
+  {id:18,p:2,q:"The Concierge department is responsible for:",opts:["Cooking and food service","Assisting guests with reservations, tours and special requests","Managing accounts and billing","Maintaining the hotel pool"],ans:1},
+  {id:19,p:2,q:"A 3-star hotel typically offers:",opts:["Only a bed and shared bathroom","Mid-range comfort with standard amenities such as a restaurant and Wi-Fi","A personal butler service for every room","Only breakfast included"],ans:1},
+  {id:20,p:2,q:"Which hotel department manages bookings and room availability?",opts:["Food & Beverage","Engineering","Reservations / Front Office","Purchasing"],ans:2},
+  {id:21,p:2,q:"Revenue management in a hotel is concerned with:",opts:["Cleaning and maintaining rooms","Maximising income by adjusting prices based on demand","Training kitchen staff","Managing laundry services"],ans:1},
+  {id:22,p:2,q:"The term 'hospitality' comes from the Latin word:",opts:["Hostilis","Hospitalis","Hospes","Hospitalium"],ans:2},
+  {id:23,p:1,q:"Which of the following represents a core principle of hospitality?",opts:["Maximising profit at all costs","Making guests feel welcome, comfortable and valued","Minimising staff to reduce expenses","Limiting food options to reduce waste"],ans:1},
+  {id:24,p:2,q:"An extended stay hotel (or apart-hotel) is designed for:",opts:["One-night stays only","Guests who need accommodation for weeks or months","Conference delegates only","Backpackers on a budget"],ans:1},
+  {id:25,p:2,q:"Which of the following is a luxury international hotel chain?",opts:["Travelodge","Premier Inn","The Ritz-Carlton","Motel 6"],ans:2},
+  {id:26,p:2,q:"The Purchasing department in a hotel is responsible for:",opts:["Selling rooms to guests","Buying food, supplies and equipment for the hotel","Marketing the hotel","Managing human resources"],ans:1},
+  {id:27,p:2,q:"Which department trains new hotel employees?",opts:["Housekeeping","Human Resources (HR)","Engineering","Reservations"],ans:1},
+  {id:28,p:2,q:"A resort hotel differs from a standard hotel because it:",opts:["Has no food service","Offers additional recreational facilities such as a spa, golf or beach access","Only accepts business travellers","Has fewer than 10 rooms"],ans:1},
+  {id:29,p:2,q:"Which term describes the total number of rooms available in a hotel?",opts:["Occupancy rate","Room inventory","Revenue per room","Average daily rate"],ans:1},
+  {id:30,p:2,q:"The term 'yield management' in hospitality means:",opts:["The amount of food produced in the kitchen","Maximising revenue by selling the right room at the right price at the right time","The process of cleaning and turning over rooms","Managing staff rotas"],ans:1},
+  {id:31,p:2,q:"In hotel operations, ADR stands for:",opts:["Average Daily Rate","Accommodation and Dining Report","Advance Deposit Request","Annual Data Review"],ans:0},
+  {id:32,p:2,q:"A food and beverage manager is responsible for:",opts:["Cleaning rooms and public areas","Managing all dining, bar and catering operations within the hotel","Booking rooms for guests","Maintaining the hotel's plumbing"],ans:1},
+  {id:33,p:1,q:"Which type of service is most commonly associated with fine dining restaurants?",opts:["Buffet service","Self-service","Table service (silver service)","Fast food counter service"],ans:2},
+  {id:34,p:2,q:"A banquet is best defined as:",opts:["A small private dinner for two guests","A large formal meal or event served to many guests at once","A type of breakfast service","A quick-service lunch option"],ans:1},
+  {id:35,p:2,q:"Which of the following is an example of an ancillary hotel service?",opts:["Room accommodation","Restaurant dining","Spa and wellness services","All of the above"],ans:3},
+  {id:36,p:2,q:"The term 'check-in' in hospitality refers to:",opts:["The process of a guest arriving and registering at the hotel","A safety inspection of the kitchen","The inventory count of food supplies","The process of billing a guest"],ans:0},
+  {id:37,p:2,q:"Which of the following departments is classified as a support department?",opts:["Food & Beverage","Rooms Division","Human Resources","Concierge"],ans:2},
+  {id:38,p:2,q:"Which hotel rating system is most recognised internationally?",opts:["Red Guide rating","Star classification system","Alphabet grading","Colour-coded rating"],ans:1},
+  {id:39,p:2,q:"A hotel's 'occupancy rate' measures:",opts:["The number of staff working on a given day","The percentage of available rooms that are occupied at a given time","The average spend per guest","The number of restaurant covers served"],ans:1},
+  {id:40,p:2,q:"Which department is responsible for maintaining hotel equipment and facilities?",opts:["Food & Beverage","Engineering and Maintenance","Sales and Marketing","Housekeeping"],ans:1},
+  {id:41,p:2,q:"A chain hotel is best described as:",opts:["A hotel that only serves chains and bonds","Part of a group of hotels operating under the same brand and standards","A privately owned independent hotel","A hotel attached to an airport only"],ans:1},
+  {id:42,p:2,q:"Which of the following is an example of a chain hotel group?",opts:["A local guesthouse","Marriott International","A family-run bed and breakfast","A campsite"],ans:1},
+  {id:43,p:2,q:"The Sales and Marketing department in a hotel is responsible for:",opts:["Cooking and food production","Attracting guests and promoting the hotel's services","Managing room allocations","Laundry operations"],ans:1},
+  {id:44,p:2,q:"A bed and breakfast (B&B) differs from a hotel because:",opts:["It never serves food","It is typically a small, family-run property offering a room and morning meal","It only accepts corporate clients","It does not have any rooms"],ans:1},
+  {id:45,p:2,q:"In which hotel department would you find a sommelier?",opts:["Housekeeping","Engineering","Food & Beverage","Front Office"],ans:2},
+  {id:46,p:2,q:"A sommelier is a specialist in:",opts:["Pastry and desserts","Wine and beverage service","Meat butchery","Vegetable preparation"],ans:1},
+  {id:47,p:1,q:"Customer satisfaction is important in hospitality because:",opts:["It is required by law in all countries","Happy guests return and recommend the property, increasing revenue","It reduces the need for advertising","It eliminates all complaints"],ans:1},
+  {id:48,p:1,q:"Which of the following is a key skill required in all hospitality roles?",opts:["Knowledge of plumbing","Excellent communication and customer service skills","Proficiency in coding and software development","Ability to drive heavy vehicles"],ans:1},
+  {id:49,p:2,q:"The term 'concession' in a hotel refers to:",opts:["A discount offered to guests","A food or service outlet within the hotel operated by an outside company","A staff penalty system","A type of guest room"],ans:1},
+  {id:50,p:1,q:"Which of the following represents the Rooms Division of a hotel?",opts:["Restaurant, bar and banqueting","Front Office, Housekeeping and Reservations","HR, Finance and IT","Engineering and Maintenance"],ans:1},
+  {id:51,p:2,q:"A hostel differs from a hotel primarily because:",opts:["It serves no food","It offers dormitory-style shared accommodation at a lower cost","It is only for business travellers","It always has a swimming pool"],ans:1},
+  {id:52,p:2,q:"The term 'turndown service' in housekeeping refers to:",opts:["Refusing a guest's request","Preparing a guest's room for sleeping — folding back the bed and placing amenities","Inspecting the room after checkout","A type of room upgrade"],ans:1},
+  {id:53,p:2,q:"In hotel operations, 'RevPAR' stands for:",opts:["Revenue Per Available Room","Reservations and Payment Annual Report","Revenue Per Allocated Rate","Rooms Per Available Rate"],ans:0},
+  {id:54,p:2,q:"Which of the following services would a 5-star hotel typically offer that a 2-star would not?",opts:["A bed in a room","24-hour room service, concierge, spa and fine dining","A shared bathroom","A basic continental breakfast"],ans:1},
+  {id:55,p:2,q:"Which of the following is an example of customer feedback in hospitality?",opts:["A staff performance appraisal","A guest review on TripAdvisor","A supplier invoice","A kitchen temperature log"],ans:1},
+  {id:56,p:2,q:"Sustainability in hospitality refers to:",opts:["Only serving organic food","Operating in a way that minimises environmental impact and supports communities","Eliminating all plastic packaging immediately","Only hiring local staff"],ans:1},
+  {id:57,p:1,q:"Which legislation in the UK covers health and safety in the workplace including hotels?",opts:["The Food Safety Act 1990","The Health and Safety at Work Act 1974","The Equality Act 2010","The Licensing Act 2003"],ans:1},
+  {id:58,p:1,q:"A hotel's duty of care means:",opts:["Charging guests fairly","Having a legal obligation to ensure the safety and wellbeing of guests and staff","Providing free meals to all guests","Offering discounts to repeat customers"],ans:1},
+  {id:59,p:2,q:"Which of the following is true about the hospitality industry globally?",opts:["It is one of the smallest industries in the world","It is one of the largest employers globally, contributing significantly to GDP","It only exists in wealthy countries","It is declining rapidly in all regions"],ans:1},
+  {id:60,p:2,q:"A conference hotel specialises in:",opts:["Only leisure and spa services","Hosting business meetings, conferences and events","Long-stay residential services","Budget accommodation only"],ans:1},
+  {id:61,p:2,q:"Which department in a hotel manages the financial records?",opts:["Front Office","Food & Beverage","Accounts / Finance","Housekeeping"],ans:2},
+  {id:62,p:2,q:"The purpose of a hotel lobby is:",opts:["Food storage and preparation","First point of contact — to welcome guests and provide a waiting and reception area","Staff break room","A room for luggage storage only"],ans:1},
+  {id:63,p:2,q:"Which of the following is a typical amenity found in a 4-star hotel?",opts:["Shared dormitory rooms","Gym, swimming pool and room service","No restaurant on site","Self-check-in kiosk only"],ans:1},
+  {id:64,p:2,q:"A hotel's guest relations team is responsible for:",opts:["Cooking for guests","Managing VIP guests, handling complaints and ensuring exceptional guest experiences","Cleaning rooms","Accounting and billing"],ans:1},
+  {id:65,p:2,q:"Cross-departmental communication in a hotel is important because:",opts:["It reduces the number of staff needed","It ensures all departments work together to deliver a seamless guest experience","It allows one department to do the work of others","It eliminates the need for management"],ans:1},
+  {id:66,p:1,q:"A hotel's standard operating procedures (SOPs) are:",opts:["Optional guidelines staff may follow if they wish","Documented step-by-step instructions ensuring consistent service standards","Legal documents required by the government","Marketing materials for guests"],ans:1},
+  {id:67,p:2,q:"Which of the following is a perishable amenity in hospitality?",opts:["A hotel key card","Fresh flowers in a guest room","A metal door handle","A marble floor tile"],ans:1},
+  {id:68,p:2,q:"What does 'upselling' mean in hospitality?",opts:["Selling items at a lower price to clear stock","Encouraging guests to purchase a higher-category room or additional services","Removing items from the menu","Refunding guests for poor service"],ans:1},
+  {id:69,p:2,q:"Which type of hotel is most commonly located near airports?",opts:["Spa resort","Airport hotel or transit hotel","Mountain lodge","Boutique hotel"],ans:1},
+  {id:70,p:2,q:"In hospitality, the term 'standard room' refers to:",opts:["The most expensive room in the hotel","A basic room with standard furnishings and amenities","A room reserved for staff","A room with a special theme"],ans:1},
+  {id:71,p:2,q:"Night audit in a hotel is performed by:",opts:["Housekeeping at end of shift","The night auditor to reconcile daily financial transactions and close the day","Security staff","The Food & Beverage manager"],ans:1},
+  {id:72,p:2,q:"The term 'FOC' in hospitality stands for:",opts:["Front Office Communications","Free of Charge","Food Operations Control","First Order Confirmation"],ans:1},
+  {id:73,p:2,q:"Which of the following is a key challenge facing the hospitality industry today?",opts:["Too many qualified staff","Staff shortages, sustainability demands and changing guest expectations","Lack of technology","Too much profit"],ans:1},
+  {id:74,p:1,q:"A kitchen brigade is the team of:",opts:["Cleaning staff responsible for the kitchen","Chefs and kitchen staff organised in a hierarchy of roles","Waiters who carry food from the kitchen","Delivery drivers who bring food supplies"],ans:1},
+  {id:75,p:1,q:"Which of the following best describes 'service excellence' in hospitality?",opts:["Delivering the minimum required service","Consistently exceeding guest expectations through skill, care and attention to detail","Following a strict script for guest interactions","Completing tasks as quickly as possible regardless of quality"],ans:1},
+];
+
+let isGhost=sessionStorage.getItem('ghostMode')==='1';
+if(isGhost)document.getElementById('ghostNotice').classList.add('show');
+const nameInput=document.getElementById('nameInput'),startBtn=document.getElementById('startBtn');
+nameInput.addEventListener('input',()=>{startBtn.disabled=nameInput.value.trim().length<2;});
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&nameInput.value.trim().length>=2)startQuiz();});
+
+let playerName='',current=0,sessionQ=[],userAnswers=[],currentSessionNum=1;
+
+function getSeenIds(){try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch{return[];}}
+function saveSeenIds(ids){try{localStorage.setItem(LS_KEY,JSON.stringify(ids));}catch{}}
+
+function getSessionNum(){
+  const seen=getSeenIds().length;
+  if(seen===0)return 1;
+  if(seen<BANK_SIZE)return 2;
+  return 1;
+}
+
+function updateSessionBadge(){
+  document.getElementById('sessionBadge').textContent='Session '+getSessionNum()+' of 2';
+}
+updateSessionBadge();
+
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function buildSession(){
+  const seen=getSeenIds();
+  const sessionNum=getSessionNum();
+  currentSessionNum=sessionNum;
+  let picked;
+  if(sessionNum===1){
+    const unseen=BANK.filter(q=>!seen.includes(q.id));
+    const p1=shuffle(unseen.filter(q=>q.p===1));
+    const p2=shuffle(unseen.filter(q=>q.p===2));
+    picked=[...p1,...p2].slice(0,S1_COUNT);
+  } else {
+    const unseen=BANK.filter(q=>!seen.includes(q.id));
+    const p1=shuffle(unseen.filter(q=>q.p===1));
+    const p2=shuffle(unseen.filter(q=>q.p===2));
+    picked=[...p1,...p2];
+    if(picked.length===0){saveSeenIds([]);return buildSession();}
+  }
+  const newSeen=[...new Set([...seen,...picked.map(q=>q.id)])];
+  saveSeenIds(newSeen);
+  updateSessionBadge();
+  return picked.map(q=>{
+    const ct=q.opts[q.ans];
+    const so=shuffle(q.opts.slice());
+    return{q:q.q,opts:so,ans:so.indexOf(ct)};
+  });
+}
+
+function startQuiz(){
+  playerName=nameInput.value.trim();
+  if(playerName.length<2)return;
+  if(playerName==='1994'){isGhost=true;playerName='Ghost';}
+  sessionQ=buildSession();
+  userAnswers=new Array(sessionQ.length).fill(null);
+  current=0;
+  document.getElementById('nameScreen').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  document.getElementById('playerLabel').textContent=isGhost?'👻 Playing anonymously':'Playing as '+playerName;
+  document.getElementById('totalQLabel').textContent=sessionQ.length;
+  document.getElementById('rOutOf').textContent='out of '+sessionQ.length;
+  document.getElementById('nextSessionBtn').textContent=currentSessionNum===1?'↺ Session 2 →':'↺ Start Over';
+  render();
+}
+
+function render(){
+  const q=sessionQ[current],tot=sessionQ.length;
+  document.getElementById('qNumber').textContent='QUESTION '+(current<9?'0':'')+(current+1);
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('progressText').textContent='Question '+(current+1)+' of '+tot;
+  document.getElementById('progressFill').style.width=((current+1)/tot*100)+'%';
+  document.getElementById('answeredCount').textContent=userAnswers.filter(a=>a!==null).length;
+  document.getElementById('liveScore').textContent='Score: '+userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').textContent=current===tot-1?'Last →':'Next →';
+  const container=document.getElementById('optionsContainer');
+  container.innerHTML='';
+  const letters=['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option';
+    btn.innerHTML='<span class="opt-letter">'+letters[i]+'</span>'+opt;
+    btn.onclick=()=>selectAnswer(i);
+    if(userAnswers[current]!==null){
+      btn.disabled=true;
+      if(i===q.ans)btn.classList.add('correct');
+      else if(i===userAnswers[current])btn.classList.add('wrong');
+    }
+    container.appendChild(btn);
+  });
+  const fb=document.getElementById('feedback');
+  fb.className='feedback';
+  if(userAnswers[current]!==null){
+    const correct=userAnswers[current]===q.ans;
+    fb.textContent=correct?'Correct! "'+q.opts[q.ans]+'" is the right answer.':'Wrong. The correct answer is: "'+q.opts[q.ans]+'"';
+    fb.className='feedback show '+(correct?'correct-fb':'wrong-fb');
+  }
+  const card=document.getElementById('questionCard');
+  card.style.animation='none';card.offsetHeight;card.style.animation='fadeSlide 0.3s ease';
+}
+
+function selectAnswer(i){if(userAnswers[current]!==null)return;userAnswers[current]=i;render();}
+function navigate(dir){current=Math.max(0,Math.min(sessionQ.length-1,current+dir));render();}
+
+async function submitQuiz(){
+  const tot=sessionQ.length;
+  const score=userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  const wrong=userAnswers.filter((a,i)=>a!==null&&a!==sessionQ[i].ans).length;
+  const skipped=userAnswers.filter(a=>a===null).length;
+  const pct=Math.round(score/tot*100);
+  document.getElementById('rScore').textContent=score;
+  document.getElementById('rOutOf').textContent='out of '+tot;
+  document.getElementById('rCorrect').textContent=score;
+  document.getElementById('rWrong').textContent=wrong;
+  document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('rPercent').textContent=pct+'%';
+  let grade,msg;
+  if(pct>=90){grade='Outstanding! 🏆';msg='Excellent mastery of Hospitality & Hotels!';}
+  else if(pct>=75){grade='Great Work! ✨';msg='Strong performance — review a few weak spots.';}
+  else if(pct>=60){grade='Good Effort! 👍';msg='Keep practising.';}
+  else if(pct>=40){grade='Keep Going! 💪';msg='Review your notes and try again.';}
+  else{grade='More Practice Needed';msg='Go over the study content carefully.';}
+  document.getElementById('rGrade').textContent=grade;
+  document.getElementById('rMsg').textContent=msg;
+  const sn=getSessionNum();
+  document.getElementById('nextSessionBtn').textContent=sn===2?'↺ Session 2 →':'↺ Start Over';
+  const savedMsg=document.getElementById('savedMsg');
+  if(isGhost){savedMsg.textContent='👻 Ghost Mode — score not saved';savedMsg.style.color='#f5c542';}
+  else{
+    try{
+      const existing=await window.storage.get(STORAGE_KEY,true).catch(()=>null);
+      const scores=existing?JSON.parse(existing.value):[];
+      scores.push({name:playerName,score,total:tot,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(STORAGE_KEY,JSON.stringify(scores),true);
+      savedMsg.textContent='Score saved as "'+playerName+'"';
+    }catch(e){savedMsg.textContent='Score could not be saved.';savedMsg.style.color='#888';}
+  }
+  const rc=document.getElementById('reviewContainer');
+  rc.innerHTML='';
+  sessionQ.forEach((q,i)=>{
+    const ua=userAnswers[i],correct=ua===q.ans;
+    const div=document.createElement('div');
+    div.className='review-item '+(ua===null?'':correct?'r-correct':'r-wrong');
+    let detail='';
+    if(ua===null)detail='<div class="r-skip">Skipped — Answer: <b>'+q.opts[q.ans]+'</b></div>';
+    else if(correct)detail='<div class="r-ans">&#10003; '+q.opts[q.ans]+'</div>';
+    else detail='<div class="r-your">&#10007; Your answer: '+q.opts[ua]+'</div><div class="r-ans">&#10003; Correct: '+q.opts[q.ans]+'</div>';
+    div.innerHTML='<div class="r-q">Q'+(i+1)+'. '+q.q+'</div>'+detail;
+    rc.appendChild(div);
+  });
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('resultsScreen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function nextSession(){
+  sessionQ=buildSession();
+  userAnswers=new Array(sessionQ.length).fill(null);
+  current=0;
+  document.getElementById('totalQLabel').textContent=sessionQ.length;
+  document.getElementById('rOutOf').textContent='out of '+sessionQ.length;
+  document.getElementById('nextSessionBtn').textContent=currentSessionNum===1?'↺ Session 2 →':'↺ Start Over';
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizScreen').style.display='block';
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

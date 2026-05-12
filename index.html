@@ -6,86 +6,85 @@
 <title>May 2026 Exam Practice</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
-  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;pointer-events:none;z-index:0;}
-  .wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:24px 20px 60px;}
-  .hero{padding:60px 0 44px;animation:fadeUp 0.5s ease both;}
-  .hero-tag{display:inline-flex;align-items:center;gap:8px;font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--green);border:1px solid var(--green);padding:6px 16px;border-radius:999px;margin-bottom:22px;cursor:default;user-select:none;-webkit-tap-highlight-color:transparent;}
-  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;line-height:1.05;letter-spacing:-2px;}
-  .hero h1 em{color:var(--green);font-style:normal;}
-  .hero p{margin-top:14px;color:var(--muted);font-size:0.82rem;line-height:1.8;max-width:520px;}
-  .stats{display:flex;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:0 0 52px;animation:fadeUp 0.5s 0.1s ease both;}
-  .stat{flex:1;padding:18px 12px;text-align:center;border-right:1px solid var(--border);}
-  .stat:last-child{border-right:none;}
-  .stat .val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--green);}
-  .stat .lbl{font-size:0.65rem;color:var(--muted);letter-spacing:1px;margin-top:3px;}
-  .section-label{font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:12px;}
-  .section-label::after{content:'';flex:1;height:1px;background:var(--border);}
-  .subject{margin-bottom:48px;animation:fadeUp 0.5s ease both;}
-  .subject-header{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
-  .subject-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;border:1px solid var(--border);background:var(--surface);flex-shrink:0;}
-  .subject-info{flex:1;}
-  .subject-name{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:-0.5px;}
-  .subject-sub{font-size:0.68rem;color:var(--muted);margin-top:2px;letter-spacing:0.5px;}
-  .subject-count{font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:999px;border:1px solid var(--border);color:var(--muted);white-space:nowrap;}
-  .divider{height:1px;background:var(--border);margin-bottom:18px;}
-  .quiz-list{display:flex;flex-direction:column;gap:10px;}
-  .quiz-card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:18px 20px;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:16px;transition:border-color 0.2s,transform 0.15s,background 0.2s;position:relative;overflow:hidden;}
-  .quiz-card:not(.coming-soon):hover{border-color:var(--c);transform:translateX(5px);background:#1f1f1f;}
-  .quiz-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c);border-radius:13px 0 0 13px;opacity:0;transition:opacity 0.2s;}
-  .quiz-card:not(.coming-soon):hover::before{opacity:1;}
-  .quiz-num{font-size:0.65rem;letter-spacing:2px;color:var(--c);text-transform:uppercase;min-width:28px;text-align:center;flex-shrink:0;}
-  .quiz-info{flex:1;}
-  .quiz-title{font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:700;line-height:1.4;}
-  .quiz-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
-  .badge{font-size:0.62rem;padding:2px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--border);color:var(--muted);}
-  .badge.live{border-color:var(--c);color:var(--c);background:transparent;}
-  .badge.random{border-color:#5b8cff;color:#5b8cff;background:transparent;}
-  .badge.priority{border-color:var(--gold);color:var(--gold);background:transparent;}
-  .quiz-arrow{color:var(--c);font-size:1rem;transition:transform 0.2s;flex-shrink:0;}
-  .quiz-card:not(.coming-soon):hover .quiz-arrow{transform:translateX(4px);}
-  .quiz-card.coming-soon{opacity:0.35;border-style:dashed;pointer-events:none;}
-  .leaderboard{margin-bottom:52px;animation:fadeUp 0.5s 0.3s ease both;}
-  .lb-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
-  .lb-tab{font-family:'DM Mono',monospace;font-size:0.72rem;padding:6px 16px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;}
-  .lb-tab.active{border-color:var(--green);color:var(--green);background:rgba(0,229,160,0.08);}
-  .lb-table{border:1px solid var(--border);border-radius:14px;overflow:hidden;}
-  .lb-header{display:grid;grid-template-columns:48px 1fr 80px 80px 70px;padding:12px 16px;background:var(--surface);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);}
-  .lb-row{display:grid;grid-template-columns:48px 1fr 80px 80px 70px;padding:14px 16px;border-bottom:1px solid var(--border);align-items:center;font-size:0.8rem;transition:background 0.15s;}
-  .lb-row:last-child{border-bottom:none;}
-  .lb-row:hover{background:#1f1f1f;}
-  .lb-row.top1{background:rgba(245,197,66,0.06);}
-  .lb-row.top2{background:rgba(200,200,200,0.04);}
-  .lb-row.top3{background:rgba(205,127,50,0.04);}
-  .lb-rank{font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;}
-  .lb-rank.r1{color:var(--gold);}
-  .lb-rank.r2{color:#aaa;}
-  .lb-rank.r3{color:#cd7f32;}
-  .lb-score{color:var(--green);font-family:'Syne',sans-serif;font-weight:700;}
-  .lb-pct{color:var(--muted);font-size:0.75rem;}
-  .lb-date{color:var(--muted);font-size:0.7rem;}
-  .lb-empty{padding:40px;text-align:center;color:var(--muted);font-size:0.8rem;}
-  .lb-loading{padding:30px;text-align:center;color:var(--muted);font-size:0.75rem;}
-  .ghost-toast{display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(30,30,30,0.95);border:1px solid var(--orange);color:var(--orange);font-size:0.78rem;padding:10px 22px;border-radius:999px;letter-spacing:1px;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.5);}
-  .ghost-toast.show{display:block;animation:toastIn 0.3s ease;}
-  @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
-  .footer{border-top:1px solid var(--border);padding:24px 0 0;text-align:center;font-size:0.7rem;color:var(--muted2);line-height:2;}
-  .footer span{color:var(--muted);}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
-  .subject:nth-child(1){animation-delay:0.1s;}
-  .subject:nth-child(2){animation-delay:0.2s;}
-  .subject:nth-child(3){animation-delay:0.3s;}
-  .subject:nth-child(4){animation-delay:0.4s;}
-  @media(max-width:580px){.lb-header,.lb-row{grid-template-columns:40px 1fr 60px 55px;}.lb-date{display:none;}.stats{flex-wrap:wrap;}.stat{min-width:50%;border-bottom:1px solid var(--border);}.subject-count{display:none;}}
+:root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;pointer-events:none;z-index:0;}
+.wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:24px 20px 60px;}
+.hero{padding:60px 0 44px;animation:fadeUp 0.5s ease both;}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--green);border:1px solid var(--green);padding:6px 16px;border-radius:999px;margin-bottom:22px;cursor:default;user-select:none;-webkit-tap-highlight-color:transparent;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;line-height:1.05;letter-spacing:-2px;}
+.hero h1 em{color:var(--green);font-style:normal;}
+.hero p{margin-top:14px;color:var(--muted);font-size:0.82rem;line-height:1.8;max-width:520px;}
+.stats{display:flex;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin:0 0 52px;animation:fadeUp 0.5s 0.1s ease both;}
+.stat{flex:1;padding:18px 12px;text-align:center;border-right:1px solid var(--border);}
+.stat:last-child{border-right:none;}
+.stat .val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--green);}
+.stat .lbl{font-size:0.65rem;color:var(--muted);letter-spacing:1px;margin-top:3px;}
+.section-label{font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:12px;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.subject{margin-bottom:48px;animation:fadeUp 0.5s ease both;}
+.subject-header{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+.subject-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;border:1px solid var(--border);background:var(--surface);flex-shrink:0;}
+.subject-info{flex:1;}
+.subject-name{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;letter-spacing:-0.5px;}
+.subject-sub{font-size:0.68rem;color:var(--muted);margin-top:2px;letter-spacing:0.5px;}
+.subject-count{font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:999px;border:1px solid var(--border);color:var(--muted);white-space:nowrap;}
+.divider{height:1px;background:var(--border);margin-bottom:18px;}
+.quiz-list{display:flex;flex-direction:column;gap:10px;}
+.quiz-card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:18px 20px;text-decoration:none;color:var(--text);display:flex;align-items:center;gap:16px;transition:border-color 0.2s,transform 0.15s,background 0.2s;position:relative;overflow:hidden;}
+.quiz-card:not(.coming-soon):hover{border-color:var(--c);transform:translateX(5px);background:#1f1f1f;}
+.quiz-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c);border-radius:13px 0 0 13px;opacity:0;transition:opacity 0.2s;}
+.quiz-card:not(.coming-soon):hover::before{opacity:1;}
+.quiz-num{font-size:0.65rem;letter-spacing:2px;color:var(--c);text-transform:uppercase;min-width:28px;text-align:center;flex-shrink:0;}
+.quiz-info{flex:1;}
+.quiz-title{font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:700;line-height:1.4;}
+.quiz-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+.badge{font-size:0.62rem;padding:2px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.badge.live{border-color:var(--c);color:var(--c);background:transparent;}
+.badge.random{border-color:#5b8cff;color:#5b8cff;background:transparent;}
+.badge.priority{border-color:var(--gold);color:var(--gold);background:transparent;}
+.quiz-arrow{color:var(--c);font-size:1rem;transition:transform 0.2s;flex-shrink:0;}
+.quiz-card:not(.coming-soon):hover .quiz-arrow{transform:translateX(4px);}
+.quiz-card.coming-soon{opacity:0.35;border-style:dashed;pointer-events:none;}
+.leaderboard{margin-bottom:52px;animation:fadeUp 0.5s 0.3s ease both;}
+.lb-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.lb-tab{font-family:'DM Mono',monospace;font-size:0.72rem;padding:6px 16px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all 0.2s;letter-spacing:0.5px;}
+.lb-tab.active{border-color:var(--green);color:var(--green);background:rgba(0,229,160,0.08);}
+.lb-table{border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.lb-header{display:grid;grid-template-columns:48px 1fr 80px 80px 70px;padding:12px 16px;background:var(--surface);font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);}
+.lb-row{display:grid;grid-template-columns:48px 1fr 80px 80px 70px;padding:14px 16px;border-bottom:1px solid var(--border);align-items:center;font-size:0.8rem;transition:background 0.15s;}
+.lb-row:last-child{border-bottom:none;}
+.lb-row:hover{background:#1f1f1f;}
+.lb-row.top1{background:rgba(245,197,66,0.06);}
+.lb-row.top2{background:rgba(200,200,200,0.04);}
+.lb-row.top3{background:rgba(205,127,50,0.04);}
+.lb-rank{font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;}
+.lb-rank.r1{color:var(--gold);}
+.lb-rank.r2{color:#aaa;}
+.lb-rank.r3{color:#cd7f32;}
+.lb-score{color:var(--green);font-family:'Syne',sans-serif;font-weight:700;}
+.lb-pct{color:var(--muted);font-size:0.75rem;}
+.lb-date{color:var(--muted);font-size:0.7rem;}
+.lb-empty{padding:40px;text-align:center;color:var(--muted);font-size:0.8rem;}
+.lb-loading{padding:30px;text-align:center;color:var(--muted);font-size:0.75rem;}
+.ghost-toast{display:none;position:fixed;top:20px;left:50%;transform:translateX(-50%);background:rgba(30,30,30,0.95);border:1px solid var(--orange);color:var(--orange);font-size:0.78rem;padding:10px 22px;border-radius:999px;letter-spacing:1px;z-index:9999;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.5);}
+.ghost-toast.show{display:block;animation:toastIn 0.3s ease;}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(-8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+.footer{border-top:1px solid var(--border);padding:24px 0 0;text-align:center;font-size:0.7rem;color:var(--muted2);line-height:2;}
+.footer span{color:var(--muted);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.subject:nth-child(1){animation-delay:0.1s;}
+.subject:nth-child(2){animation-delay:0.2s;}
+.subject:nth-child(3){animation-delay:0.3s;}
+.subject:nth-child(4){animation-delay:0.4s;}
+@media(max-width:580px){.lb-header,.lb-row{grid-template-columns:40px 1fr 60px 55px;}.lb-date{display:none;}.stats{flex-wrap:wrap;}.stat{min-width:50%;border-bottom:1px solid var(--border);}.subject-count{display:none;}}
 </style>
 </head>
 <body>
-
 <div class="ghost-toast" id="ghostToast"></div>
-
 <div class="wrap">
+
   <div class="hero">
     <div class="hero-tag" id="heroTag">📚 Practice Hub</div>
     <h1>May 2026<br><em>Exam Practice</em></h1>
@@ -94,8 +93,8 @@
 
   <div class="stats">
     <div class="stat"><div class="val">4</div><div class="lbl">Subjects</div></div>
-    <div class="stat"><div class="val">11</div><div class="lbl">Quiz Sets</div></div>
-    <div class="stat"><div class="val">300+</div><div class="lbl">Questions</div></div>
+    <div class="stat"><div class="val">14</div><div class="lbl">Quiz Sets</div></div>
+    <div class="stat"><div class="val">900+</div><div class="lbl">Questions</div></div>
     <div class="stat"><div class="val">∞</div><div class="lbl">Attempts</div></div>
   </div>
 
@@ -110,6 +109,7 @@
       <div class="lb-tab" data-quiz="english-02" onclick="switchTab(this)">English 02</div>
       <div class="lb-tab" data-quiz="english-03" onclick="switchTab(this)">English 03</div>
       <div class="lb-tab" data-quiz="gpdp-01" onclick="switchTab(this)">GPDP 01</div>
+      <div class="lb-tab" data-quiz="culinary-01" onclick="switchTab(this)">Culinary 01</div>
     </div>
     <div class="lb-table">
       <div class="lb-header"><div>#</div><div>Name</div><div>Score</div><div>Percent</div><div>Date</div></div>
@@ -123,7 +123,7 @@
       <div class="subject-icon">💻</div>
       <div class="subject-info">
         <div class="subject-name" style="color:var(--green)">Computer</div>
-        <div class="subject-sub">Introduction to Computing & Office Applications</div>
+        <div class="subject-sub">Introduction to Computing &amp; Office Applications</div>
       </div>
       <div class="subject-count">2 quizzes</div>
     </div>
@@ -193,42 +193,20 @@
       <div class="subject-icon">📋</div>
       <div class="subject-info">
         <div class="subject-name" style="color:var(--purple)">GPDP</div>
-        <div class="subject-sub">Food Safety · Culinary Skills · Knife Skills</div>
+        <div class="subject-sub">Food Safety &amp; Personal Hygiene</div>
       </div>
-      <div class="subject-count">6 quizzes</div>
+      <div class="subject-count">1 quiz</div>
     </div>
     <div class="divider"></div>
     <div class="quiz-list">
       <a class="quiz-card" href="01-FoodSafety.html" style="--c:var(--purple)">
         <div class="quiz-num">01</div>
-        <div class="quiz-info"><div class="quiz-title">Food Safety & Personal Hygiene</div><div class="quiz-badges"><span class="badge">50 Questions</span><span class="badge random">🎲</span></div></div>
+        <div class="quiz-info">
+          <div class="quiz-title">Food Safety &amp; Personal Hygiene</div>
+          <div class="quiz-badges"><span class="badge">50 Questions</span><span class="badge random">🎲</span></div>
+        </div>
         <div class="quiz-arrow">→</div>
       </a>
-      <div class="quiz-card coming-soon" style="--c:var(--purple)">
-        <div class="quiz-num">02</div>
-        <div class="quiz-info"><div class="quiz-title">Culinary Boot Camp</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
-        <div class="quiz-arrow">→</div>
-      </div>
-      <div class="quiz-card coming-soon" style="--c:var(--purple)">
-        <div class="quiz-num">03</div>
-        <div class="quiz-info"><div class="quiz-title">Culinary Foundations</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
-        <div class="quiz-arrow">→</div>
-      </div>
-      <div class="quiz-card coming-soon" style="--c:var(--purple)">
-        <div class="quiz-num">04</div>
-        <div class="quiz-info"><div class="quiz-title">Cutting and Processing</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
-        <div class="quiz-arrow">→</div>
-      </div>
-      <div class="quiz-card coming-soon" style="--c:var(--purple)">
-        <div class="quiz-num">05</div>
-        <div class="quiz-info"><div class="quiz-title">Food Presentation and Plating</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
-        <div class="quiz-arrow">→</div>
-      </div>
-      <div class="quiz-card coming-soon" style="--c:var(--purple)">
-        <div class="quiz-num">06</div>
-        <div class="quiz-info"><div class="quiz-title">Knife Skills</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
-        <div class="quiz-arrow">→</div>
-      </div>
     </div>
   </div>
 
@@ -238,17 +216,103 @@
       <div class="subject-icon">🍳</div>
       <div class="subject-info">
         <div class="subject-name" style="color:var(--gold)">Culinary Arts</div>
-        <div class="subject-sub">Diploma of Culinary Arts</div>
+        <div class="subject-sub">Diploma of Culinary Arts — 9 topics + revision</div>
       </div>
-      <div class="subject-count">TBC</div>
+      <div class="subject-count">10 quizzes</div>
     </div>
     <div class="divider"></div>
     <div class="quiz-list">
+
+      <a class="quiz-card" href="01-Hospitality-Chef-Hotels.html" style="--c:var(--gold)">
+        <div class="quiz-num">01</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Hospitality, Chef &amp; Hotels</div>
+          <div class="quiz-badges"><span class="badge live">75 Questions</span><span class="badge random">🎲</span><span class="badge priority">⭐</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </a>
+
       <div class="quiz-card coming-soon" style="--c:var(--gold)">
-        <div class="quiz-num">—</div>
-        <div class="quiz-info"><div class="quiz-title">Quizzes will be added soon</div><div class="quiz-badges"><span class="badge">Coming Soon</span></div></div>
+        <div class="quiz-num">02</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Kitchen on Fire, Brigade &amp; Foodborne Illness</div>
+          <div class="quiz-badges"><span class="badge">Coming Soon</span></div>
+        </div>
         <div class="quiz-arrow">→</div>
       </div>
+
+      <div class="quiz-card coming-soon" style="--c:var(--gold)">
+        <div class="quiz-num">03</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Knife Handling, Sharpening &amp; Vegetable Cutting</div>
+          <div class="quiz-badges"><span class="badge">Coming Soon</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </div>
+
+      <div class="quiz-card coming-soon" style="--c:var(--gold)">
+        <div class="quiz-num">04</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Kitchen Terminologies, Veg, Fruits, Meat &amp; FOH/BOH</div>
+          <div class="quiz-badges"><span class="badge">Coming Soon</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </div>
+
+      <div class="quiz-card coming-soon" style="--c:var(--gold)">
+        <div class="quiz-num">05</div>
+        <div class="quiz-info">
+          <div class="quiz-title">HACCP, Bacteria, Temperature &amp; Waste Disposal</div>
+          <div class="quiz-badges"><span class="badge">Coming Soon</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </div>
+
+      <div class="quiz-card coming-soon" style="--c:var(--gold)">
+        <div class="quiz-num">06</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Cooking Methods</div>
+          <div class="quiz-badges"><span class="badge">Coming Soon</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </div>
+
+      <div class="quiz-card coming-soon" style="--c:var(--gold)">
+        <div class="quiz-num">07</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Mother Sauces</div>
+          <div class="quiz-badges"><span class="badge">Coming Soon</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </div>
+
+      <div class="quiz-card coming-soon" style="--c:var(--gold)">
+        <div class="quiz-num">08</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Conversations a Commis Chef Must Know</div>
+          <div class="quiz-badges"><span class="badge">Coming Soon</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </div>
+
+      <div class="quiz-card coming-soon" style="--c:var(--gold)">
+        <div class="quiz-num">09</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Important Temperatures &amp; Getting Started</div>
+          <div class="quiz-badges"><span class="badge">Coming Soon</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </div>
+
+      <div class="quiz-card coming-soon" style="--c:var(--gold)">
+        <div class="quiz-num">10</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Most Important Revision</div>
+          <div class="quiz-badges"><span class="badge">Coming Soon</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </div>
+
     </div>
   </div>
 
@@ -267,7 +331,7 @@ heroTag.addEventListener('click',()=>{
     tapCount=0;clearTimeout(tapTimer);
     ghostMode=!ghostMode;
     sessionStorage.setItem('ghostMode',ghostMode?'1':'0');
-    toast.textContent=ghostMode?'👻 Ghost Mode ON — scores won\'t be saved':'👤 Ghost Mode OFF — scores will be saved';
+    toast.textContent=ghostMode?"👻 Ghost Mode ON — scores won't be saved":"👤 Ghost Mode OFF — scores will be saved";
     toast.classList.add('show');
     setTimeout(()=>toast.classList.remove('show'),3000);
   }
