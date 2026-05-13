@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Introduction to Computer — Quiz Practice</title>
+<title>Computer Miscellaneous — Quiz Practice</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{--bg:#0d0d0d;--surface:#1a1a1a;--card:#222;--border:#333;--accent:#00e5a0;--accent2:#ff6b35;--wrong:#ff4444;--text:#f0f0f0;--muted:#888;--correct-bg:rgba(0,229,160,0.12);--wrong-bg:rgba(255,68,68,0.1);}
@@ -87,21 +87,21 @@
 <body>
 <div class="container">
   <div class="name-screen" id="nameScreen">
-    <h2>Introduction to<br><span>Computer</span></h2>
-    <p>Basics · Generations · Hardware · Software · Classification<br>Enter your name to start.</p>
+    <h2>Computer<br><span>Miscellaneous</span></h2>
+    <p>Windows Versions · Files · Users · Desktop · Hardware · Printers<br>Enter your name to start.</p>
     <div class="name-input-wrap">
       <input type="text" class="name-input" id="nameInput" placeholder="Your name..." maxlength="30">
       <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>Start Quiz →</button>
       <div class="ghost-notice" id="ghostNotice">👻 Ghost Mode — score won't be saved</div>
     </div>
-    <div class="bank-info">🎲 <span>35 questions</span> per session · Bank of <span>65</span> · New questions each session · Full bank in <span>2 sessions</span></div>
+    <div class="bank-info">🎲 <span>30 questions</span> per session · Bank of <span>50</span> · New questions each session · Full bank in <span>2 sessions</span></div>
     <div class="session-badge" id="sessionBadge">Session 1 of 2</div>
     <a href="index.html" class="back-link">← Back to all quizzes</a>
   </div>
   <div id="quizScreen" style="display:none">
-    <div class="header"><h1>Introduction to<br><span>Computer</span></h1><p id="playerLabel" style="color:var(--accent);font-size:0.8rem;"></p></div>
+    <div class="header"><h1>Computer<br><span>Miscellaneous</span></h1><p id="playerLabel" style="color:var(--accent);font-size:0.8rem;"></p></div>
     <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
-    <div class="progress-label"><span id="progressText">Question 1 of 35</span><span id="liveScore">Score: 0</span></div>
+    <div class="progress-label"><span id="progressText">Question 1 of 30</span><span id="liveScore">Score: 0</span></div>
     <div class="question-card" id="questionCard">
       <div class="q-number" id="qNumber">QUESTION 01</div>
       <div class="q-text" id="qText"></div>
@@ -110,13 +110,13 @@
     </div>
     <div class="nav">
       <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>← Prev</button>
-      <div class="score-chip">Answered: <span id="answeredCount">0</span>/35</div>
+      <div class="score-chip">Answered: <span id="answeredCount">0</span>/30</div>
       <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next →</button>
     </div>
     <div style="text-align:center;margin-bottom:40px;"><button class="btn btn-submit" onclick="submitQuiz()">Submit & See Results</button></div>
   </div>
   <div class="results-screen" id="resultsScreen">
-    <div class="result-score-ring"><div class="big" id="rScore">0</div><div class="small">out of 35</div></div>
+    <div class="result-score-ring"><div class="big" id="rScore">0</div><div class="small">out of 30</div></div>
     <h2 id="rGrade"></h2><div class="grade-msg" id="rMsg"></div><div class="saved-msg" id="savedMsg"></div>
     <div class="result-breakdown">
       <div class="rb-item"><div class="val" id="rCorrect" style="color:var(--accent)">0</div><div class="lbl">Correct</div></div>
@@ -133,7 +133,7 @@
 </div>
 <script>
 
-const QUIZ_ID='comp-01',STORAGE_KEY='leaderboard-scores',TOTAL_Q=35,LS_KEY='comp01_seen';
+const QUIZ_ID='comp-04',STORAGE_KEY='leaderboard-scores',TOTAL_Q=30,LS_KEY='comp04_seen';
 let isGhost=sessionStorage.getItem('ghostMode')==='1';
 if(isGhost)document.getElementById('ghostNotice').classList.add('show');
 const nameInput=document.getElementById('nameInput'),startBtn=document.getElementById('startBtn');
@@ -145,73 +145,57 @@ function saveSeenIds(ids){try{localStorage.setItem(LS_KEY,JSON.stringify(ids));}
 function getSessionNum(){return Math.min(2,Math.floor(getSeenIds().length/TOTAL_Q)+1);}
 function updateSessionBadge(){document.getElementById('sessionBadge').textContent='Session '+getSessionNum()+' of 2';}
 updateSessionBadge();
-const BANK=[{q:"Who is known as the Father of the Computer?",opts:["Alan Turing", "Bill Gates", "John von Neumann", "Charles Babbage"],ans:3},
-{q:"What is the binary language used by computers?",opts:["0 and 2", "1 and 2", "A and B", "0 and 1"],ans:3},
-{q:"Which generation of computers used vacuum tubes?",opts:["2nd Generation", "3rd Generation", "4th Generation", "1st Generation (1940\u20131956)"],ans:3},
-{q:"What replaced vacuum tubes in the 2nd generation?",opts:["Integrated circuits", "Microprocessors", "ULSI chips", "Transistors"],ans:3},
-{q:"Which generation introduced integrated circuits (ICs)?",opts:["1st", "2nd", "4th", "3rd (1963\u20131971)"],ans:3},
-{q:"The Intel 4004 chip is associated with which generation?",opts:["1st", "2nd", "3rd", "4th"],ans:3},
-{q:"The 5th generation focuses on:",opts:["Vacuum tubes", "Transistors", "Integrated circuits", "AI, machine learning, and neural networks"],ans:3},
-{q:"What is the fastest type of computer?",opts:["Mainframe", "Minicomputer", "Personal Computer", "Supercomputer"],ans:3},
-{q:"Which of the following is an input device?",opts:["Monitor", "Speaker", "Printer", "Scanner"],ans:3},
-{q:"Which of the following is an output device?",opts:["Keyboard", "Mouse", "Touchscreen", "Monitor"],ans:3},
-{q:"CPU stands for:",opts:["Central Power Unit", "Computer Processing Unit", "Core Processor Unit", "Central Processing Unit"],ans:3},
-{q:"CPU speed is measured in:",opts:["Gigabytes and Megabytes", "Bits and Bytes", "Watts and Volts", "Megahertz (MHz) and Gigahertz (GHz)"],ans:3},
-{q:"The brain of the computer is:",opts:["RAM", "Motherboard", "Hard Disk", "CPU"],ans:3},
-{q:"The Motherboard is:",opts:["The permanent memory", "The screen display", "The power supply unit", "The basic processing hardware to which all peripherals connect"],ans:3},
-{q:"BIOS stands for:",opts:["Binary Input Output Storage", "Basic Integrated Operating System", "Binary Integrated Output System", "Basic Input Output System"],ans:3},
-{q:"RAM stands for:",opts:["Read Access Memory", "Rapid Access Memory", "Read And Memory", "Random Access Memory"],ans:3},
-{q:"ROM stands for:",opts:["Random Only Memory", "Read Output Memory", "Removable Output Memory", "Read Only Memory"],ans:3},
-{q:"Which memory is permanent?",opts:["RAM", "Cache", "Virtual Memory", "ROM"],ans:3},
-{q:"Which memory is lost when power is off?",opts:["ROM", "Hard Disk", "Flash Drive", "RAM"],ans:3},
-{q:"1024 Megabytes equals:",opts:["1 Terabyte", "1 Kilobyte", "1 Petabyte", "1 Gigabyte"],ans:3},
-{q:"The smallest unit of computer memory is:",opts:["Byte", "Kilobyte", "Megabyte", "Bit"],ans:3},
-{q:"A standard QWERTY keyboard has how many keys?",opts:["84", "96", "101", "104"],ans:3},
-{q:"GUI stands for:",opts:["General User Interface", "Graphical Unified Interface", "General Unified Integration", "Graphical User Interface"],ans:3},
-{q:"A mouse is used for:",opts:["Typing text", "Printing documents", "Scanning documents", "Moving a pointer in a Graphical User Environment"],ans:3},
-{q:"System software is responsible for:",opts:["Creating documents", "Playing music", "Browsing the internet", "Managing computer hardware and providing essential services"],ans:3},
-{q:"Windows is an example of:",opts:["Application software", "Hardware", "Firmware", "System software \u2014 an Operating System"],ans:3},
-{q:"Icons on a desktop represent:",opts:["Hardware components", "CPU instructions", "Network connections", "Small pictures that represent files and folders"],ans:3},
-{q:"LAN stands for:",opts:["Large Area Network", "Long Access Network", "Linked Area Node", "Local Area Network"],ans:3},
-{q:"WAN stands for:",opts:["Wireless Area Node", "Wide Access Node", "Wired Area Network", "Wide Area Network"],ans:3},
-{q:"A computer cannot boot without:",opts:["An internet connection", "A printer", "A mouse", "An operating system"],ans:3},
-{q:"A Mainframe computer is used by:",opts:["Individual home users", "Small businesses only", "Gaming enthusiasts", "Banks, governments, and large organisations for large-scale data processing"],ans:3},
-{q:"Embedded computers are found in:",opts:["Only offices", "Only schools", "Only research labs", "Devices like washing machines, cars, and microwaves"],ans:3},
-{q:"Hardware refers to:",opts:["Programs and instructions", "Only the CPU", "Only input devices", "All physical, tangible parts of a computer you can touch"],ans:3},
-{q:"Software refers to:",opts:["All physical components", "The screen and keyboard only", "Only the operating system", "The set of instructions that tell hardware what to do"],ans:3},
-{q:"Utility software performs:",opts:["User productivity tasks", "Permanent firmware functions", "Network communication", "Maintenance tasks like antivirus and disk cleanup"],ans:3},
-{q:"Firmware is:",opts:["Temporary software in RAM", "Application software for users", "Network software", "Permanent software programmed into ROM \u2014 e.g., BIOS"],ans:3},
-{q:"A PC is designed for:",opts:["Large organisations only", "Scientific research only", "Multi-user server operations", "Use by a single individual"],ans:3},
-{q:"A Laptop PC is:",opts:["A desktop replacement only for offices", "A type of server", "A gaming console", "Portable, battery-powered, with built-in keyboard and screen"],ans:3},
-{q:"Modem stands for:",opts:["Monitor and Display", "Memory and Output Device", "Module and Decoder", "Modulator Demodulator"],ans:3},
-{q:"Networks allow sharing of:",opts:["Only internet access", "Only email", "Only storage", "Programs, files, and printers"],ans:3},
-{q:"Primary memory is:",opts:["Permanent even without power", "Secondary storage like a hard disk", "Only ROM", "Temporary \u2014 lost without power (RAM and ROM)"],ans:3},
-{q:"Secondary memory is:",opts:["Lost when power is off", "Only RAM", "Only ROM", "Permanent even without power \u2014 e.g., Hard Disk Drive"],ans:3},
-{q:"An advantage of computers is:",opts:["Health issues", "Virus and hacking", "Spread of false content", "Amazing speed, accuracy, and huge storage"],ans:3},
-{q:"A disadvantage of computers is:",opts:["Multitasking", "Automation", "Data security", "Cyber crimes and virus attacks"],ans:3},
-{q:"By data handling, computers are:",opts:["Fast, medium, slow", "Input, output, processing", "Large, medium, small", "Analog, Digital, and Hybrid"],ans:3},
-{q:"A Hybrid computer combines:",opts:["RAM and ROM", "Input and output", "Hardware and software", "Analog and digital processing"],ans:3},
-{q:"Peripheral devices are:",opts:["The CPU and motherboard only", "Internal components only", "Only input devices", "Auxiliary hardware connected to expand functionality"],ans:3},
-{q:"Floppy disk storage capacity is:",opts:["650MB", "4.7GB", "25GB", "1.44MB"],ans:3},
-{q:"A CD stores:",opts:["1.44MB", "4.7GB", "25GB", "650MB to 700MB"],ans:3},
-{q:"A DVD stores:",opts:["1.44MB", "650MB", "25GB", "4.7GB to 8.5GB"],ans:3},
-{q:"Blu-Ray stores:",opts:["1.44MB", "650MB", "4.7GB", "25GB to 50GB"],ans:3},
-{q:"The 1st generation spanned:",opts:["1956\u20131963", "1963\u20131971", "1971\u20131980s", "1940\u20131956"],ans:3},
-{q:"The 2nd generation spanned:",opts:["1940\u20131956", "1963\u20131971", "1971\u20131980s", "1956\u20131963"],ans:3},
-{q:"The 3rd generation introduced:",opts:["Vacuum tubes", "Transistors", "AI", "Operating systems, multitasking, and mass-market business use"],ans:3},
-{q:"Application software is:",opts:["The operating system", "The BIOS", "Firmware", "Developed specifically for different user tasks"],ans:3},
-{q:"The User Interface controls:",opts:["CPU speed", "Network settings", "Memory allocation", "The interaction between the user and the operating system"],ans:3},
-{q:"Copy and paste creates:",opts:["Moves the file", "Deletes the original", "Renames the file", "A duplicate \u2014 the original remains"],ans:3},
-{q:"A folder is:",opts:["A type of hardware", "A network device", "A type of software", "A named storage area in which files are located"],ans:3},
-{q:"Function keys (F1, F2 etc.) are used for:",opts:["Typing only", "Deleting files", "Saving documents only", "Controlling system software, launching apps, and adjusting brightness"],ans:3},
-{q:"The ESC key is used to:",opts:["Save a file", "Select all", "Confirm a command", "Cancel or close a dialog box or drop-down list"],ans:3},
-{q:"MS Office is:",opts:["System software", "Hardware", "Firmware", "An application software package"],ans:3},
-{q:"Hard Disk is classified as:",opts:["Primary memory", "ROM", "RAM", "Secondary storage"],ans:3},
-{q:"A server in a network is:",opts:["A type of printer", "The slowest computer", "A wireless router", "The main computer providing services to other computers"],ans:3},
-{q:"By purpose, computers are:",opts:["Fast and slow", "Digital and analog", "Large and small", "General-purpose and Special-purpose"],ans:3},
-{q:"By size, computers are:",opts:["Fast, medium, slow", "Digital, analog, hybrid", "Input, output, processing", "Supercomputer, Mainframe, Minicomputer, Microcomputer"],ans:3},
-{q:"Three characteristics of a computer:",opts:["Speed, colour, weight", "Size, brand, cost", "Shape, memory, network", "Responds to specific instructions, executes pre-recorded lists, quickly stores/retrieves large data"],ans:3},
-{q:"The 4th generation introduced:",opts:["Vacuum tubes", "Transistors", "AI", "Personal computers, GUIs, the internet, and networking"],ans:3}];
+const BANK=[{q:"Windows is a GUI operating system developed by:",opts:["Apple", "Google", "IBM", "Microsoft"],ans:3},
+{q:"Windows 98 introduced:",opts:["The Metro UI", "NTFS file system", "Aero Glass effects", "USB support and improved internet integration"],ans:3},
+{q:"Windows XP was significant because it:",opts:["Introduced USB support", "Introduced the Metro UI", "Introduced Aero Glass", "Merged home and business editions and improved stability"],ans:3},
+{q:"Windows Vista introduced:",opts:["USB support", "NTFS file system", "Metro UI", "Aero Glass visual effects, UAC, and Windows Defender"],ans:3},
+{q:"Windows 7 introduced:",opts:["USB support", "Aero Glass", "Metro UI Start Screen", "Snap, Libraries, and HomeGroup networking"],ans:3},
+{q:"Windows 8 introduced:",opts:["USB support", "Aero Glass", "NTFS file system", "The Start Screen (Metro UI) optimised for touchscreens"],ans:3},
+{q:"Windows 98 used which file system?",opts:["NTFS", "exFAT", "ext4", "FAT32"],ans:3},
+{q:"Windows 2000 introduced:",opts:["Aero Glass effects", "Metro UI", "USB support", "NTFS file system support and better security"],ans:3},
+{q:"Windows XP introduced:",opts:["Metro UI", "Aero Glass", "NTFS only", "ClearType font, fast user switching, and a redesigned Start menu"],ans:3},
+{q:"The Control Panel is used to:",opts:["Browse the internet", "Create documents", "Play media files", "Manage system settings, users, and hardware"],ans:3},
+{q:"A file is:",opts:["A physical storage device", "A type of hardware", "A folder containing other folders", "A named collection of data stored on a computer"],ans:3},
+{q:"A folder (directory) is used to:",opts:["Run programs", "Connect to the internet", "Store hardware drivers", "Organise and contain files"],ans:3},
+{q:"A file extension identifies:",opts:["The file's colour on screen", "Its size limit", "Its location", "Its type \u2014 e.g., .docx, .jpg"],ans:3},
+{q:"Copy and Paste:",opts:["Moves the file", "Deletes the original", "Renames the file", "Creates a duplicate \u2014 the original remains"],ans:3},
+{q:"Cut and Paste:",opts:["Creates a duplicate", "Permanently deletes the file", "Keeps the original in place", "Moves a file \u2014 the original is removed"],ans:3},
+{q:"Deleting a file in Windows sends it to:",opts:["The internet", "Another hard drive", "Permanent deletion immediately", "The Recycle Bin"],ans:3},
+{q:"File Explorer is used to:",opts:["Browse the internet", "Run antivirus scans", "Create presentations", "Browse, manage, and organise files and folders"],ans:3},
+{q:"An Administrator account can:",opts:["Only run programs", "Only change personal settings", "Not install software", "Install software, change settings, and manage other user accounts"],ans:3},
+{q:"A Standard User account can:",opts:["Install software for all users", "Change all system settings", "Manage other user accounts", "Run programs and change personal settings only"],ans:3},
+{q:"A Guest account provides:",opts:["Full administrator access", "No access at all", "Access only to the internet", "Temporary limited access without a password"],ans:3},
+{q:"Fast User Switching (introduced in XP) allows:",opts:["Switching between computers on a network", "Transferring files between users", "Sharing the same desktop simultaneously", "Switching between users without logging out"],ans:3},
+{q:"The Desktop in Windows is:",opts:["A type of application", "The taskbar only", "The system tray", "The main screen you see after logging in"],ans:3},
+{q:"The Taskbar shows:",opts:["Only the clock", "Only open applications", "Only the Start button", "The Start button, open applications, system tray, and clock"],ans:3},
+{q:"The System Tray shows:",opts:["All installed programs", "Only the clock and date", "The Start menu", "Background running programs and system status"],ans:3},
+{q:"Desktop wallpaper can be changed via:",opts:["Device Manager", "File Explorer", "Task Manager", "Right-click > Personalize > Background"],ans:3},
+{q:"Screen resolution settings are in:",opts:["File Explorer", "Task Manager", "Device Manager", "Control Panel > Display Settings"],ans:3},
+{q:"Device Manager shows:",opts:["Only installed software", "Only internet connections", "Only open applications", "All hardware devices connected to the computer and their status"],ans:3},
+{q:"A yellow exclamation mark in Device Manager indicates:",opts:["Device working perfectly", "Device is disconnected", "Device needs replacing", "A driver problem with the hardware device"],ans:3},
+{q:"A driver is software that:",opts:["Replaces the operating system", "Manages antivirus", "Connects to the internet", "Allows the OS to communicate with hardware devices"],ans:3},
+{q:"Plug and Play means:",opts:["Manual driver installation required", "Device only works on older systems", "Restart required after every connection", "Windows automatically detects and installs drivers for new hardware"],ans:3},
+{q:"To safely remove a USB drive:",opts:["Just pull it out quickly", "Turn off the computer first", "Delete all files first", "Use the Safely Remove Hardware icon in the system tray"],ans:3},
+{q:"To uninstall software in Windows go to:",opts:["Device Manager", "Start > Run", "File Explorer", "Control Panel > Programs and Features"],ans:3},
+{q:"The Windows Store (from Windows 8) allows:",opts:["Buying physical hardware", "Creating user accounts", "Formatting hard drives", "Installing apps directly from an online store"],ans:3},
+{q:"Software is installed by running:",opts:["A .docx file", "A .jpg file", "A .txt file", "A setup file such as setup.exe or installer.msi"],ans:3},
+{q:"A printer is:",opts:["An input device", "A processing device", "A storage device", "An output device that produces a hard copy of digital documents"],ans:3},
+{q:"An Inkjet printer uses:",opts:["Toner powder", "Dot matrix pins", "Laser beam", "Liquid ink"],ans:3},
+{q:"A Laser printer uses:",opts:["Liquid ink", "Dot matrix pins", "Heat transfer only", "Toner powder"],ans:3},
+{q:"The Default Printer is:",opts:["The most expensive printer", "The newest printer connected", "Only available on networks", "The printer automatically selected when printing a document"],ans:3},
+{q:"The print queue shows:",opts:["Printer ink levels", "The printer IP address", "Number of pages in the document", "All pending print jobs \u2014 allows you to pause, resume or cancel them"],ans:3},
+{q:"Print settings include:",opts:["Only number of copies", "Only paper size", "Only colour or black and white", "Paper size, orientation, number of copies, and colour/black and white"],ans:3},
+{q:"Network printers are:",opts:["Only for large companies", "Only for wireless connections", "Only for Windows servers", "Shared across multiple computers on the same network"],ans:3},
+{q:"Printers can be added via:",opts:["File Explorer", "Device Manager", "Task Manager", "Control Panel > Devices and Printers > Add a Printer"],ans:3},
+{q:"System Information (msinfo32) provides:",opts:["Only software information", "Only network information", "Only user account information", "Detailed info about hardware, software, and system components"],ans:3},
+{q:"User accounts are managed through:",opts:["File Explorer", "Device Manager", "Task Manager", "Control Panel > User Accounts"],ans:3},
+{q:"The Recycle Bin:",opts:["Permanently deletes files immediately", "Is used for recycling paper", "Cleans up viruses", "Temporarily stores deleted files before permanent removal"],ans:3},
+{q:"Desktop icons can be arranged by:",opts:["Only alphabetically", "Only by size", "Randomly only", "Name, size, type, or date modified"],ans:3},
+{q:"Hardware information can be viewed via:",opts:["The Recycle Bin", "File Explorer > This PC", "The system tray clock", "Control Panel > System or right-clicking My Computer > Properties"],ans:3},
+{q:"NTFS file system allows:",opts:["Only FAT32 files", "Smaller file sizes only", "Only 2GB files maximum", "File permissions and larger file sizes compared to FAT32"],ans:3},
+{q:"Software updates and patches:",opts:["Are never needed", "Replace the operating system", "Reduce performance", "Improve performance and fix security issues"],ans:3},
+{q:"Unauthorised software can:",opts:["Only slow the computer", "Never cause damage", "Only affect the network", "Contain viruses \u2014 always install from trusted sources"],ans:3},
+{q:"Some software requires a restart because:",opts:["It deletes files on restart", "It needs internet access", "It requires a password change", "Installation or uninstallation needs to complete the process"],ans:3}];
 function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function buildSession(){const seen=getSeenIds();const unseen=shuffle(BANK.filter((_,i)=>!seen.includes(i)));const seenQ=shuffle(BANK.filter((_,i)=>seen.includes(i)));const picked=unseen.concat(seenQ).slice(0,TOTAL_Q);const newSeen=[...new Set([...seen,...picked.map(q=>BANK.indexOf(q))])];saveSeenIds(newSeen.length>=BANK.length?[]:newSeen);updateSessionBadge();return shuffle(picked).map(q=>{const ct=q.opts[q.ans];const so=shuffle(q.opts.slice());return{q:q.q,opts:so,ans:so.indexOf(ct)};}); }
 function startQuiz(){playerName=nameInput.value.trim();if(playerName.length<2)return;if(playerName==='1994'){isGhost=true;playerName='Ghost';}sessionQ=buildSession();userAnswers=new Array(TOTAL_Q).fill(null);current=0;document.getElementById('nameScreen').style.display='none';document.getElementById('quizScreen').style.display='block';document.getElementById('playerLabel').textContent=isGhost?'👻 Playing anonymously':'Playing as '+playerName;render();}
