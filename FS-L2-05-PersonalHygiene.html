@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Safety L2 — 05. Food Handlers — Personal Hygiene</title>
+<style>:root{--c:var(--green);}@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400;500&display=swap');
+:root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;pointer-events:none;z-index:0;}
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 20px 60px;}
+.top-bar{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 20px;}
+.top-bar-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:14px;}
+.back-btn{color:var(--c);text-decoration:none;font-size:0.72rem;letter-spacing:1px;border:1px solid var(--border);padding:5px 14px;border-radius:999px;transition:border-color 0.2s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{border-color:var(--c);}
+.top-title{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.top-sub{font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.hero{padding:40px 0 28px;animation:fadeUp 0.4s ease both;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--c);border:1px solid var(--c);padding:5px 13px;border-radius:999px;margin-bottom:16px;opacity:0.8;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:800;line-height:1.1;letter-spacing:-1px;}
+.hero h1 em{color:var(--c);font-style:normal;}
+.hero p{margin-top:10px;color:var(--muted);font-size:0.78rem;line-height:1.8;max-width:500px;}
+.name-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;margin:8px 0 0;}
+.name-box h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--gold);}
+.name-box p{font-size:0.75rem;color:var(--muted);margin-bottom:20px;line-height:1.7;}
+.name-box input{width:100%;max-width:280px;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:0.82rem;outline:none;text-align:center;transition:border-color 0.2s;display:block;margin:0 auto;}
+.name-box input:focus{border-color:var(--c);}
+.start-btn{display:inline-block;margin:14px auto 0;background:var(--c);color:#000;font-family:'DM Mono',monospace;font-size:0.8rem;font-weight:600;border:none;border-radius:9px;padding:11px 30px;cursor:pointer;letter-spacing:0.5px;transition:opacity 0.2s;}
+.start-btn:hover{opacity:0.85;}
+#quizArea{display:none;}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 18px 16px;margin-bottom:14px;transition:border-color 0.2s;}
+.q-card.correct{border-color:var(--green);}.q-card.wrong{border-color:var(--wrong);}
+.q-num{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--c);margin-bottom:9px;}
+.q-text{font-size:0.86rem;line-height:1.65;font-weight:500;margin-bottom:13px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 13px;cursor:pointer;font-size:0.8rem;line-height:1.5;text-align:left;color:var(--text);font-family:'DM Mono',monospace;width:100%;transition:border-color 0.15s,background 0.15s;}
+.opt:hover:not([disabled]){border-color:var(--c);background:#1e2530;}
+.opt-l{font-weight:700;color:var(--c);min-width:15px;font-size:0.75rem;margin-top:1px;flex-shrink:0;}
+.opt.ok{background:rgba(0,229,160,0.1);border-color:var(--green);color:var(--green);}
+.opt.ok .opt-l{color:var(--green);}
+.opt.no{background:rgba(255,68,68,0.1);border-color:var(--wrong);color:var(--wrong);}
+.opt.no .opt-l{color:var(--wrong);}
+.opt.reveal{background:rgba(0,229,160,0.06);border-color:var(--green);color:var(--green);}
+.opt[disabled]{cursor:default;pointer-events:none;}
+.fb{display:none;margin-top:10px;padding:9px 12px;border-radius:8px;font-size:0.73rem;line-height:1.5;}
+.fb.show{display:block;}
+.fb.fb-ok{background:rgba(0,229,160,0.08);color:var(--green);}
+.fb.fb-no{background:rgba(255,68,68,0.08);color:#ff8a8a;}
+.result{display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 24px;text-align:center;margin:24px 0;}
+.result.show{display:block;}
+.res-pct{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;color:var(--c);}
+.res-detail{font-size:0.78rem;color:var(--muted);margin-top:6px;}
+.res-grade{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;margin:18px 0 10px;}
+.res-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+.btn-retry{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;cursor:pointer;transition:all 0.2s;}
+.btn-retry:hover{border-color:var(--c);color:var(--c);}
+.btn-home{text-decoration:none;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;display:inline-block;transition:all 0.2s;}
+.btn-home:hover{border-color:var(--gold);color:var(--gold);}
+.footer{border-top:1px solid var(--border);padding:24px 0 0;text-align:center;font-size:0.7rem;color:var(--muted2);line-height:2;margin-top:20px;}
+.footer span{color:var(--muted);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a class="back-btn" href="index.html">← Home</a>
+    <div class="top-title">Food Handlers — Personal Hygiene</div>
+    <div class="top-sub">FS L2 · T05</div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-tag">📚 Food Safety Handbook L2 · Topic 05</div>
+    <h1>Food Handlers<br><em>Personal Hygiene</em></h1>
+    <p>Handwashing procedure · When to wash · Illness reporting · Clothing · Training requirements</p>
+  </div>
+  <div class="name-box" id="nameBox">
+    <h3>Enter your name to begin</h3>
+    <p>Questions are randomised on every attempt.<br>Your score will be saved to the leaderboard.</p>
+    <input type="text" id="nameInput" placeholder="Your name..." maxlength="30" autocomplete="off">
+    <button class="start-btn" onclick="startQuiz()">Start →</button>
+  </div>
+  <div id="quizArea"></div>
+  <div class="result" id="result">
+    <div class="res-pct" id="resPct">0%</div>
+    <div class="res-detail" id="resDetail"></div>
+    <div class="res-grade" id="resGrade"></div>
+    <div class="res-btns">
+      <button class="btn-retry" onclick="retry()">Try Again</button>
+      <a class="btn-home" href="index.html">← Home</a>
+    </div>
+  </div>
+  <div class="footer"><span>May 2026 Exam Practice</span> · KiranMoghul · Open in any browser · No login needed</div>
+</div>
+<script>
+const QUIZ_ID='fs-l2-05';
+const ALL_Q=[{"q": "Why is the human body temperature of 37°C significant for food safety?", "opts": ["It destroys all bacteria that come into contact with the skin during food handling", "It is the ideal temperature for growth of most food poisoning organisms on our skin and in our intestines", "It means food handled by people is automatically kept safe due to the warmth of human touch", "It makes all chemical disinfectants significantly more effective when applied directly to hands"], "ans": 1, "fb": "Our body temperature is 37°C — the ideal for most food poisoning organisms to multiply, either in our intestines or on our skin. Most people carry some type of food poisoning organism at one time or another, especially when they have diarrhoea and/or vomiting."}, {"q": "What is the correct WATER TEMPERATURE range for effective handwashing?", "opts": ["10°C to 15°C — cool water that avoids skin irritation from excessive heat", "30°C to 40°C — warm running water that removes lather, bacteria, and dirt effectively", "50°C to 60°C — hot water that kills bacteria through heat on contact with the skin", "Above 60°C — water as hot as possible for the maximum level of bacterial destruction"], "ans": 1, "fb": "The hands should be rinsed thoroughly in warm running water (30°C to 40°C) to remove all the lather, bacteria, and dirt. Efficient drying with clean disposable paper towels is essential and will reduce the number of bacteria remaining."}, {"q": "Which handwashing occasions are classified as CRITICAL for food handlers?", "opts": ["Only at the very start of each shift before touching any food whatsoever", "After visiting the toilet, on entering the food room, after handling raw food including eggs, and before handling ready-to-eat food", "Only when hands are visibly soiled or contaminated with food residue", "After every single hour of continuous work regardless of what work was done"], "ans": 1, "fb": "Critical handwashing occasions include: after visiting the toilet, on entering the food room and before handling any food, after handling raw food including eggs, after dealing with an ill customer or a baby's nappy, and after handling ready-to-eat food."}, {"q": "Up to what PERCENTAGE of adults carry germs in their nose and mouth?", "opts": ["Up to 10% — a small minority of the general adult population at any time", "Up to 20% — approximately one in five adults at any given point in time", "Up to 40% — approaching nearly half of all adults carry germs in this area", "Up to 60% — the majority of all adults carry germs in their nose and mouth"], "ans": 2, "fb": "Up to 40 per cent of adults carry germs in the nose and mouth. Coughs and sneezes can carry droplet infection for a considerable distance. Persons with bad colds should not handle open food."}, {"q": "When a food handler needs to cough or sneeze while working, they should:", "opts": ["Turn away from food and sneeze directly into their cupped hands nearby", "Turn away from food and cough or sneeze into their upper arm or shoulder, using disposable single-use tissues", "Leave the kitchen area completely every single time they need to sneeze or cough", "Always wear a full face mask throughout the entire shift at all times while working"], "ans": 1, "fb": "Staff should turn away from food and cough or sneeze into the upper arm or shoulder. Disposable single-use paper tissues are preferable to handkerchiefs. The hands must always be washed after using a tissue or handkerchief."}, {"q": "Why should food handlers NOT wear jewellery, watches, or jewelled rings at work?", "opts": ["It looks unprofessional in a food service environment according to hygiene guidelines", "They harbour dirt and bacteria, and stones and small pieces of metal may fall off into food causing contamination", "They can become a hazard only if they get caught in kitchen machinery during use", "It is only a legal requirement in specific countries and is not universally enforced everywhere"], "ans": 1, "fb": "Food handlers should not wear earrings, watches, jewelled rings, or brooches, as they harbour dirt and bacteria. Furthermore, stones and small pieces of metal may end up in the food and result in a customer complaint or a physical hazard."}, {"q": "Why must food handlers always wear suitable HEAD COVERINGS during food preparation?", "opts": ["Only for uniform and aesthetic presentation reasons to create a professional appearance", "Hair constantly falls out and the scalp harbours harmful bacteria — head coverings prevent hair and bacteria from entering food", "Only to keep food handlers cool and comfortable in a hot and demanding kitchen environment", "It is an optional guidance note for senior chefs only and not required for all food staff"], "ans": 1, "fb": "Hair is constantly falling out and, along with dandruff, can result in contamination of food. The scalp often contains harmful bacteria and must be shampooed regularly. To prevent hair getting into food, long hair should be tied back and suitable head covering and/or hairnets worn by all food handlers."}, {"q": "A food handler suffering from diarrhoea and vomiting must do what?", "opts": ["Continue working normally but avoid touching ready-to-eat food with bare ungloved hands", "Immediately stop handling food and notify their supervisor, who must exclude them from any work which would expose food to risk from pathogens", "Wear double layers of disposable gloves over each other and continue their normal working duties", "Self-medicate with over-the-counter remedies and return to work the following morning without reporting"], "ans": 1, "fb": "Food handlers suffering from diarrhoea, vomiting, or a foodborne illness must not handle food. They must notify their supervisor who must exclude them from any work which would expose food to risks from pathogens. They should not return to work until symptoms have been absent for at least 48 hours."}, {"q": "When may a food handler RETURN TO WORK after suffering from diarrhoea and vomiting?", "opts": ["As soon as they personally feel better and their appetite returns to normal", "Only after symptoms have been absent for at least 48 hours AND they have finished taking any medication", "After exactly 24 hours have passed with written confirmation signed by their supervisor", "After a qualified doctor has completed and officially signed a standard return-to-work form"], "ans": 1, "fb": "Food handlers should not return to work until symptoms have been absent for at least 48 hours and they have finished taking any medication. Food handlers who have consumed a meal known to have caused food poisoning should also report to the supervisor."}, {"q": "Protective clothing in a food environment is worn primarily to protect what?", "opts": ["The food handler's own clothes from becoming visibly soiled during food preparation", "The FOOD — from microbiological and physical contamination carried on ordinary clothing such as dust, pet hairs, fibres, and pathogens", "Only the food handler's forearms from heat and splashing burns during high-temperature cooking", "Only the high-risk food preparation areas from accidental liquid spillages during preparation"], "ans": 1, "fb": "Staff must be aware that protective clothing is worn to protect the FOOD from risk of contamination (microbiological and physical) and not to keep their own clothes clean. Dust, pet hairs, woollen fibres, and pathogens are just a few of the contaminants carried on ordinary clothing."}, {"q": "Where should protective clothing specifically NOT be worn?", "opts": ["In the main kitchen food preparation and service areas during normal working hours", "When handling raw meat, poultry, and other high-risk raw ingredients during preparation", "Outside the food premises — not for travel to and from work, and not during lunchtime sporting activities", "When cleaning and disinfecting food contact surfaces and preparation equipment after service"], "ans": 2, "fb": "Protective clothing should not be worn outside the food premises, for example not used to travel to and from work and not worn during lunchtime sporting activities such as football. Outdoor clothing and personal effects must be stored in suitable lockers."}, {"q": "Why is SMOKING strictly not allowed in food rooms or while handling food?", "opts": ["Only because it is a legal requirement enforced equally across all countries worldwide", "It causes microbiological contamination (touching mouth then food, saliva from cigarette ends on surfaces) and physical contamination (cigarette ends and ash in food), and it encourages coughing and droplet infection", "Only because it creates an unpleasant smell that negatively affects customer dining experience", "Only because it is distracting to other food handlers who are trying to concentrate on their work"], "ans": 1, "fb": "Smoking is not allowed in food rooms or whilst handling open food as it results in microbiological contamination (people touch mouths and then food, or saliva from cigarette ends on work surfaces) and physical contamination (cigarette ends and ash in food). It also encourages coughing."}, {"q": "What is the recommended CONTACT TIME when disinfecting probe thermometers using wipes?", "opts": ["5 seconds — a very quick wipe is sufficient to remove all surface contamination", "10 seconds — a brief application of the wipe is recommended before probing food", "30 seconds — the minimum contact time required for the disinfection to be effective", "60 seconds — a full minute is always required for complete disinfection of all probes"], "ans": 2, "fb": "A contact time of 30 seconds is recommended when using disinfecting wipes on probe thermometers. Probes must be cleaned and disinfected with a clean, disinfected sanitiser wipe before and after use to prevent cross-contamination."}, {"q": "Within how many WEEKS of starting should new food handlers receive awareness training?", "opts": ["Within 1 week — before they handle any food whatsoever on the premises", "Within 2 weeks — within their first fortnight of employment in the business", "Within 4 weeks — within their first month of starting their food handling role", "Within 8 weeks — within the first two months of working in any food business"], "ans": 2, "fb": "A training programme should be implemented to ensure the competency of all food handlers. Programmes should include induction training before new staff handle food, and awareness training within 4 weeks of starting. Level 2 training for high-risk food handlers is recommended within 3 months."}, {"q": "Level 2 training for HIGH-RISK food handlers should be completed within how many months?", "opts": ["Within 1 month — within the first 30 days of employment in the business", "Within 2 months — within the first 8 weeks of handling high-risk food", "Within 3 months — within the first quarter of working with high-risk food items", "Within 6 months — within the first half-year of employment in the food business"], "ans": 2, "fb": "Customised Level 2 training of high-risk food handlers is recommended within 3 months. This may involve external accredited courses, e-learning, or in-house training. The knowledge gained must be implemented to ensure the safety of food produced."}];
+let active=[],playerName='',answered=0,correct=0;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')startQuiz();});
+function startQuiz(){
+  const n=document.getElementById('nameInput').value.trim();
+  if(!n)return;
+  playerName=n;
+  document.getElementById('nameBox').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  active=shuffle(ALL_Q);
+  answered=0;correct=0;
+  buildQuiz();
+}
+function buildQuiz(){
+  const area=document.getElementById('quizArea');
+  const L=['A','B','C','D'];
+  area.innerHTML=active.map((q,i)=>{
+    const idx=shuffle([0,1,2,3]);
+    const newAns=idx.indexOf(q.ans);
+    const optsHtml=idx.map((oi,li)=>
+      `<button class="opt" id="o${i}_${li}" onclick="pick(${i},${li},${newAns})"><span class="opt-l">${L[li]}</span><span>${q.opts[oi]}</span></button>`
+    ).join('');
+    return `<div class="q-card" id="card${i}"><div class="q-num">Q${i+1} / ${active.length}</div><div class="q-text">${q.q}</div><div class="opts">${optsHtml}</div><div class="fb" id="fb${i}"></div></div>`;
+  }).join('');
+}
+function pick(qi,chosen,correctIdx){
+  if(document.getElementById(`o${qi}_0`).hasAttribute('disabled'))return;
+  answered++;
+  const isOk=chosen===correctIdx;
+  if(isOk)correct++;
+  for(let i=0;i<4;i++){
+    const el=document.getElementById(`o${qi}_${i}`);
+    el.setAttribute('disabled','');
+    if(i===correctIdx)el.classList.add(isOk&&i===chosen?'ok':'reveal');
+    else if(i===chosen&&!isOk)el.classList.add('no');
+  }
+  document.getElementById(`card${qi}`).classList.add(isOk?'correct':'wrong');
+  const fb=document.getElementById(`fb${qi}`);
+  fb.textContent=(isOk?'✓ Correct. ':'✗ Incorrect. ')+active[qi].fb;
+  fb.className=`fb show ${isOk?'fb-ok':'fb-no'}`;
+  if(answered===active.length)setTimeout(showResult,700);
+}
+async function showResult(){
+  const pct=Math.round((correct/active.length)*100);
+  const grade=pct>=90?'Excellent 🏆':pct>=75?'Good Pass ✓':pct>=60?'Borderline — keep going ⚠️':'Needs more revision ✗';
+  document.getElementById('resPct').textContent=pct+'%';
+  document.getElementById('resDetail').textContent=correct+' correct out of '+active.length;
+  document.getElementById('resGrade').textContent=grade;
+  const r=document.getElementById('result');
+  r.classList.add('show');
+  r.scrollIntoView({behavior:'smooth',block:'center'});
+  const ghost=sessionStorage.getItem('ghostMode')==='1';
+  if(playerName&&!ghost){
+    try{
+      const key='leaderboard-scores';
+      const ex=await window.storage.get(key,true);
+      const scores=ex?JSON.parse(ex.value):[];
+      scores.push({name:playerName,score:correct,total:active.length,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(key,JSON.stringify(scores),true);
+    }catch(e){}
+  }
+}
+function retry(){location.reload();}
+</script>
+</body>
+</html>

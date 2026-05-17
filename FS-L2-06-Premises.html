@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Safety L2 — 06. Food Premises — & Equipment</title>
+<style>:root{--c:var(--gold);}@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400;500&display=swap');
+:root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;pointer-events:none;z-index:0;}
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 20px 60px;}
+.top-bar{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 20px;}
+.top-bar-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:14px;}
+.back-btn{color:var(--c);text-decoration:none;font-size:0.72rem;letter-spacing:1px;border:1px solid var(--border);padding:5px 14px;border-radius:999px;transition:border-color 0.2s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{border-color:var(--c);}
+.top-title{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.top-sub{font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.hero{padding:40px 0 28px;animation:fadeUp 0.4s ease both;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--c);border:1px solid var(--c);padding:5px 13px;border-radius:999px;margin-bottom:16px;opacity:0.8;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:800;line-height:1.1;letter-spacing:-1px;}
+.hero h1 em{color:var(--c);font-style:normal;}
+.hero p{margin-top:10px;color:var(--muted);font-size:0.78rem;line-height:1.8;max-width:500px;}
+.name-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;margin:8px 0 0;}
+.name-box h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--gold);}
+.name-box p{font-size:0.75rem;color:var(--muted);margin-bottom:20px;line-height:1.7;}
+.name-box input{width:100%;max-width:280px;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:0.82rem;outline:none;text-align:center;transition:border-color 0.2s;display:block;margin:0 auto;}
+.name-box input:focus{border-color:var(--c);}
+.start-btn{display:inline-block;margin:14px auto 0;background:var(--c);color:#000;font-family:'DM Mono',monospace;font-size:0.8rem;font-weight:600;border:none;border-radius:9px;padding:11px 30px;cursor:pointer;letter-spacing:0.5px;transition:opacity 0.2s;}
+.start-btn:hover{opacity:0.85;}
+#quizArea{display:none;}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 18px 16px;margin-bottom:14px;transition:border-color 0.2s;}
+.q-card.correct{border-color:var(--green);}.q-card.wrong{border-color:var(--wrong);}
+.q-num{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--c);margin-bottom:9px;}
+.q-text{font-size:0.86rem;line-height:1.65;font-weight:500;margin-bottom:13px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 13px;cursor:pointer;font-size:0.8rem;line-height:1.5;text-align:left;color:var(--text);font-family:'DM Mono',monospace;width:100%;transition:border-color 0.15s,background 0.15s;}
+.opt:hover:not([disabled]){border-color:var(--c);background:#1e2530;}
+.opt-l{font-weight:700;color:var(--c);min-width:15px;font-size:0.75rem;margin-top:1px;flex-shrink:0;}
+.opt.ok{background:rgba(0,229,160,0.1);border-color:var(--green);color:var(--green);}
+.opt.ok .opt-l{color:var(--green);}
+.opt.no{background:rgba(255,68,68,0.1);border-color:var(--wrong);color:var(--wrong);}
+.opt.no .opt-l{color:var(--wrong);}
+.opt.reveal{background:rgba(0,229,160,0.06);border-color:var(--green);color:var(--green);}
+.opt[disabled]{cursor:default;pointer-events:none;}
+.fb{display:none;margin-top:10px;padding:9px 12px;border-radius:8px;font-size:0.73rem;line-height:1.5;}
+.fb.show{display:block;}
+.fb.fb-ok{background:rgba(0,229,160,0.08);color:var(--green);}
+.fb.fb-no{background:rgba(255,68,68,0.08);color:#ff8a8a;}
+.result{display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 24px;text-align:center;margin:24px 0;}
+.result.show{display:block;}
+.res-pct{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;color:var(--c);}
+.res-detail{font-size:0.78rem;color:var(--muted);margin-top:6px;}
+.res-grade{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;margin:18px 0 10px;}
+.res-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+.btn-retry{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;cursor:pointer;transition:all 0.2s;}
+.btn-retry:hover{border-color:var(--c);color:var(--c);}
+.btn-home{text-decoration:none;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;display:inline-block;transition:all 0.2s;}
+.btn-home:hover{border-color:var(--gold);color:var(--gold);}
+.footer{border-top:1px solid var(--border);padding:24px 0 0;text-align:center;font-size:0.7rem;color:var(--muted2);line-height:2;margin-top:20px;}
+.footer span{color:var(--muted);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a class="back-btn" href="index.html">← Home</a>
+    <div class="top-title">Food Premises — & Equipment</div>
+    <div class="top-sub">FS L2 · T06</div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-tag">📚 Food Safety Handbook L2 · Topic 06</div>
+    <h1>Food Premises<br><em>& Equipment</em></h1>
+    <p>Design principles · Equipment materials · Waste disposal · Workflow · Construction requirements</p>
+  </div>
+  <div class="name-box" id="nameBox">
+    <h3>Enter your name to begin</h3>
+    <p>Questions are randomised on every attempt.<br>Your score will be saved to the leaderboard.</p>
+    <input type="text" id="nameInput" placeholder="Your name..." maxlength="30" autocomplete="off">
+    <button class="start-btn" onclick="startQuiz()">Start →</button>
+  </div>
+  <div id="quizArea"></div>
+  <div class="result" id="result">
+    <div class="res-pct" id="resPct">0%</div>
+    <div class="res-detail" id="resDetail"></div>
+    <div class="res-grade" id="resGrade"></div>
+    <div class="res-btns">
+      <button class="btn-retry" onclick="retry()">Try Again</button>
+      <a class="btn-home" href="index.html">← Home</a>
+    </div>
+  </div>
+  <div class="footer"><span>May 2026 Exam Practice</span> · KiranMoghul · Open in any browser · No login needed</div>
+</div>
+<script>
+const QUIZ_ID='fs-l2-06';
+const ALL_Q=[{"q": "What material is MOST appropriate for food preparation equipment and work surfaces?", "opts": ["Soft wood — natural, traditional, and widely available for use in kitchen construction", "Painted mild steel — inexpensive and effective for most standard kitchen applications", "Stainless steel — smooth, non-toxic, non-flaking, non-rusting, and easy to clean and disinfect", "Recycled cardboard or similar disposable materials — easy to replace when contaminated"], "ans": 2, "fb": "Stainless steel is appropriate for most equipment. Surfaces in contact with food should be smooth, waterproof, non-toxic, non-flaking, non-rusting, hard-wearing, and kept clean. Cracked, chipped, or broken equipment should not be used."}, {"q": "Why should SOFT WOODEN surfaces NOT be used in food preparation areas?", "opts": ["They are prohibitively expensive to purchase and install in a commercial kitchen", "They are absorbent, cannot be properly cleaned and disinfected, and may splinter into prepared food", "They are excessively heavy and very difficult to move for regular thorough cleaning underneath", "They conduct heat too efficiently and therefore cannot be used near cooking equipment"], "ans": 1, "fb": "Soft wooden surfaces should not be used, as they are absorbent, incapable of being cleaned and disinfected and may splinter. Cutting boards and handles of knives and brushes may be made from polypropylene or other suitable material."}, {"q": "At approximately what temperature should HOT WATER be provided at food premises?", "opts": ["Around 40°C — slightly above body temperature for comfortable and safe handwashing", "Around 60°C — hot enough for effective cleaning of equipment and work surfaces", "Around 80°C — a high temperature for maximum disinfection capability of equipment", "Around 100°C — at boiling point for complete sterilisation of all items and utensils"], "ans": 1, "fb": "Hot water should be around 60°C and warm water from spray taps around 35°C to 40°C. Hot water should be around 60°C. Water at this temperature is important for the cleaning of food preparation surfaces and equipment."}, {"q": "Washbasins in food rooms must NOT be used for:", "opts": ["Handwashing before and after handling raw food and ready-to-eat food items", "Washing food items, equipment, or utensils — as this creates a serious cross-contamination risk", "Rinsing reusable rubber gloves that have been used during cleaning procedures", "Any purpose at all — washbasins should be completely removed from all food rooms"], "ans": 1, "fb": "Washbasins should be positioned close to workstations and at the entrance of large food rooms. They should not be used for washing food or equipment to avoid cross-contamination. Adequate supplies of hot and cold water must be provided together with soap and drying facilities."}, {"q": "What design PRINCIPLE should food premises follow to prevent cross-contamination?", "opts": ["All food preparation should be completed in one large open room with no physical divisions", "Workflow should be linear — progressing in a uniform direction from raw material to finished product to prevent cross-contamination", "All kitchen equipment should be permanently fixed and bolted to walls to prevent movement", "All windows should remain completely closed at all times to prevent any external contamination"], "ans": 1, "fb": "Workflow should be linear and progress in a uniform direction from raw material to finished product. Cross-contamination should be eliminated. Clean and dirty processes and raw and high-risk food preparation must be separated. Work areas should be colour-coded."}, {"q": "What are the required characteristics of WALL FINISHES in food preparation rooms?", "opts": ["Rough and dark-coloured surfaces that effectively help to conceal visible dirt marks", "Clean, smooth, waterproof, non-flaking, hard-wearing, light-coloured, and capable of being thoroughly cleaned", "Made from natural soft wood or other natural sustainable materials for environmental reasons", "Covered with fabric, cork tiles, or decorative wallpaper to improve the working environment"], "ans": 1, "fb": "Wall finishes should be clean, smooth, waterproof, non-flaking, hard-wearing, light-coloured, and capable of being cleaned. They should be coved at wall joints and easy to clean. Condensation and the growth of moulds should be prevented."}, {"q": "What are the required characteristics of FLOOR SURFACES in food rooms?", "opts": ["Carpeted or cushioned surfaces for staff comfort and to reduce fatigue during long shifts", "Clean, hard-wearing, waterproof, anti-slip, without crevices, and capable of being effectively cleaned and resistant to acids, grease, and salts", "Made from soft natural timber or wood flooring for an attractive kitchen appearance", "Painted with standard household emulsion paint that can be easily repainted annually"], "ans": 1, "fb": "Floors should be clean, hard-wearing, waterproof, anti-slip, without crevices, and capable of being effectively cleaned. They may need to be resistant to acids, grease, and salts, and where necessary should slope to drain through trapped gullies."}, {"q": "What type of lid should waste bins inside a food room PREFERABLY have?", "opts": ["No lid at all — an open top allows rapid and easy access throughout the shift", "An open top of sufficient size for speed and ease of use during busy service", "Foot-operated lids — to avoid hand contact with the bin lid during food handling", "Swing-top lids that open with a gentle push from the hand or wrist of staff members"], "ans": 2, "fb": "Suitable containers should be provided, for the disposal of waste food and debris. Disposable polythene sacks in sack holders, or bins, with foot-operated lids are preferred internally. Foot-operated lids prevent the food handler touching the lid."}, {"q": "How frequently must refuse containers inside a food room be emptied?", "opts": ["Once per week on a fixed schedule set by the premises or area manager", "Only when they are completely and entirely full to avoid unnecessary waste of bags", "Regularly throughout the working day AND always at the end of every working shift", "Once per month as part of a scheduled deep cleaning programme for the premises"], "ans": 2, "fb": "Refuse containers used internally must be emptied regularly throughout the day and always at the end of the day. Polythene sacks should be tied securely when full and placed in the external waste receptacle. Reusable containers must be cleaned before being brought back."}, {"q": "Cracked, chipped, or broken food preparation equipment should be treated how?", "opts": ["Continue to be used until a suitable replacement can be obtained from the supplier", "Immediately removed from service — it harbours bacteria, cannot be cleaned, and is a physical contamination hazard", "Temporarily repaired using food-safe waterproof tape as an interim emergency measure", "Reserved only for dry food preparation where liquid food contamination is less likely"], "ans": 1, "fb": "Surfaces in contact with food should be smooth, waterproof, non-toxic, non-flaking, non-rusting, hard-wearing, and kept clean. Cracked, chipped, broken, and badly pitted equipment should not be used. Staff must report defective, dirty, or unsuitable equipment or surfaces to their supervisor."}];
+let active=[],playerName='',answered=0,correct=0;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')startQuiz();});
+function startQuiz(){
+  const n=document.getElementById('nameInput').value.trim();
+  if(!n)return;
+  playerName=n;
+  document.getElementById('nameBox').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  active=shuffle(ALL_Q);
+  answered=0;correct=0;
+  buildQuiz();
+}
+function buildQuiz(){
+  const area=document.getElementById('quizArea');
+  const L=['A','B','C','D'];
+  area.innerHTML=active.map((q,i)=>{
+    const idx=shuffle([0,1,2,3]);
+    const newAns=idx.indexOf(q.ans);
+    const optsHtml=idx.map((oi,li)=>
+      `<button class="opt" id="o${i}_${li}" onclick="pick(${i},${li},${newAns})"><span class="opt-l">${L[li]}</span><span>${q.opts[oi]}</span></button>`
+    ).join('');
+    return `<div class="q-card" id="card${i}"><div class="q-num">Q${i+1} / ${active.length}</div><div class="q-text">${q.q}</div><div class="opts">${optsHtml}</div><div class="fb" id="fb${i}"></div></div>`;
+  }).join('');
+}
+function pick(qi,chosen,correctIdx){
+  if(document.getElementById(`o${qi}_0`).hasAttribute('disabled'))return;
+  answered++;
+  const isOk=chosen===correctIdx;
+  if(isOk)correct++;
+  for(let i=0;i<4;i++){
+    const el=document.getElementById(`o${qi}_${i}`);
+    el.setAttribute('disabled','');
+    if(i===correctIdx)el.classList.add(isOk&&i===chosen?'ok':'reveal');
+    else if(i===chosen&&!isOk)el.classList.add('no');
+  }
+  document.getElementById(`card${qi}`).classList.add(isOk?'correct':'wrong');
+  const fb=document.getElementById(`fb${qi}`);
+  fb.textContent=(isOk?'✓ Correct. ':'✗ Incorrect. ')+active[qi].fb;
+  fb.className=`fb show ${isOk?'fb-ok':'fb-no'}`;
+  if(answered===active.length)setTimeout(showResult,700);
+}
+async function showResult(){
+  const pct=Math.round((correct/active.length)*100);
+  const grade=pct>=90?'Excellent 🏆':pct>=75?'Good Pass ✓':pct>=60?'Borderline — keep going ⚠️':'Needs more revision ✗';
+  document.getElementById('resPct').textContent=pct+'%';
+  document.getElementById('resDetail').textContent=correct+' correct out of '+active.length;
+  document.getElementById('resGrade').textContent=grade;
+  const r=document.getElementById('result');
+  r.classList.add('show');
+  r.scrollIntoView({behavior:'smooth',block:'center'});
+  const ghost=sessionStorage.getItem('ghostMode')==='1';
+  if(playerName&&!ghost){
+    try{
+      const key='leaderboard-scores';
+      const ex=await window.storage.get(key,true);
+      const scores=ex?JSON.parse(ex.value):[];
+      scores.push({name:playerName,score:correct,total:active.length,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(key,JSON.stringify(scores),true);
+    }catch(e){}
+  }
+}
+function retry(){location.reload();}
+</script>
+</body>
+</html>

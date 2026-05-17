@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Safety L2 — 08. Cleaning — & Disinfection</title>
+<style>:root{--c:var(--purple);}@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400;500&display=swap');
+:root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;pointer-events:none;z-index:0;}
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 20px 60px;}
+.top-bar{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 20px;}
+.top-bar-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:14px;}
+.back-btn{color:var(--c);text-decoration:none;font-size:0.72rem;letter-spacing:1px;border:1px solid var(--border);padding:5px 14px;border-radius:999px;transition:border-color 0.2s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{border-color:var(--c);}
+.top-title{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.top-sub{font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.hero{padding:40px 0 28px;animation:fadeUp 0.4s ease both;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--c);border:1px solid var(--c);padding:5px 13px;border-radius:999px;margin-bottom:16px;opacity:0.8;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:800;line-height:1.1;letter-spacing:-1px;}
+.hero h1 em{color:var(--c);font-style:normal;}
+.hero p{margin-top:10px;color:var(--muted);font-size:0.78rem;line-height:1.8;max-width:500px;}
+.name-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;margin:8px 0 0;}
+.name-box h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--gold);}
+.name-box p{font-size:0.75rem;color:var(--muted);margin-bottom:20px;line-height:1.7;}
+.name-box input{width:100%;max-width:280px;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:0.82rem;outline:none;text-align:center;transition:border-color 0.2s;display:block;margin:0 auto;}
+.name-box input:focus{border-color:var(--c);}
+.start-btn{display:inline-block;margin:14px auto 0;background:var(--c);color:#000;font-family:'DM Mono',monospace;font-size:0.8rem;font-weight:600;border:none;border-radius:9px;padding:11px 30px;cursor:pointer;letter-spacing:0.5px;transition:opacity 0.2s;}
+.start-btn:hover{opacity:0.85;}
+#quizArea{display:none;}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 18px 16px;margin-bottom:14px;transition:border-color 0.2s;}
+.q-card.correct{border-color:var(--green);}.q-card.wrong{border-color:var(--wrong);}
+.q-num{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--c);margin-bottom:9px;}
+.q-text{font-size:0.86rem;line-height:1.65;font-weight:500;margin-bottom:13px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 13px;cursor:pointer;font-size:0.8rem;line-height:1.5;text-align:left;color:var(--text);font-family:'DM Mono',monospace;width:100%;transition:border-color 0.15s,background 0.15s;}
+.opt:hover:not([disabled]){border-color:var(--c);background:#1e2530;}
+.opt-l{font-weight:700;color:var(--c);min-width:15px;font-size:0.75rem;margin-top:1px;flex-shrink:0;}
+.opt.ok{background:rgba(0,229,160,0.1);border-color:var(--green);color:var(--green);}
+.opt.ok .opt-l{color:var(--green);}
+.opt.no{background:rgba(255,68,68,0.1);border-color:var(--wrong);color:var(--wrong);}
+.opt.no .opt-l{color:var(--wrong);}
+.opt.reveal{background:rgba(0,229,160,0.06);border-color:var(--green);color:var(--green);}
+.opt[disabled]{cursor:default;pointer-events:none;}
+.fb{display:none;margin-top:10px;padding:9px 12px;border-radius:8px;font-size:0.73rem;line-height:1.5;}
+.fb.show{display:block;}
+.fb.fb-ok{background:rgba(0,229,160,0.08);color:var(--green);}
+.fb.fb-no{background:rgba(255,68,68,0.08);color:#ff8a8a;}
+.result{display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 24px;text-align:center;margin:24px 0;}
+.result.show{display:block;}
+.res-pct{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;color:var(--c);}
+.res-detail{font-size:0.78rem;color:var(--muted);margin-top:6px;}
+.res-grade{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;margin:18px 0 10px;}
+.res-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+.btn-retry{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;cursor:pointer;transition:all 0.2s;}
+.btn-retry:hover{border-color:var(--c);color:var(--c);}
+.btn-home{text-decoration:none;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;display:inline-block;transition:all 0.2s;}
+.btn-home:hover{border-color:var(--gold);color:var(--gold);}
+.footer{border-top:1px solid var(--border);padding:24px 0 0;text-align:center;font-size:0.7rem;color:var(--muted2);line-height:2;margin-top:20px;}
+.footer span{color:var(--muted);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a class="back-btn" href="index.html">← Home</a>
+    <div class="top-title">Cleaning — & Disinfection</div>
+    <div class="top-sub">FS L2 · T08</div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-tag">📚 Food Safety Handbook L2 · Topic 08</div>
+    <h1>Cleaning<br><em>& Disinfection</em></h1>
+    <p>6-stage procedure · Detergent vs disinfectant · Sanitiser · Temperatures · Schedules</p>
+  </div>
+  <div class="name-box" id="nameBox">
+    <h3>Enter your name to begin</h3>
+    <p>Questions are randomised on every attempt.<br>Your score will be saved to the leaderboard.</p>
+    <input type="text" id="nameInput" placeholder="Your name..." maxlength="30" autocomplete="off">
+    <button class="start-btn" onclick="startQuiz()">Start →</button>
+  </div>
+  <div id="quizArea"></div>
+  <div class="result" id="result">
+    <div class="res-pct" id="resPct">0%</div>
+    <div class="res-detail" id="resDetail"></div>
+    <div class="res-grade" id="resGrade"></div>
+    <div class="res-btns">
+      <button class="btn-retry" onclick="retry()">Try Again</button>
+      <a class="btn-home" href="index.html">← Home</a>
+    </div>
+  </div>
+  <div class="footer"><span>May 2026 Exam Practice</span> · KiranMoghul · Open in any browser · No login needed</div>
+</div>
+<script>
+const QUIZ_ID='fs-l2-08';
+const ALL_Q=[{"q": "What is the difference between CLEANING and DISINFECTION?", "opts": ["They are exactly the same process — the two terms are completely interchangeable in food safety", "Cleaning removes food residues, dirt, and grease — disinfection reduces micro-organisms to a safe level using chemicals or heat", "Disinfection removes visible dirt and grease — cleaning reduces bacteria to a safe level through scrubbing", "Cleaning is applied only to floors while disinfection is applied only to food contact preparation surfaces"], "ans": 1, "fb": "Effective cleaning and disinfection will remove microbiological hazards, chemical hazards, and physical hazards from defective equipment. Soiling of surfaces and equipment is unavoidable. The chemical used for cleaning is known as a detergent. The chemical used to disinfect is a disinfectant. A sanitiser is both a detergent and a disinfectant combined."}, {"q": "What is a DETERGENT and what does it do in the cleaning process?", "opts": ["A chemical that kills all bacteria, viruses, and spores upon contact with food surfaces", "The chemical used specifically for cleaning — it removes food residues, dirt, and grease but does NOT kill bacteria", "A chemical that reduces all micro-organisms to a completely safe level like a disinfectant does", "A strong industrial bleach used for thorough cleaning of all kitchens and food preparation rooms"], "ans": 1, "fb": "The chemical used for cleaning is known as a detergent. Removal of food residues, dirt, and grease by cleaning is necessary to reduce the risk of food contamination. Cleaning does not destroy bacteria — it only removes them."}, {"q": "What is a SANITISER and how does it differ from using a detergent alone?", "opts": ["A chemical that only cleans surfaces and removes grease but does not kill micro-organisms", "A chemical that only kills bacteria and viruses but cannot remove visible dirt or grease", "A chemical that is both a detergent AND a disinfectant combined into a single product", "A specific type of antibacterial rinse aid used only in commercial dishwashing machines"], "ans": 2, "fb": "A sanitiser is a chemical that is both a detergent and a disinfectant combined. It both removes food residues, dirt, and grease AND reduces micro-organisms to a safe level. Using a sanitiser means the cleaning and disinfection stages can be combined."}, {"q": "What are the SIX stages of the cleaning and disinfection procedure in the correct order?", "opts": ["Wash with soap, rinse with water, dry with cloth, apply disinfectant, re-rinse, then store", "Pre-clean → Main clean → Rinse → Disinfection → Final rinse → Drying", "Scrub surface with brush, soak in water, rinse off, dry in air, store clean, label with date", "Sweep floors first, mop all surfaces, rinse all equipment, disinfect all areas, dry, then inspect"], "ans": 1, "fb": "Cleaning and disinfection may consist of six basic stages: Pre-clean (remove loose dirt), Main clean (detergent and hot water), Rinse (remove detergent), Disinfection (apply disinfectant with contact time), Final rinse (remove chemical disinfectant residue), Drying (air-dry or disposable paper towels)."}, {"q": "What is the specific purpose of the PRE-CLEAN stage in the cleaning process?", "opts": ["To apply the disinfectant as the very first step of the entire cleaning process", "To remove loose food scraps, food residues, and waste before the main cleaning stage begins", "To rinse off any chemical residues remaining from the previous cleaning session", "To dry and polish the surface to a shine before the main cleaning process begins"], "ans": 1, "fb": "Pre-clean — remove food scraps and waste. Use a clean cloth, hot water, and a sanitiser in a clean bucket (never place a bucket on a sanitiser). Alternatively it may be possible to use a hand-spray. Allow sufficient contact time."}, {"q": "At what temperature does a commercial dishwasher WASH CYCLE typically operate?", "opts": ["Around 40°C — slightly above body temperature for basic initial cleaning", "Around 60°C — the standard wash cycle temperature for cleaning and initial disinfection", "Around 82°C — the temperature required specifically for the sanitising rinse cycle", "Around 100°C — at boiling point for complete sterilisation of all items washed"], "ans": 1, "fb": "Dishwashers are commonly used for cleaning and disinfecting. The wash cycle operates at around 60°C and the rinse cycle between 82°C and 88°C. The manufacturers' instructions must be followed and the right chemicals must be used."}, {"q": "At what temperature does a commercial dishwasher RINSE CYCLE operate for effective disinfection?", "opts": ["60°C to 70°C — the same temperature range as the standard wash cycle", "70°C to 80°C — a moderate increase above the standard wash cycle temperature", "82°C to 88°C — a high temperature that effectively destroys bacteria on utensils", "90°C to 100°C — approaching the boiling point of water for complete sterilisation"], "ans": 2, "fb": "The rinse cycle operates between 82°C and 88°C. The sprayer arm jets must be clear of obstruction and the machine must be correctly stacked. Soiled utensils should be washed as soon as possible and clean utensils should be allowed to air-dry."}, {"q": "What THREE requirements are needed for EFFECTIVE disinfection to occur?", "opts": ["Using detergent, clean water, and sufficient time for scrubbing the surface", "The right chemical or sufficient heat, adequate contact time, and correct dilution concentration", "Thorough physical scrubbing of the surface, a complete rinse, and total air-drying afterwards", "Antibacterial soap, warm water at 30°C to 40°C, and clean disposable paper towels"], "ans": 1, "fb": "For disinfection to be effective, you need the right chemical (or heat), sufficient contact time, and the correct concentration. Disinfectants must be used at the correct concentration — too dilute and they will not work effectively."}, {"q": "Why must cleaning chemicals NEVER be mixed together under any circumstances?", "opts": ["They lose their individual chemical effectiveness when combined into a single solution", "Mixing different cleaning chemicals may produce dangerous toxic gases and/or cause an explosion", "They are far too expensive to waste and should be used individually and separately", "They become too diluted and ineffective for proper cleaning when combined together"], "ans": 1, "fb": "Mixing of chemicals must be avoided — chemicals must never be mixed as the mixture may produce dangerous gases and/or explosion. Safe cleaning: separate colour-coded cloths and equipment are recommended for raw and high-risk risk areas."}, {"q": "What THREE forms of ENERGY are applied during the cleaning process?", "opts": ["Solar energy, wind energy, and nuclear energy for all industrial cleaning applications", "Physical energy (e.g. scrubbing), heat energy (e.g. hot water), and chemical energy (e.g. detergent or disinfectant)", "Electrical energy, steam energy, and manual labour for preparing all food surfaces", "Mechanical energy, biological energy, and thermal energy for all types of surface cleaning"], "ans": 1, "fb": "Cleaning involves the application of energy and is applied as: Physical, e.g. scrubbing; Heat, e.g. hot water; Chemical, e.g. detergent. Hot water, chemicals, and physical energy must be used to remove the dirt and grease from surfaces before disinfecting."}, {"q": "What does CLEAR-AND-CLEAN-AS-YOU-GO mean in a food business?", "opts": ["A formal scheduled weekly deep cleaning programme for the entire food premises", "Keeping work areas clean and tidy continuously throughout the entire shift — removing spillages and waste packaging immediately as work proceeds", "Performing a full comprehensive clean only at the very end of each working shift", "Cleaning only the surfaces that have visible food contamination or dirt on them"], "ans": 1, "fb": "Clear-and-clean-as-you-go — keep work areas clean and tidy. Don't let waste food and dirty equipment build up. Remove spillages immediately. Remove waste packaging immediately. Report to your supervisor if you are running short of cleaning materials or chemicals."}, {"q": "What information must a CLEANING SCHEDULE contain?", "opts": ["Only the name of the person responsible for each individual cleaning task", "What to clean, who will clean it, when to clean it, what chemical to use, how to clean it, how much time is allowed, and the required safety measures", "Only the list of cleaning chemicals and their correct dilution ratios for each surface", "Only the required frequency of cleaning for each specific area of the food premises"], "ans": 1, "fb": "To be effective, cleaning must be planned, organised, and implemented in all areas of food premises. Cleaning schedules should be written which state: what is to be cleaned, who is to clean it, when to clean it, the amount and type of chemical to use, how to clean it, how much time is allowed for cleaning it, and the safety measures."}, {"q": "Which surfaces do NOT require disinfection — only regular thorough cleaning?", "opts": ["All food contact surfaces, chopping boards, and equipment used directly with food", "Kitchen walls, floors, drains, and equipment legs — items unlikely to directly contaminate food", "Probe thermometers and any equipment used to measure and check food temperatures", "Cutting boards and knives used directly during the preparation of raw food items"], "ans": 1, "fb": "Although food rooms and equipment need to be regularly cleaned, not everything requires disinfecting. Kitchen walls, floors, drains, and equipment legs require regular and thorough cleaning and degreasing, but do not require disinfection as they are unlikely to contaminate ready-to-eat food directly."}, {"q": "The most critical factor ensuring disinfection actually works is:", "opts": ["Immediately rinsing the disinfectant off right after it has been applied to the surface", "Always using a brand-new clean stainless steel bucket for every individual cleaning session", "Using the disinfectant at the correct concentration AND allowing sufficient contact time", "Mixing the detergent and disinfectant together at the start for a more powerful combined effect"], "ans": 2, "fb": "For disinfection to be effective, you need the right chemical, sufficient contact time, and the correct concentration. Rinsing the disinfectant off immediately before the contact time is up defeats the whole purpose — the chemical needs time to reduce micro-organisms to a safe level."}, {"q": "Suitable protective GLOVES should be worn when:", "opts": ["Handling all types of food at every single stage of preparation and service", "Using hot water and/or chemical cleaning products throughout the cleaning process", "Only when specifically cleaning toilet facilities and bathroom areas in the premises", "Only when handling concentrated bleach-based or caustic cleaning products only"], "ans": 1, "fb": "Suitable gloves should be worn when using hot water and/or chemicals. Separate, colour-coded cloths and equipment are recommended for raw and high-risk risk areas. Clear-and-clean-as-you-go — keep work areas clean and tidy throughout the shift."}];
+let active=[],playerName='',answered=0,correct=0;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')startQuiz();});
+function startQuiz(){
+  const n=document.getElementById('nameInput').value.trim();
+  if(!n)return;
+  playerName=n;
+  document.getElementById('nameBox').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  active=shuffle(ALL_Q);
+  answered=0;correct=0;
+  buildQuiz();
+}
+function buildQuiz(){
+  const area=document.getElementById('quizArea');
+  const L=['A','B','C','D'];
+  area.innerHTML=active.map((q,i)=>{
+    const idx=shuffle([0,1,2,3]);
+    const newAns=idx.indexOf(q.ans);
+    const optsHtml=idx.map((oi,li)=>
+      `<button class="opt" id="o${i}_${li}" onclick="pick(${i},${li},${newAns})"><span class="opt-l">${L[li]}</span><span>${q.opts[oi]}</span></button>`
+    ).join('');
+    return `<div class="q-card" id="card${i}"><div class="q-num">Q${i+1} / ${active.length}</div><div class="q-text">${q.q}</div><div class="opts">${optsHtml}</div><div class="fb" id="fb${i}"></div></div>`;
+  }).join('');
+}
+function pick(qi,chosen,correctIdx){
+  if(document.getElementById(`o${qi}_0`).hasAttribute('disabled'))return;
+  answered++;
+  const isOk=chosen===correctIdx;
+  if(isOk)correct++;
+  for(let i=0;i<4;i++){
+    const el=document.getElementById(`o${qi}_${i}`);
+    el.setAttribute('disabled','');
+    if(i===correctIdx)el.classList.add(isOk&&i===chosen?'ok':'reveal');
+    else if(i===chosen&&!isOk)el.classList.add('no');
+  }
+  document.getElementById(`card${qi}`).classList.add(isOk?'correct':'wrong');
+  const fb=document.getElementById(`fb${qi}`);
+  fb.textContent=(isOk?'✓ Correct. ':'✗ Incorrect. ')+active[qi].fb;
+  fb.className=`fb show ${isOk?'fb-ok':'fb-no'}`;
+  if(answered===active.length)setTimeout(showResult,700);
+}
+async function showResult(){
+  const pct=Math.round((correct/active.length)*100);
+  const grade=pct>=90?'Excellent 🏆':pct>=75?'Good Pass ✓':pct>=60?'Borderline — keep going ⚠️':'Needs more revision ✗';
+  document.getElementById('resPct').textContent=pct+'%';
+  document.getElementById('resDetail').textContent=correct+' correct out of '+active.length;
+  document.getElementById('resGrade').textContent=grade;
+  const r=document.getElementById('result');
+  r.classList.add('show');
+  r.scrollIntoView({behavior:'smooth',block:'center'});
+  const ghost=sessionStorage.getItem('ghostMode')==='1';
+  if(playerName&&!ghost){
+    try{
+      const key='leaderboard-scores';
+      const ex=await window.storage.get(key,true);
+      const scores=ex?JSON.parse(ex.value):[];
+      scores.push({name:playerName,score:correct,total:active.length,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(key,JSON.stringify(scores),true);
+    }catch(e){}
+  }
+}
+function retry(){location.reload();}
+</script>
+</body>
+</html>

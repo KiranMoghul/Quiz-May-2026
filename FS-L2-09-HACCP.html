@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Safety L2 — 09. HACCP — Purchase to Service</title>
+<style>:root{--c:var(--gold);}@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400;500&display=swap');
+:root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;pointer-events:none;z-index:0;}
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 20px 60px;}
+.top-bar{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 20px;}
+.top-bar-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:14px;}
+.back-btn{color:var(--c);text-decoration:none;font-size:0.72rem;letter-spacing:1px;border:1px solid var(--border);padding:5px 14px;border-radius:999px;transition:border-color 0.2s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{border-color:var(--c);}
+.top-title{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.top-sub{font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.hero{padding:40px 0 28px;animation:fadeUp 0.4s ease both;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--c);border:1px solid var(--c);padding:5px 13px;border-radius:999px;margin-bottom:16px;opacity:0.8;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:800;line-height:1.1;letter-spacing:-1px;}
+.hero h1 em{color:var(--c);font-style:normal;}
+.hero p{margin-top:10px;color:var(--muted);font-size:0.78rem;line-height:1.8;max-width:500px;}
+.name-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;margin:8px 0 0;}
+.name-box h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--gold);}
+.name-box p{font-size:0.75rem;color:var(--muted);margin-bottom:20px;line-height:1.7;}
+.name-box input{width:100%;max-width:280px;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:0.82rem;outline:none;text-align:center;transition:border-color 0.2s;display:block;margin:0 auto;}
+.name-box input:focus{border-color:var(--c);}
+.start-btn{display:inline-block;margin:14px auto 0;background:var(--c);color:#000;font-family:'DM Mono',monospace;font-size:0.8rem;font-weight:600;border:none;border-radius:9px;padding:11px 30px;cursor:pointer;letter-spacing:0.5px;transition:opacity 0.2s;}
+.start-btn:hover{opacity:0.85;}
+#quizArea{display:none;}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 18px 16px;margin-bottom:14px;transition:border-color 0.2s;}
+.q-card.correct{border-color:var(--green);}.q-card.wrong{border-color:var(--wrong);}
+.q-num{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--c);margin-bottom:9px;}
+.q-text{font-size:0.86rem;line-height:1.65;font-weight:500;margin-bottom:13px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 13px;cursor:pointer;font-size:0.8rem;line-height:1.5;text-align:left;color:var(--text);font-family:'DM Mono',monospace;width:100%;transition:border-color 0.15s,background 0.15s;}
+.opt:hover:not([disabled]){border-color:var(--c);background:#1e2530;}
+.opt-l{font-weight:700;color:var(--c);min-width:15px;font-size:0.75rem;margin-top:1px;flex-shrink:0;}
+.opt.ok{background:rgba(0,229,160,0.1);border-color:var(--green);color:var(--green);}
+.opt.ok .opt-l{color:var(--green);}
+.opt.no{background:rgba(255,68,68,0.1);border-color:var(--wrong);color:var(--wrong);}
+.opt.no .opt-l{color:var(--wrong);}
+.opt.reveal{background:rgba(0,229,160,0.06);border-color:var(--green);color:var(--green);}
+.opt[disabled]{cursor:default;pointer-events:none;}
+.fb{display:none;margin-top:10px;padding:9px 12px;border-radius:8px;font-size:0.73rem;line-height:1.5;}
+.fb.show{display:block;}
+.fb.fb-ok{background:rgba(0,229,160,0.08);color:var(--green);}
+.fb.fb-no{background:rgba(255,68,68,0.08);color:#ff8a8a;}
+.result{display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 24px;text-align:center;margin:24px 0;}
+.result.show{display:block;}
+.res-pct{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;color:var(--c);}
+.res-detail{font-size:0.78rem;color:var(--muted);margin-top:6px;}
+.res-grade{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;margin:18px 0 10px;}
+.res-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+.btn-retry{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;cursor:pointer;transition:all 0.2s;}
+.btn-retry:hover{border-color:var(--c);color:var(--c);}
+.btn-home{text-decoration:none;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;display:inline-block;transition:all 0.2s;}
+.btn-home:hover{border-color:var(--gold);color:var(--gold);}
+.footer{border-top:1px solid var(--border);padding:24px 0 0;text-align:center;font-size:0.7rem;color:var(--muted2);line-height:2;margin-top:20px;}
+.footer span{color:var(--muted);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a class="back-btn" href="index.html">← Home</a>
+    <div class="top-title">HACCP — Purchase to Service</div>
+    <div class="top-sub">FS L2 · T09</div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-tag">📚 Food Safety Handbook L2 · Topic 09</div>
+    <h1>HACCP<br><em>Purchase to Service</em></h1>
+    <p>7 HACCP principles · Critical limits · FIFO · Thawing · Cooking · Cooling · Hot holding · Service</p>
+  </div>
+  <div class="name-box" id="nameBox">
+    <h3>Enter your name to begin</h3>
+    <p>Questions are randomised on every attempt.<br>Your score will be saved to the leaderboard.</p>
+    <input type="text" id="nameInput" placeholder="Your name..." maxlength="30" autocomplete="off">
+    <button class="start-btn" onclick="startQuiz()">Start →</button>
+  </div>
+  <div id="quizArea"></div>
+  <div class="result" id="result">
+    <div class="res-pct" id="resPct">0%</div>
+    <div class="res-detail" id="resDetail"></div>
+    <div class="res-grade" id="resGrade"></div>
+    <div class="res-btns">
+      <button class="btn-retry" onclick="retry()">Try Again</button>
+      <a class="btn-home" href="index.html">← Home</a>
+    </div>
+  </div>
+  <div class="footer"><span>May 2026 Exam Practice</span> · KiranMoghul · Open in any browser · No login needed</div>
+</div>
+<script>
+const QUIZ_ID='fs-l2-09';
+const ALL_Q=[{"q": "What does the abbreviation HACCP stand for?", "opts": ["Hygiene And Contamination Control Procedures for all food businesses", "Hazard Analysis Critical Control Points — a food safety management system", "High-risk Area Cleaning and Cooking Practices in commercial catering kitchens", "Handling And Cooling Cooked Products to ensure safe and hygienic food service"], "ans": 1, "fb": "HACCP is a food safety management system which identifies and controls hazards at critical points to minimise the risk of food poisoning and food safety failures. HACCP stands for Hazard Analysis Critical Control Points."}, {"q": "How many principles does the HACCP system have?", "opts": ["Five principles covering the key food safety management requirements", "Six principles forming the foundation of a complete HACCP management system", "Seven principles — from identifying hazards through to documentation and review", "Ten principles covering all aspects of food safety from purchase through to service"], "ans": 2, "fb": "HACCP Principles: (1) Identify the hazards and control measures, (2) Identify CCPs, (3) Establish critical limits, (4) Monitor CCPs, (5) Establish corrective actions, (6) Establish procedures for verification, (7) Establish documentation and records and review."}, {"q": "What is a CRITICAL CONTROL POINT (CCP) in the HACCP system?", "opts": ["A written cleaning schedule that details who cleans what area and when", "A step in the preparation or production of food which must be controlled as it is critical to food safety", "A temperature monitoring log used to record refrigerator and hot holding temperature readings", "A delivery inspection checklist used to verify incoming food from approved suppliers"], "ans": 1, "fb": "Identify the critical control points (CCPs) — those steps in the preparation or production of food which must be controlled as they are critical to food safety. For example, cooking food to a core temperature of 75°C."}, {"q": "What is the CRITICAL LIMIT for core temperature when cooking food safely?", "opts": ["At least 63°C at the centre or thickest part of the food being cooked", "At least 70°C at the centre or thickest part of the food being cooked", "At least 75°C at the centre or thickest part of the food being cooked", "At least 80°C at the centre or thickest part of the food being cooked"], "ans": 2, "fb": "Cooking temperatures of at least 75°C should normally be achieved at the centre of food to ensure safety. Foods such as stews should be cooked at temperatures approaching 100°C. A combination of a suitable temperature and sufficient time is always required."}, {"q": "What is the CORE TEMPERATURE and where is it measured?", "opts": ["The temperature recorded on the outer surface of the food being cooked", "The temperature at the centre or thickest part of the food — measured with a clean, disinfected probe thermometer", "The temperature shown on the display panel of the oven or cooking equipment", "The temperature of the cooking oil or water in which the food is being cooked"], "ans": 1, "fb": "The temperature at the centre or thickest part of the cooked food is usually referred to as the core temperature. Cooking should be continued until this temperature is reached. The temperature must not touch bone or the surface of the container."}, {"q": "What is the ACCEPTABLE ERROR RANGE for a probe thermometer?", "opts": ["Up to ±5°C — a five-degree margin is acceptable in either direction", "Up to ±3°C — a three-degree margin is acceptable in either direction", "Up to ±1°C — a one-degree margin is acceptable in either direction", "No error is acceptable — the thermometer must be perfectly accurate at all times"], "ans": 2, "fb": "The use of accurate tip sensitive thermometers is the best way to check the temperature of cold or hot food. An error of up to plus or minus 1°C is acceptable. Validation involves using melting ice (should read 0°C) and boiling water (should read 100°C)."}, {"q": "If cooked food has NOT reached the required 75°C core temperature, what is the CORRECTIVE ACTION?", "opts": ["Serve the food quickly before it cools further and the temperature drops", "Continue cooking the food until 75°C is achieved — inform the supervisor if the oven is thought to be faulty", "Add additional seasoning and sauce then serve immediately without any further cooking", "Rapidly cool the food and refrigerate it immediately for service the following day"], "ans": 1, "fb": "Corrective action: if the cooked food has not achieved 75°C, cooking should be continued until the temperature is reached. If the temperature is thought to be faulty, the supervisor should be informed and the engineer called in. The food should not be served until the correct temperature is confirmed."}, {"q": "What is the FIRST IN, FIRST OUT (FIFO) rule for stock rotation?", "opts": ["The newest stock that was most recently delivered should always be used first", "Older stock should always be used before newer stock — new stock placed at the back and existing stock brought to the front to be used first", "Stock should be used in a completely random order based on whatever is convenient", "Date codes printed on products are irrelevant for most dry goods and canned food items"], "ans": 1, "fb": "Satisfactory rotation of stock is essential to avoid older food used last and ensure that food is of good quality and safe. Always follow the rule: First in, first out. New stock should be placed at the back of the shelf, behind existing stock."}, {"q": "High-risk and perishable food must NOT be sold or served after its:", "opts": ["Best-before date — any food deteriorating beyond this date must be removed", "Use-by date — any food past this date must be disposed of and must not be served or sold", "Best-before date plus one additional day as an accepted safety buffer period", "Delivery date plus seven days regardless of the storage conditions it was kept in"], "ans": 1, "fb": "High-risk and perishable foods have a short shelf life and must be date-code checked regularly. The food must not be sold after its use-by date. Date-expired food should be disposed of. The shelf life depends on the type of food, storage conditions, and special storage conditions on the label."}, {"q": "At what temperature should FROZEN FOOD be delivered to meet food safety standards?", "opts": ["At 0°C — at the freezing point of water to confirm it is still frozen solid", "At −5°C — well below the standard freezing point to confirm no thawing has occurred", "At −10°C — below the temperature at which most bacterial activity effectively ceases", "Below −15°C — preferably at −18°C — the standard recommended freezing temperature"], "ans": 3, "fb": "All food should be inspected before placing in storage. Controls: delivery vehicles or drivers may indicate unsatisfactory refrigeration. Deliveries should be checked for freshness, temperature, colour, odour, contamination, infestations, and satisfactory packaging and labelling. High-risk food should be delivered below 5°C; frozen food below −15°C, ideally −18°C."}, {"q": "Which of the following deliveries should be REJECTED and not accepted into the premises?", "opts": ["Chilled food at 3°C delivered in good undamaged packaging with a valid use-by date", "Frozen food at −20°C that is completely solid with no signs of thawing or damage", "Perishable food above 5°C, frozen food that is not completely solid, or food that is out of date", "Canned food with clean intact undented seals and a current valid use-by date"], "ans": 2, "fb": "REJECT: contaminated food from unapproved sources, perishable food above 5°C, frozen food which is not solid, food with evidence of pest activity, food which is not covered or with damaged packaging, and food which is out of date."}, {"q": "Where in a refrigerator should RAW FOOD always be stored?", "opts": ["On the top shelf — at the highest and coolest level for easy monitoring and access", "On the middle shelf — beside but physically separated from ready-to-eat cooked items", "At the BOTTOM — below all ready-to-eat food to prevent blood or liquid dripping down", "On the door shelf — for the easiest and most convenient access during food preparation"], "ans": 2, "fb": "Raw food must always be placed at the bottom of the refrigerator. Separate refrigerators are preferred. If in the same unit, the raw food must always be at the bottom to prevent blood or liquid dripping down and contaminating ready-to-eat food stored below."}, {"q": "Between what temperatures should a refrigerator operate?", "opts": ["Between 0°C and 2°C — just above the freezing point for maximum bacterial control", "Between 1°C and 4°C — within the safe chilled food storage range below 5°C", "Between 5°C and 8°C — a moderate cool temperature suitable for general food storage", "Between 8°C and 10°C — a common setting used for large commercial display fridges"], "ans": 1, "fb": "Refrigerators and freezers should be sited in well-ventilated areas away from heat sources, such as ovens and the rays of the sun. The display temperature should be checked and recorded at least weekly and whenever the fridge is used. Temperatures should not rise above 5°C."}, {"q": "At what temperature should a FREEZER operate?", "opts": ["At 0°C — at the standard freezing point of water and common liquids", "At −5°C — just slightly below the standard freezing point of most foods", "At −10°C — the temperature at which most bacterial growth stops effectively", "At −18°C — the standard recommended commercial freezer operating temperature"], "ans": 3, "fb": "Freezers should operate at −18°C. At −18°C bacterial growth stops. However, spores and pathogens will survive. Freezers should be operated correctly. At temperatures above −10°C, spoilage organisms especially moulds and yeasts begin to cause problems."}, {"q": "What is the RECOMMENDED method for safely thawing high-risk frozen food?", "opts": ["Leave the food on the kitchen counter at standard room temperature until thawed", "Thaw in a refrigerator at the bottom, or in cold running water below 10°C, or in a microwave — always avoiding any cross-contamination of ready-to-eat food", "Place in hot water at 60°C to quickly and safely speed up the thawing process", "Thaw in a conventional oven set to the lowest possible temperature setting"], "ans": 1, "fb": "Thawing of raw food is best carried out at around 10°C. Sufficient time is always allowed for 10°C. Thawing can also be achieved using cold running water, clean, cold running water, below 10°C, or in a microwave oven, although care is necessary because of the risk of uneven cooking."}, {"q": "Why must frozen POULTRY specifically NOT be thawed near or above ready-to-eat food?", "opts": ["The low temperature of frozen poultry will cause other nearby food items to cool down", "The liquid from thawing poultry must never be allowed to contaminate ready-to-eat food nearby", "Frozen poultry takes up too much refrigerator space when thawing next to other items", "The weight of frozen poultry could physically damage other food items stored near it"], "ans": 1, "fb": "Thawing times in refrigerators vary considerably depending on the temperature. Before using a refrigerator for thawing raw chicken or other frozen raw food, it is essential to know the temperature of the refrigerator. The liquid from thawing poultry must not contaminate ready-to-eat food."}, {"q": "Food should be cooled from 60°C to 20°C within what time limit?", "opts": ["Within 30 minutes — using a blast chiller or an ice bath immediately after cooking", "Within 2 hours — moving as quickly as possible through this temperature range", "Within 4 hours — a moderate and manageable rate of cooling through this range", "Within 8 hours — a slow overnight cool before refrigerating the following morning"], "ans": 1, "fb": "The hazards associated with cooling include the multiplication of food poisoning bacteria, the production of toxins, the germination of spores, and the contamination of food by micro-organisms or chemicals. Cooling trials using a disinfected probe thermometer assist in determining the most effective way of cooling food. Food should be cooled from 60°C to 20°C within 2 hours and from 20°C to 5°C within a further 4 hours."}, {"q": "What is the SAFEST and most effective method for rapidly cooling cooked food?", "opts": ["Leave food uncovered on a work surface at room temperature in the kitchen", "Use a BLAST CHILLER — it can cool food from 60°C to 5°C within 90 minutes effectively", "Place the food directly into the refrigerator while it is still hot immediately after cooking", "Cover food tightly with cling film and leave it in the kitchen overnight to cool"], "ans": 1, "fb": "A blast chiller is the safest and most effective method of cooling food. In the UK, a blast chiller food from 60°C to 20°C within 2 hours, and from 20°C to 5°C within a further 4 hours — a maximum weight of 2.25kg is recommended."}, {"q": "What minimum temperature must HOT HOLDING food be maintained at during service?", "opts": ["Above 37°C — above the human body temperature to slow bacterial growth", "Above 50°C — above the midpoint of the bacterial danger zone temperature range", "Above 60°C — at the upper boundary of the bacterial danger zone temperature range", "Above 75°C — above the minimum safe cooking core temperature for most foods"], "ans": 2, "fb": "Food which is kept hot prior to serving should be maintained above 60°C and this should be checked in the centre of the food. Food which is kept hot for service must be maintained above 60°C to prevent food poisoning bacteria multiplying. Stews and sauces should be stirred frequently."}, {"q": "What core temperature must be achieved when REHEATING food?", "opts": ["At least 63°C at the thickest part of the food being reheated", "At least 70°C at the thickest part of the food being reheated", "At least 75°C at the thickest part of the food being reheated", "At least 85°C at the thickest part of the food being reheated"], "ans": 2, "fb": "Inadequate cooking or reheating enables pathogenic bacteria to survive and is a serious hazard. A centre cooking temperature of 75°C is sufficient to destroy most harmful bacteria, although cooking and foods and stews should be cooked at temperatures approaching 100°C. Any unthawed food should be discarded."}, {"q": "Food should not be reheated more than how many times?", "opts": ["An unlimited number of times as long as it is stored and cooled correctly each time", "A maximum of three times if cooled and stored below 5°C between each heating event", "Only ONCE — reheating more than once creates too many opportunities for bacterial growth", "A maximum of twice if cooling and storage were carried out correctly between reheats"], "ans": 2, "fb": "A similar temperature to cooking should be achieved when reheating food. Any unthawed reheated food should be discarded. Food should not be reheated more than once. Controls include: using a probe thermometer and stirring from time to time."}, {"q": "Dry food stores should be kept at what temperature?", "opts": ["Below 5°C — the same standard temperature as a refrigerator for maximum safety", "Between 10°C and 20°C — a standard comfortable office room temperature range", "Below 10°C — cool, dry, well lit, well ventilated, and completely pest-free", "Between 20°C and 30°C — a warm temperature that prevents condensation forming"], "ans": 2, "fb": "Keep stores dry, cool, well lit and well ventilated. Effective pest control systems are essential to eliminate pest infestations. Dry food stores should be cool (below 10°C), dry, well lit, well ventilated, and pest-free. Food should be stored at least 15cm above the floor."}, {"q": "What does VERIFICATION mean within the HACCP system?", "opts": ["Recording and documenting what went wrong after a food poisoning incident", "Methods, procedures, tests, and evaluations — in addition to daily monitoring — to confirm the HACCP plan is working and controls are effective", "The initial induction training of new staff in the core principles of the HACCP system", "Checking delivery temperatures at the loading dock as food arrives from approved suppliers"], "ans": 1, "fb": "Establish procedures for verification, i.e. prove that the HACCP system is working. Verification: the methods, procedures, tests, and other evaluations used, in addition to monitoring, to determine compliance with the HACCP plan and confirm that control past tense."}, {"q": "Self-service buffets and display counters present which specific food safety challenge?", "opts": ["They always use too much food and consistently generate significant amounts of food waste", "Prolonged display periods, contamination from food handlers and customers, difficulty controlling utensil hygiene, temperature problems, and many difficult-to-control hazards", "They are automatically maintained at the correct temperatures by built-in refrigeration equipment", "Staff are completely unable to monitor them at any point during busy service periods"], "ans": 1, "fb": "The food poisoning hazards associated with serving food include the multiplication of bacteria because of prolonged periods of display and because food handlers and buffets present many potential hazards from customers, utensils, and price tags (retail). In particular, present many potential hazards which are difficult to control."}, {"q": "Which is an example of GOOD practice during a food DELIVERY?", "opts": ["Accepting deliveries of cooked meat transported in an unrefrigerated vehicle from a supplier", "Moving chilled food deliveries to refrigerated storage within 60 minutes and unpacking in a separate de-boxing area away from food preparation", "Accepting frozen food delivered at −2°C on the basis it is only slightly above the required temperature", "Leaving all deliveries on the loading dock until a quiet period when it is convenient to unpack them"], "ans": 1, "fb": "Good hygiene practice during delivery includes: moving chilled food to storage within 60 minutes, unpacking in a separate external de-boxing area not inside food preparation areas, and rejecting food at wrong temperatures, from unapproved sources, or with damaged packaging or labelling."}];
+let active=[],playerName='',answered=0,correct=0;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')startQuiz();});
+function startQuiz(){
+  const n=document.getElementById('nameInput').value.trim();
+  if(!n)return;
+  playerName=n;
+  document.getElementById('nameBox').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  active=shuffle(ALL_Q);
+  answered=0;correct=0;
+  buildQuiz();
+}
+function buildQuiz(){
+  const area=document.getElementById('quizArea');
+  const L=['A','B','C','D'];
+  area.innerHTML=active.map((q,i)=>{
+    const idx=shuffle([0,1,2,3]);
+    const newAns=idx.indexOf(q.ans);
+    const optsHtml=idx.map((oi,li)=>
+      `<button class="opt" id="o${i}_${li}" onclick="pick(${i},${li},${newAns})"><span class="opt-l">${L[li]}</span><span>${q.opts[oi]}</span></button>`
+    ).join('');
+    return `<div class="q-card" id="card${i}"><div class="q-num">Q${i+1} / ${active.length}</div><div class="q-text">${q.q}</div><div class="opts">${optsHtml}</div><div class="fb" id="fb${i}"></div></div>`;
+  }).join('');
+}
+function pick(qi,chosen,correctIdx){
+  if(document.getElementById(`o${qi}_0`).hasAttribute('disabled'))return;
+  answered++;
+  const isOk=chosen===correctIdx;
+  if(isOk)correct++;
+  for(let i=0;i<4;i++){
+    const el=document.getElementById(`o${qi}_${i}`);
+    el.setAttribute('disabled','');
+    if(i===correctIdx)el.classList.add(isOk&&i===chosen?'ok':'reveal');
+    else if(i===chosen&&!isOk)el.classList.add('no');
+  }
+  document.getElementById(`card${qi}`).classList.add(isOk?'correct':'wrong');
+  const fb=document.getElementById(`fb${qi}`);
+  fb.textContent=(isOk?'✓ Correct. ':'✗ Incorrect. ')+active[qi].fb;
+  fb.className=`fb show ${isOk?'fb-ok':'fb-no'}`;
+  if(answered===active.length)setTimeout(showResult,700);
+}
+async function showResult(){
+  const pct=Math.round((correct/active.length)*100);
+  const grade=pct>=90?'Excellent 🏆':pct>=75?'Good Pass ✓':pct>=60?'Borderline — keep going ⚠️':'Needs more revision ✗';
+  document.getElementById('resPct').textContent=pct+'%';
+  document.getElementById('resDetail').textContent=correct+' correct out of '+active.length;
+  document.getElementById('resGrade').textContent=grade;
+  const r=document.getElementById('result');
+  r.classList.add('show');
+  r.scrollIntoView({behavior:'smooth',block:'center'});
+  const ghost=sessionStorage.getItem('ghostMode')==='1';
+  if(playerName&&!ghost){
+    try{
+      const key='leaderboard-scores';
+      const ex=await window.storage.get(key,true);
+      const scores=ex?JSON.parse(ex.value):[];
+      scores.push({name:playerName,score:correct,total:active.length,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(key,JSON.stringify(scores),true);
+    }catch(e){}
+  }
+}
+function retry(){location.reload();}
+</script>
+</body>
+</html>

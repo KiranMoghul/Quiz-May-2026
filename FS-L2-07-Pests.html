@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Safety L2 — 07. Food Pests — & Control</title>
+<style>:root{--c:var(--wrong);}@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400;500&display=swap');
+:root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;pointer-events:none;z-index:0;}
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 20px 60px;}
+.top-bar{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 20px;}
+.top-bar-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:14px;}
+.back-btn{color:var(--c);text-decoration:none;font-size:0.72rem;letter-spacing:1px;border:1px solid var(--border);padding:5px 14px;border-radius:999px;transition:border-color 0.2s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{border-color:var(--c);}
+.top-title{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.top-sub{font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.hero{padding:40px 0 28px;animation:fadeUp 0.4s ease both;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--c);border:1px solid var(--c);padding:5px 13px;border-radius:999px;margin-bottom:16px;opacity:0.8;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:800;line-height:1.1;letter-spacing:-1px;}
+.hero h1 em{color:var(--c);font-style:normal;}
+.hero p{margin-top:10px;color:var(--muted);font-size:0.78rem;line-height:1.8;max-width:500px;}
+.name-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;margin:8px 0 0;}
+.name-box h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--gold);}
+.name-box p{font-size:0.75rem;color:var(--muted);margin-bottom:20px;line-height:1.7;}
+.name-box input{width:100%;max-width:280px;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:0.82rem;outline:none;text-align:center;transition:border-color 0.2s;display:block;margin:0 auto;}
+.name-box input:focus{border-color:var(--c);}
+.start-btn{display:inline-block;margin:14px auto 0;background:var(--c);color:#000;font-family:'DM Mono',monospace;font-size:0.8rem;font-weight:600;border:none;border-radius:9px;padding:11px 30px;cursor:pointer;letter-spacing:0.5px;transition:opacity 0.2s;}
+.start-btn:hover{opacity:0.85;}
+#quizArea{display:none;}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 18px 16px;margin-bottom:14px;transition:border-color 0.2s;}
+.q-card.correct{border-color:var(--green);}.q-card.wrong{border-color:var(--wrong);}
+.q-num{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--c);margin-bottom:9px;}
+.q-text{font-size:0.86rem;line-height:1.65;font-weight:500;margin-bottom:13px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 13px;cursor:pointer;font-size:0.8rem;line-height:1.5;text-align:left;color:var(--text);font-family:'DM Mono',monospace;width:100%;transition:border-color 0.15s,background 0.15s;}
+.opt:hover:not([disabled]){border-color:var(--c);background:#1e2530;}
+.opt-l{font-weight:700;color:var(--c);min-width:15px;font-size:0.75rem;margin-top:1px;flex-shrink:0;}
+.opt.ok{background:rgba(0,229,160,0.1);border-color:var(--green);color:var(--green);}
+.opt.ok .opt-l{color:var(--green);}
+.opt.no{background:rgba(255,68,68,0.1);border-color:var(--wrong);color:var(--wrong);}
+.opt.no .opt-l{color:var(--wrong);}
+.opt.reveal{background:rgba(0,229,160,0.06);border-color:var(--green);color:var(--green);}
+.opt[disabled]{cursor:default;pointer-events:none;}
+.fb{display:none;margin-top:10px;padding:9px 12px;border-radius:8px;font-size:0.73rem;line-height:1.5;}
+.fb.show{display:block;}
+.fb.fb-ok{background:rgba(0,229,160,0.08);color:var(--green);}
+.fb.fb-no{background:rgba(255,68,68,0.08);color:#ff8a8a;}
+.result{display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 24px;text-align:center;margin:24px 0;}
+.result.show{display:block;}
+.res-pct{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;color:var(--c);}
+.res-detail{font-size:0.78rem;color:var(--muted);margin-top:6px;}
+.res-grade{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;margin:18px 0 10px;}
+.res-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+.btn-retry{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;cursor:pointer;transition:all 0.2s;}
+.btn-retry:hover{border-color:var(--c);color:var(--c);}
+.btn-home{text-decoration:none;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;display:inline-block;transition:all 0.2s;}
+.btn-home:hover{border-color:var(--gold);color:var(--gold);}
+.footer{border-top:1px solid var(--border);padding:24px 0 0;text-align:center;font-size:0.7rem;color:var(--muted2);line-height:2;margin-top:20px;}
+.footer span{color:var(--muted);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a class="back-btn" href="index.html">← Home</a>
+    <div class="top-title">Food Pests — & Control</div>
+    <div class="top-sub">FS L2 · T07</div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-tag">📚 Food Safety Handbook L2 · Topic 07</div>
+    <h1>Food Pests<br><em>& Control</em></h1>
+    <p>Types of pests · Signs of infestation · Denial of access · Surveys · Control methods</p>
+  </div>
+  <div class="name-box" id="nameBox">
+    <h3>Enter your name to begin</h3>
+    <p>Questions are randomised on every attempt.<br>Your score will be saved to the leaderboard.</p>
+    <input type="text" id="nameInput" placeholder="Your name..." maxlength="30" autocomplete="off">
+    <button class="start-btn" onclick="startQuiz()">Start →</button>
+  </div>
+  <div id="quizArea"></div>
+  <div class="result" id="result">
+    <div class="res-pct" id="resPct">0%</div>
+    <div class="res-detail" id="resDetail"></div>
+    <div class="res-grade" id="resGrade"></div>
+    <div class="res-btns">
+      <button class="btn-retry" onclick="retry()">Try Again</button>
+      <a class="btn-home" href="index.html">← Home</a>
+    </div>
+  </div>
+  <div class="footer"><span>May 2026 Exam Practice</span> · KiranMoghul · Open in any browser · No login needed</div>
+</div>
+<script>
+const QUIZ_ID='fs-l2-07';
+const ALL_Q=[{"q": "What is the definition of a FOOD PEST?", "opts": ["Any member of staff who repeatedly wastes or mishandles food on the premises", "An animal which lives in or on our food — it is destructive or a nuisance and a source of food poisoning bacteria", "A type of mould, yeast, or fungus that grows on the surface of improperly stored food", "A chemical substance used to treat, preserve, or protect food products from spoilage"], "ans": 1, "fb": "A food pest is an animal which lives in or on our food. Food pests, including dogs, cats, and other pets, are a source of food poisoning bacteria. Pests contaminate food with hair, fur, droppings, eggs, and dead bodies."}, {"q": "Which pests are commonly found in food industry premises?", "opts": ["Domestic pets such as dogs, cats, and household goldfish kept in tanks", "Rodents (rats and mice) and insects (flies, moths, cockroaches, stored product insects, and ants)", "Livestock and farm animals including horses, cattle, sheep, and domesticated poultry", "Common garden spiders, ladybirds, and other harmless outdoor insects only"], "ans": 1, "fb": "The common pests found in the food industry include: rodents — rats and mice; insects — flies, moths, cockroaches, stored product insects, and ants. Raw materials, including packaging, may bring pests into the premises."}, {"q": "How do FLIES specifically contaminate food during their typical feeding behaviour?", "opts": ["Only by briefly landing on food surfaces for a few seconds before flying away", "They vomit on food during feeding, leave droppings, eggs, and dead bodies — and land on animal faeces before visiting food premises", "They burrow into sealed food containers by chewing through thin packaging materials", "They contaminate food only through contact with their wings when flying directly over it"], "ans": 1, "fb": "Flies vomit on food during feeding and may leave droppings, eggs, and dead bodies. They often land on animal faeces where they pick up large numbers of bacteria on their hairy bodies, and may have just left a pile of refuse or animal faeces before visiting a food premises."}, {"q": "What are the SIGNS OF RODENT INFESTATION to look for in food premises?", "opts": ["Eggs, egg cases, webbing on shelving, and visible larvae in stored dry food", "Live or dead bodies, droppings, holes and runs, footprints in dust, gnawing damage, nests, fur, unusual smell, bait takes, and rat grease smears on walls", "Only larvae, pupae, and small eggs visible inside opened food packaging items", "Only burrow holes through walls and floors without any other associated evidence"], "ans": 1, "fb": "Signs of rodent infestation include: live or dead bodies, droppings, holes and runs, footprints/tail marks in dust, chewed paper or food, gnawing damage, nests/fur/smell, bait takes, rat grease smears (black marks on walls and along pipes and beams)."}, {"q": "What are the SIGNS OF INSECT INFESTATION to look for in food premises?", "opts": ["Only gnaw marks on woodwork and holes chewed through food packaging materials", "Eggs and egg cases, larvae/pupae, live or dead bodies, characteristic smell (cockroaches), piles of dust, holes in food, and webbing (moths)", "Only burrow holes through walls and floor surfaces with no other evidence", "Only chewed electrical wiring found in wall cavities and ceiling void spaces"], "ans": 1, "fb": "Signs of insect infestation include: eggs and egg cases, larvae/pupae, live or dead bodies, smell (cockroaches), piles of 'dust', holes in food, and webbing (moths). Regular surveys should be carried out to ensure that food premises are pest-free."}, {"q": "Why do food premises attract pests in the first place?", "opts": ["Because they provide electricity, running water, and consistent artificial lighting", "Because they provide food, warmth, harbourage, and moisture — the four things pests need to survive", "Because they contain cleaning chemicals, packaging materials, and consistent background noise", "Because they maintain cool temperatures and near-complete darkness in dry storage areas"], "ans": 1, "fb": "Food premises attract pests because they provide food, warmth, harbourage, and moisture (condensation). Raw materials, including packaging, may bring pests into the premises. Denial of these environmental factors is the first line of defence against possible infestations."}, {"q": "What does DENIAL OF ACCESS as a pest control method involve?", "opts": ["Placing poisoned bait stations at all potential entry points to kill pests on arrival", "Care in design, maintenance, and proofing of buildings — keeping doors and windows closed and sealing all access holes with mortar, metal sheets, or mesh", "Removing all food from the premises every single night to deny pests a food source", "Carrying out daily spraying of insecticide around the full perimeter of the building"], "ans": 1, "fb": "Denial of access by care in design, maintenance, and proofing of buildings. Doors and windows should be kept closed. Doorways can be protected with hanging plastic strips. Access holes and other openings should be sealed with mortar, metal sheets or mesh."}, {"q": "When pest infestation is discovered in food premises, what should management do?", "opts": ["Attempt to trap and remove all visible pests themselves using commercially bought products", "Deal with the infestation immediately and seek assistance from an approved pest control operator", "Permanently close the premises until the infestation has been completely eliminated", "Ignore minor infestations if they do not appear to be directly affecting any food items"], "ans": 1, "fb": "Infestations of food premises should be dealt with immediately and managers should seek assistance from an approved pest control operator. Rodenticides are used to kill rats and mice. Care must be taken when using insecticides — food and small utensils must always be removed or covered."}, {"q": "Why is pest control important for reasons BEYOND just food contamination?", "opts": ["Pests are purely a cosmetic and visual problem affecting only the appearance of premises", "To prevent disease spread, prevent contamination and wastage, prevent physical damage (fires from gnawing wires, flooding from gnawing pipes), prevent loss of profit, avoid losing staff, and comply with the law", "Only to maintain compliance with food safety legislation and avoid prosecution", "Only to protect external food packaging and delivery materials from physical damage"], "ans": 1, "fb": "Reasons for pest control: to prevent the spread of disease, to prevent contamination and wastage of food (from bodies, droppings, and urine), to prevent damage (fires caused by gnawing electric cables or flooding caused by gnawing of pipes), to prevent loss of custom and profit, to avoid losing staff who will not wish to work in infested premises, and to comply with the law."}, {"q": "What is the purpose of regular PEST SURVEYS carried out in food premises?", "opts": ["Only to maintain an accurate count record of how many pests are currently present", "To ensure food premises are pest-free by checking food storage rooms, equipment, dark undisturbed areas, drains, gullies, and waste storage areas", "Only so that staff can learn to correctly identify different pest species on sight", "Only to determine which specific types of food the pests in the premises prefer most"], "ans": 1, "fb": "Regular surveys are carried out to ensure that food premises are pest-free. In particular, food storage rooms, equipment, dark, undisturbed areas, drains, and waste storage areas should be examined. Signs of pest activity should result in immediate action."}];
+let active=[],playerName='',answered=0,correct=0;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')startQuiz();});
+function startQuiz(){
+  const n=document.getElementById('nameInput').value.trim();
+  if(!n)return;
+  playerName=n;
+  document.getElementById('nameBox').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  active=shuffle(ALL_Q);
+  answered=0;correct=0;
+  buildQuiz();
+}
+function buildQuiz(){
+  const area=document.getElementById('quizArea');
+  const L=['A','B','C','D'];
+  area.innerHTML=active.map((q,i)=>{
+    const idx=shuffle([0,1,2,3]);
+    const newAns=idx.indexOf(q.ans);
+    const optsHtml=idx.map((oi,li)=>
+      `<button class="opt" id="o${i}_${li}" onclick="pick(${i},${li},${newAns})"><span class="opt-l">${L[li]}</span><span>${q.opts[oi]}</span></button>`
+    ).join('');
+    return `<div class="q-card" id="card${i}"><div class="q-num">Q${i+1} / ${active.length}</div><div class="q-text">${q.q}</div><div class="opts">${optsHtml}</div><div class="fb" id="fb${i}"></div></div>`;
+  }).join('');
+}
+function pick(qi,chosen,correctIdx){
+  if(document.getElementById(`o${qi}_0`).hasAttribute('disabled'))return;
+  answered++;
+  const isOk=chosen===correctIdx;
+  if(isOk)correct++;
+  for(let i=0;i<4;i++){
+    const el=document.getElementById(`o${qi}_${i}`);
+    el.setAttribute('disabled','');
+    if(i===correctIdx)el.classList.add(isOk&&i===chosen?'ok':'reveal');
+    else if(i===chosen&&!isOk)el.classList.add('no');
+  }
+  document.getElementById(`card${qi}`).classList.add(isOk?'correct':'wrong');
+  const fb=document.getElementById(`fb${qi}`);
+  fb.textContent=(isOk?'✓ Correct. ':'✗ Incorrect. ')+active[qi].fb;
+  fb.className=`fb show ${isOk?'fb-ok':'fb-no'}`;
+  if(answered===active.length)setTimeout(showResult,700);
+}
+async function showResult(){
+  const pct=Math.round((correct/active.length)*100);
+  const grade=pct>=90?'Excellent 🏆':pct>=75?'Good Pass ✓':pct>=60?'Borderline — keep going ⚠️':'Needs more revision ✗';
+  document.getElementById('resPct').textContent=pct+'%';
+  document.getElementById('resDetail').textContent=correct+' correct out of '+active.length;
+  document.getElementById('resGrade').textContent=grade;
+  const r=document.getElementById('result');
+  r.classList.add('show');
+  r.scrollIntoView({behavior:'smooth',block:'center'});
+  const ghost=sessionStorage.getItem('ghostMode')==='1';
+  if(playerName&&!ghost){
+    try{
+      const key='leaderboard-scores';
+      const ex=await window.storage.get(key,true);
+      const scores=ex?JSON.parse(ex.value):[];
+      scores.push({name:playerName,score:correct,total:active.length,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(key,JSON.stringify(scores),true);
+    }catch(e){}
+  }
+}
+function retry(){location.reload();}
+</script>
+</body>
+</html>

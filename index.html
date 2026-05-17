@@ -6,7 +6,7 @@
 <title>May 2026 Exam Practice</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;}
+:root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;--sky:#38bdf8;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;pointer-events:none;z-index:0;}
@@ -44,6 +44,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .badge.live{border-color:var(--c);color:var(--c);background:transparent;}
 .badge.random{border-color:#5b8cff;color:#5b8cff;background:transparent;}
 .badge.priority{border-color:var(--gold);color:var(--gold);background:transparent;}
+.badge.new{border-color:var(--sky);color:var(--sky);background:transparent;}
 .quiz-arrow{color:var(--c);font-size:1rem;transition:transform 0.2s;flex-shrink:0;}
 .quiz-card:not(.coming-soon):hover .quiz-arrow{transform:translateX(4px);}
 .quiz-card.coming-soon{opacity:0.35;border-style:dashed;pointer-events:none;}
@@ -78,6 +79,7 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .subject:nth-child(2){animation-delay:0.2s;}
 .subject:nth-child(3){animation-delay:0.3s;}
 .subject:nth-child(4){animation-delay:0.4s;}
+.subject:nth-child(5){animation-delay:0.5s;}
 @media(max-width:580px){.lb-header,.lb-row{grid-template-columns:40px 1fr 60px 55px;}.lb-date{display:none;}.stats{flex-wrap:wrap;}.stat{min-width:50%;border-bottom:1px solid var(--border);}.subject-count{display:none;}}
 </style>
 </head>
@@ -88,13 +90,13 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <div class="hero">
     <div class="hero-tag" id="heroTag">📚 Practice Hub</div>
     <h1>May 2026<br><em>Exam Practice</em></h1>
-    <p>Four subjects. All your MCQs in one place. Pick a topic, test yourself, see your score — and keep going until exam day.</p>
+    <p>Five subjects. All your MCQs in one place. Pick a topic, test yourself, see your score — and keep going until exam day.</p>
   </div>
 
   <div class="stats">
-    <div class="stat"><div class="val">4</div><div class="lbl">Subjects</div></div>
-    <div class="stat"><div class="val">23</div><div class="lbl">Quiz Sets</div></div>
-    <div class="stat"><div class="val">1700+</div><div class="lbl">Questions</div></div>
+    <div class="stat"><div class="val">5</div><div class="lbl">Subjects</div></div>
+    <div class="stat"><div class="val">32</div><div class="lbl">Quiz Sets</div></div>
+    <div class="stat"><div class="val">1840+</div><div class="lbl">Questions</div></div>
     <div class="stat"><div class="val">∞</div><div class="lbl">Attempts</div></div>
   </div>
 
@@ -119,6 +121,15 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="lb-tab" data-quiz="culinary-08" onclick="switchTab(this)">Culinary 08</div>
       <div class="lb-tab" data-quiz="culinary-09" onclick="switchTab(this)">Culinary 09</div>
       <div class="lb-tab" data-quiz="culinary-10" onclick="switchTab(this)">Culinary 10 ⭐</div>
+      <div class="lb-tab" data-quiz="fs-l2-01" onclick="switchTab(this)">FS L2 — T01</div>
+      <div class="lb-tab" data-quiz="fs-l2-02" onclick="switchTab(this)">FS L2 — T02</div>
+      <div class="lb-tab" data-quiz="fs-l2-03" onclick="switchTab(this)">FS L2 — T03</div>
+      <div class="lb-tab" data-quiz="fs-l2-04" onclick="switchTab(this)">FS L2 — T04</div>
+      <div class="lb-tab" data-quiz="fs-l2-05" onclick="switchTab(this)">FS L2 — T05</div>
+      <div class="lb-tab" data-quiz="fs-l2-06" onclick="switchTab(this)">FS L2 — T06</div>
+      <div class="lb-tab" data-quiz="fs-l2-07" onclick="switchTab(this)">FS L2 — T07</div>
+      <div class="lb-tab" data-quiz="fs-l2-08" onclick="switchTab(this)">FS L2 — T08</div>
+      <div class="lb-tab" data-quiz="fs-l2-09" onclick="switchTab(this)">FS L2 — T09</div>
     </div>
     <div class="lb-table">
       <div class="lb-header"><div>#</div><div>Name</div><div>Score</div><div>Percent</div><div>Date</div></div>
@@ -320,6 +331,104 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
           <div class="quiz-badges"><span class="badge" style="border-color:var(--gold);color:var(--gold)">20 Questions</span><span class="badge" style="border-color:var(--gold);color:var(--gold)">Fixed Set</span><span class="badge priority">⭐ Must Know</span></div>
         </div>
         <div class="quiz-arrow" style="color:var(--gold)">→</div>
+      </a>
+
+    </div>
+  </div>
+
+
+  <!-- ── FOOD SAFETY L2 ── -->
+  <div class="subject">
+    <div class="subject-header">
+      <div class="subject-icon">🛡️</div>
+      <div class="subject-info">
+        <div class="subject-name" style="color:var(--sky)">Food Safety L2</div>
+        <div class="subject-sub">Highfield Food Safety Handbook — Level 2 Overseas Edition · 9 topics · 140 questions</div>
+      </div>
+      <div class="subject-count">9 quizzes</div>
+    </div>
+    <div class="divider"></div>
+    <div class="quiz-list">
+
+      <a class="quiz-card" href="FS-L2-01-Introduction.html" style="--c:var(--sky)">
+        <div class="quiz-num">01</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Introduction to Food Safety</div>
+          <div class="quiz-badges"><span class="badge live">10 Questions</span><span class="badge random">🎲</span><span class="badge priority">⭐</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </a>
+
+      <a class="quiz-card" href="FS-L2-02-Bacteria.html" style="--c:var(--sky)">
+        <div class="quiz-num">02</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Microbiological Hazards — Bacteria</div>
+          <div class="quiz-badges"><span class="badge live">20 Questions</span><span class="badge random">🎲</span><span class="badge priority">⭐</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </a>
+
+      <a class="quiz-card" href="FS-L2-03-FoodPoisoning.html" style="--c:var(--sky)">
+        <div class="quiz-num">03</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Food Poisoning &amp; Its Control</div>
+          <div class="quiz-badges"><span class="badge live">15 Questions</span><span class="badge random">🎲</span><span class="badge priority">⭐</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </a>
+
+      <a class="quiz-card" href="FS-L2-04-Contamination.html" style="--c:var(--sky)">
+        <div class="quiz-num">04</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Contamination Hazards &amp; Controls</div>
+          <div class="quiz-badges"><span class="badge live">20 Questions</span><span class="badge random">🎲</span><span class="badge priority">⭐</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </a>
+
+      <a class="quiz-card" href="FS-L2-05-PersonalHygiene.html" style="--c:var(--sky)">
+        <div class="quiz-num">05</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Food Handlers &amp; Personal Hygiene</div>
+          <div class="quiz-badges"><span class="badge live">15 Questions</span><span class="badge random">🎲</span><span class="badge priority">⭐</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </a>
+
+      <a class="quiz-card" href="FS-L2-06-Premises.html" style="--c:var(--sky)">
+        <div class="quiz-num">06</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Food Premises &amp; Equipment</div>
+          <div class="quiz-badges"><span class="badge live">10 Questions</span><span class="badge random">🎲</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </a>
+
+      <a class="quiz-card" href="FS-L2-07-Pests.html" style="--c:var(--sky)">
+        <div class="quiz-num">07</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Food Pests &amp; Control</div>
+          <div class="quiz-badges"><span class="badge live">10 Questions</span><span class="badge random">🎲</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </a>
+
+      <a class="quiz-card" href="FS-L2-08-Cleaning.html" style="--c:var(--sky)">
+        <div class="quiz-num">08</div>
+        <div class="quiz-info">
+          <div class="quiz-title">Cleaning &amp; Disinfection</div>
+          <div class="quiz-badges"><span class="badge live">15 Questions</span><span class="badge random">🎲</span><span class="badge priority">⭐</span></div>
+        </div>
+        <div class="quiz-arrow">→</div>
+      </a>
+
+      <a class="quiz-card" href="FS-L2-09-HACCP.html" style="--c:var(--sky);border-color:rgba(56,189,248,0.4);background:rgba(56,189,248,0.04);">
+        <div class="quiz-num" style="color:var(--sky)">09</div>
+        <div class="quiz-info">
+          <div class="quiz-title" style="color:var(--sky)">HACCP &amp; Food Handling — Purchase to Service ⭐</div>
+          <div class="quiz-badges"><span class="badge" style="border-color:var(--sky);color:var(--sky)">25 Questions</span><span class="badge random">🎲</span><span class="badge priority">⭐ Most Important</span></div>
+        </div>
+        <div class="quiz-arrow" style="color:var(--sky)">→</div>
       </a>
 
     </div>

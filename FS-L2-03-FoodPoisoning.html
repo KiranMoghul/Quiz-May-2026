@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Safety L2 — 03. Food Poisoning — & Its Control</title>
+<style>:root{--c:var(--wrong);}@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400;500&display=swap');
+:root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;pointer-events:none;z-index:0;}
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 20px 60px;}
+.top-bar{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 20px;}
+.top-bar-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:14px;}
+.back-btn{color:var(--c);text-decoration:none;font-size:0.72rem;letter-spacing:1px;border:1px solid var(--border);padding:5px 14px;border-radius:999px;transition:border-color 0.2s;white-space:nowrap;flex-shrink:0;}
+.back-btn:hover{border-color:var(--c);}
+.top-title{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
+.top-sub{font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.hero{padding:40px 0 28px;animation:fadeUp 0.4s ease both;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--c);border:1px solid var(--c);padding:5px 13px;border-radius:999px;margin-bottom:16px;opacity:0.8;}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:800;line-height:1.1;letter-spacing:-1px;}
+.hero h1 em{color:var(--c);font-style:normal;}
+.hero p{margin-top:10px;color:var(--muted);font-size:0.78rem;line-height:1.8;max-width:500px;}
+.name-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;margin:8px 0 0;}
+.name-box h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--gold);}
+.name-box p{font-size:0.75rem;color:var(--muted);margin-bottom:20px;line-height:1.7;}
+.name-box input{width:100%;max-width:280px;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:0.82rem;outline:none;text-align:center;transition:border-color 0.2s;display:block;margin:0 auto;}
+.name-box input:focus{border-color:var(--c);}
+.start-btn{display:inline-block;margin:14px auto 0;background:var(--c);color:#000;font-family:'DM Mono',monospace;font-size:0.8rem;font-weight:600;border:none;border-radius:9px;padding:11px 30px;cursor:pointer;letter-spacing:0.5px;transition:opacity 0.2s;}
+.start-btn:hover{opacity:0.85;}
+#quizArea{display:none;}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 18px 16px;margin-bottom:14px;transition:border-color 0.2s;}
+.q-card.correct{border-color:var(--green);}.q-card.wrong{border-color:var(--wrong);}
+.q-num{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--c);margin-bottom:9px;}
+.q-text{font-size:0.86rem;line-height:1.65;font-weight:500;margin-bottom:13px;}
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 13px;cursor:pointer;font-size:0.8rem;line-height:1.5;text-align:left;color:var(--text);font-family:'DM Mono',monospace;width:100%;transition:border-color 0.15s,background 0.15s;}
+.opt:hover:not([disabled]){border-color:var(--c);background:#1e2530;}
+.opt-l{font-weight:700;color:var(--c);min-width:15px;font-size:0.75rem;margin-top:1px;flex-shrink:0;}
+.opt.ok{background:rgba(0,229,160,0.1);border-color:var(--green);color:var(--green);}
+.opt.ok .opt-l{color:var(--green);}
+.opt.no{background:rgba(255,68,68,0.1);border-color:var(--wrong);color:var(--wrong);}
+.opt.no .opt-l{color:var(--wrong);}
+.opt.reveal{background:rgba(0,229,160,0.06);border-color:var(--green);color:var(--green);}
+.opt[disabled]{cursor:default;pointer-events:none;}
+.fb{display:none;margin-top:10px;padding:9px 12px;border-radius:8px;font-size:0.73rem;line-height:1.5;}
+.fb.show{display:block;}
+.fb.fb-ok{background:rgba(0,229,160,0.08);color:var(--green);}
+.fb.fb-no{background:rgba(255,68,68,0.08);color:#ff8a8a;}
+.result{display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 24px;text-align:center;margin:24px 0;}
+.result.show{display:block;}
+.res-pct{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;color:var(--c);}
+.res-detail{font-size:0.78rem;color:var(--muted);margin-top:6px;}
+.res-grade{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;margin:18px 0 10px;}
+.res-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
+.btn-retry{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;cursor:pointer;transition:all 0.2s;}
+.btn-retry:hover{border-color:var(--c);color:var(--c);}
+.btn-home{text-decoration:none;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;display:inline-block;transition:all 0.2s;}
+.btn-home:hover{border-color:var(--gold);color:var(--gold);}
+.footer{border-top:1px solid var(--border);padding:24px 0 0;text-align:center;font-size:0.7rem;color:var(--muted2);line-height:2;margin-top:20px;}
+.footer span{color:var(--muted);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}</style>
+</head>
+<body>
+<div class="top-bar">
+  <div class="top-bar-inner">
+    <a class="back-btn" href="index.html">← Home</a>
+    <div class="top-title">Food Poisoning — & Its Control</div>
+    <div class="top-sub">FS L2 · T03</div>
+  </div>
+</div>
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-tag">📚 Food Safety Handbook L2 · Topic 03</div>
+    <h1>Food Poisoning<br><em>& Its Control</em></h1>
+    <p>Causes · Spoilage signs · Faecal-oral route · Poisoning chain · Control measures</p>
+  </div>
+  <div class="name-box" id="nameBox">
+    <h3>Enter your name to begin</h3>
+    <p>Questions are randomised on every attempt.<br>Your score will be saved to the leaderboard.</p>
+    <input type="text" id="nameInput" placeholder="Your name..." maxlength="30" autocomplete="off">
+    <button class="start-btn" onclick="startQuiz()">Start →</button>
+  </div>
+  <div id="quizArea"></div>
+  <div class="result" id="result">
+    <div class="res-pct" id="resPct">0%</div>
+    <div class="res-detail" id="resDetail"></div>
+    <div class="res-grade" id="resGrade"></div>
+    <div class="res-btns">
+      <button class="btn-retry" onclick="retry()">Try Again</button>
+      <a class="btn-home" href="index.html">← Home</a>
+    </div>
+  </div>
+  <div class="footer"><span>May 2026 Exam Practice</span> · KiranMoghul · Open in any browser · No login needed</div>
+</div>
+<script>
+const QUIZ_ID='fs-l2-03';
+const ALL_Q=[{"q": "Food poisoning results from management failing to control which TWO key hazards?", "opts": ["Incorrect purchasing from unapproved suppliers and failure to train new staff adequately", "Contamination of ready-to-eat food AND multiplication of bacteria within the food", "Poor kitchen design and failure to maintain comprehensive pest control records", "Inadequate cooking temperatures AND failure to properly date-label all food items"], "ans": 1, "fb": "Food poisoning rarely occurs because of a single mistake. Food poisoning results from management failing to control two major hazards: the contamination of ready-to-eat food and the multiplication of bacteria within the food."}, {"q": "Which of the following can cause food poisoning?", "opts": ["Overcooking food to temperatures above 200°C during grilling or roasting", "Bacteria or their toxins, viruses, moulds, poisonous chemicals, metals, or plants", "Using too many different herbs and spices in a single prepared dish", "Purchasing food exclusively from large well-established supermarket chains"], "ans": 1, "fb": "Food poisoning may be caused by: bacteria or their toxins, viruses (which multiply in living cells only), moulds (mycotoxins), poisonous chemicals such as insecticides, poisonous metals such as lead, copper, and mercury, poisonous plants, or poisonous fish or shellfish."}, {"q": "How do VIRUSES differ from bacteria in terms of where they multiply?", "opts": ["Viruses multiply in food when left at room temperature above 20°C", "Viruses multiply rapidly in water stored in the danger zone between 5°C and 60°C", "Viruses multiply only in the living cells of people or animals — not in food or water", "Viruses multiply in refrigerated food stored between 1°C and 4°C in a chilled environment"], "ans": 2, "fb": "Viruses multiply in the living cells of people or animals — not in food or water. Only very small numbers are required to cause illness. They may involve an infected person handling food or polluted irrigation water used on salad vegetables."}, {"q": "Which of the following is a sign of food SPOILAGE?", "opts": ["Food looks completely normal and smells the same as when it was freshly prepared", "Food has been stored correctly below 5°C with a current and valid use-by date", "Bulging cans, off odours, slime or stickiness, discolouration, and production of gas", "Food feels warm after being removed from a properly working hot holding unit"], "ans": 2, "fb": "Signs of spoilage include: off odours, discolouration, slime/stickiness, mould growth, changes in texture such as dry or spongy, unusual taste such as sour, the production of gas, and bulging cans or leaking packs."}, {"q": "Unlike food contaminated with pathogens, food SPOILAGE can be detected how?", "opts": ["Only through laboratory testing as spoilage produces no detectable visible signs", "Only by observing the colour and texture of the food under bright lighting conditions", "Spoilage can be seen, felt, tasted, and smelled — unlike pathogens which leave food looking normal", "Only after consuming the food and then experiencing digestive symptoms hours later"], "ans": 2, "fb": "Unlike food contaminated with pathogens — which looks, smells, and tastes completely normal — the effects of food spoilage can be seen (mould), felt (slime), tasted (sour or unusual), and smelled (off odours). This is why it is easier to detect spoilage than contamination."}, {"q": "What causes METALLIC food poisoning?", "opts": ["Consuming too much salt over a long period leading to toxic levels in the body", "Acid food or drink coming into contact with metals such as copper, cadmium, or zinc", "Bacteria growing rapidly in warm food that has been left out overnight", "Eating undercooked poultry that has not reached the required minimum core temperature"], "ans": 1, "fb": "Metallic food poisoning is also quite rare. It usually results from acid food or drink, being in contact with metal such as copper, cadmium, or zinc. Symptoms, mainly vomiting and abdominal pain, usually develop within an hour."}, {"q": "What are the typical symptoms of METALLIC food poisoning?", "opts": ["A persistent skin rash and noticeably swollen throat developing slowly over several days", "Vomiting and abdominal pain that develop quickly, usually within one hour of eating", "A high fever with severe diarrhoea that typically lasts for approximately one full week", "Persistent joint pain and constant dizziness that develops gradually over several hours"], "ans": 1, "fb": "The symptoms of metallic food poisoning are mainly vomiting and abdominal pain. These symptoms usually develop within an hour. This differs from bacterial food poisoning which tends to have a longer incubation period."}, {"q": "What is the FAECAL-ORAL ROUTE of contamination?", "opts": ["Bacteria spreading through steam produced in kitchens during the cooking process", "Organisms from faeces ending up on ready-to-eat food via hands or sewage, and then being eaten", "Raw meat juices dripping down directly onto cooked food stored in the refrigerator below", "Insects flying in from outdoor areas and landing on uncovered food in the kitchen"], "ans": 1, "fb": "Pathogens are found in the intestine of ill people, carriers, animals, or illness. They may end up on raw ready-to-eat food as a result of sewage contamination, and on cooked food because of poor hygiene practices. This is known as the faecal-oral route."}, {"q": "What are CARRIERS in a food safety context?", "opts": ["People who display the most severe visible symptoms during a food poisoning outbreak", "People who excrete pathogenic organisms without showing any signs of illness themselves", "Food handlers who consistently follow all required handwashing and hygiene procedures", "People who have received vaccination against typhoid and hepatitis A infections"], "ans": 1, "fb": "Carriers are people who may excrete pathogenic organisms without showing signs of illness. Typhoid and hepatitis carriers are a major risk as only a few organisms are necessary to cause illness. The food only transports the pathogen."}, {"q": "What most commonly causes CHEMICAL food poisoning?", "opts": ["Natural toxins that occur in common plants eaten regularly as part of daily meals", "Poisonous chemicals stored in unlabelled food containers, or contamination from insecticides or cleaning chemicals", "Bacteria multiplying rapidly in warm food that was not refrigerated quickly enough", "Viruses introduced into food through polluted drinking water from untreated sources"], "ans": 1, "fb": "Chemical food poisoning is rare and usually results accidentally from poisonous chemicals being stored in unlabelled food containers, contamination of food by significant amounts of chemical (insecticides or cleaning chemicals), or large amounts of chemical additives."}, {"q": "Which foods are specifically associated with MOULD TOXINS (mycotoxins)?", "opts": ["Cooked chicken, fish fillets, and other hot protein dishes served at buffets", "Nuts — especially peanuts — figs, and apple juice stored in poor conditions", "Commercially frozen peas, broccoli, and other frozen vegetable products", "Pasteurised milk, drinking yogurt, and commercially produced soft cheese products"], "ans": 1, "fb": "Moulds are often responsible for the spoilage of food, especially baked products and fruit, due to prolonged unsatisfactory storage. However, some moulds produce toxins which cause illness and sometimes death. Foods involved include nuts, figs, and apple juice."}, {"q": "The FOOD POISONING CHAIN shows which sequence of events?", "opts": ["Food is bought from a supplier, cooked properly, served correctly, then eaten safely", "Food becomes contaminated, bacteria multiply within the food, then a person eats the contaminated food and becomes ill", "Food spoils in storage, it is identified and thrown away, then fresh food is ordered from the supplier", "Hands are washed by the food handler, food is prepared safely, food is stored below 5°C"], "ans": 1, "fb": "The food poisoning chain shows: food contaminated → bacteria multiply → person eats contaminated food. To protect food from contamination: purchase from approved suppliers, train food handlers, maintain high hygiene standards, and separate raw from ready-to-eat food at all stages."}, {"q": "How do FOODBORNE DISEASES differ from standard bacterial food poisoning?", "opts": ["Foodborne diseases are always caused by cleaning chemicals rather than bacteria or viruses", "The food only transports the pathogen — no multiplication in the food is needed and only very small numbers cause illness", "Foodborne diseases only ever affect very young children and elderly residents in care settings", "Foodborne diseases are caused exclusively by viruses and not by any type of bacteria"], "ans": 1, "fb": "In addition to food poisoning, other illnesses can result from eating food or water that carries pathogens. However, the food only transports the pathogen. The pathogen doesn't usually multiply in the food, and only small numbers are required to cause illness."}, {"q": "Which specific POISONOUS PLANTS and FISH have been linked to real food poisoning cases?", "opts": ["Common apple and raw carrot when consumed in very large quantities without washing", "Toadstools, undercooked red kidney beans, tea contaminated with deadly nightshade, and the Japanese puffer fish", "Ripe fresh tomatoes, cucumber, and courgette when eaten without being washed first", "Garlic, lemon juice, and fresh chilli pepper when consumed in very excessive amounts"], "ans": 1, "fb": "Poisonous plants rarely cause food poisoning in commercial premises. However, cases of poisoning from toadstools, tea contaminated with deadly nightshade, undercooked red kidney beans, and the Japanese puffer fish have been recorded."}, {"q": "Which of the following PROTECTS food from contamination?", "opts": ["Purchasing food from any convenient source that offers the most competitive prices", "Purchasing from approved suppliers, separating raw and ready-to-eat food at all stages, effective staff training, pest control, and proper cleaning and disinfection at all times", "Keeping all food at room temperature throughout the entire day for easy staff access", "Not labelling food containers during busy service periods in order to save preparation time"], "ans": 1, "fb": "To protect food from contamination: purchase from approved suppliers, effectively instruct, supervise, and train food handlers, maintain high personal hygiene standards, carry out effective pest control, separate raw and ready-to-eat food at all stages, and practise effective cleaning and disinfection."}];
+let active=[],playerName='',answered=0,correct=0;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')startQuiz();});
+function startQuiz(){
+  const n=document.getElementById('nameInput').value.trim();
+  if(!n)return;
+  playerName=n;
+  document.getElementById('nameBox').style.display='none';
+  document.getElementById('quizArea').style.display='block';
+  active=shuffle(ALL_Q);
+  answered=0;correct=0;
+  buildQuiz();
+}
+function buildQuiz(){
+  const area=document.getElementById('quizArea');
+  const L=['A','B','C','D'];
+  area.innerHTML=active.map((q,i)=>{
+    const idx=shuffle([0,1,2,3]);
+    const newAns=idx.indexOf(q.ans);
+    const optsHtml=idx.map((oi,li)=>
+      `<button class="opt" id="o${i}_${li}" onclick="pick(${i},${li},${newAns})"><span class="opt-l">${L[li]}</span><span>${q.opts[oi]}</span></button>`
+    ).join('');
+    return `<div class="q-card" id="card${i}"><div class="q-num">Q${i+1} / ${active.length}</div><div class="q-text">${q.q}</div><div class="opts">${optsHtml}</div><div class="fb" id="fb${i}"></div></div>`;
+  }).join('');
+}
+function pick(qi,chosen,correctIdx){
+  if(document.getElementById(`o${qi}_0`).hasAttribute('disabled'))return;
+  answered++;
+  const isOk=chosen===correctIdx;
+  if(isOk)correct++;
+  for(let i=0;i<4;i++){
+    const el=document.getElementById(`o${qi}_${i}`);
+    el.setAttribute('disabled','');
+    if(i===correctIdx)el.classList.add(isOk&&i===chosen?'ok':'reveal');
+    else if(i===chosen&&!isOk)el.classList.add('no');
+  }
+  document.getElementById(`card${qi}`).classList.add(isOk?'correct':'wrong');
+  const fb=document.getElementById(`fb${qi}`);
+  fb.textContent=(isOk?'✓ Correct. ':'✗ Incorrect. ')+active[qi].fb;
+  fb.className=`fb show ${isOk?'fb-ok':'fb-no'}`;
+  if(answered===active.length)setTimeout(showResult,700);
+}
+async function showResult(){
+  const pct=Math.round((correct/active.length)*100);
+  const grade=pct>=90?'Excellent 🏆':pct>=75?'Good Pass ✓':pct>=60?'Borderline — keep going ⚠️':'Needs more revision ✗';
+  document.getElementById('resPct').textContent=pct+'%';
+  document.getElementById('resDetail').textContent=correct+' correct out of '+active.length;
+  document.getElementById('resGrade').textContent=grade;
+  const r=document.getElementById('result');
+  r.classList.add('show');
+  r.scrollIntoView({behavior:'smooth',block:'center'});
+  const ghost=sessionStorage.getItem('ghostMode')==='1';
+  if(playerName&&!ghost){
+    try{
+      const key='leaderboard-scores';
+      const ex=await window.storage.get(key,true);
+      const scores=ex?JSON.parse(ex.value):[];
+      scores.push({name:playerName,score:correct,total:active.length,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(key,JSON.stringify(scores),true);
+    }catch(e){}
+  }
+}
+function retry(){location.reload();}
+</script>
+</body>
+</html>
