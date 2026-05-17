@@ -3,162 +3,280 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Food Safety L2 — 02. Microbiological Hazards — Bacteria</title>
-<style>:root{--c:var(--orange);}@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400;500&display=swap');
-:root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;}
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦠</text></svg>">
+<title>FS L2 T02 — Microbiological Hazards — Quiz Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0d;--surface:#1a1a1a;--card:#222;--border:#333;--accent:#38bdf8;--accent2:#ff6b35;--wrong:#ff4444;--text:#f0f0f0;--muted:#888;--correct-bg:rgba(56,189,248,0.12);--wrong-bg:rgba(255,68,68,0.1);}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;pointer-events:none;z-index:0;}
-.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 20px 60px;}
-.top-bar{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 20px;}
-.top-bar-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:14px;}
-.back-btn{color:var(--c);text-decoration:none;font-size:0.72rem;letter-spacing:1px;border:1px solid var(--border);padding:5px 14px;border-radius:999px;transition:border-color 0.2s;white-space:nowrap;flex-shrink:0;}
-.back-btn:hover{border-color:var(--c);}
-.top-title{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
-.top-sub{font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
-.hero{padding:40px 0 28px;animation:fadeUp 0.4s ease both;}
-.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--c);border:1px solid var(--c);padding:5px 13px;border-radius:999px;margin-bottom:16px;opacity:0.8;}
-.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:800;line-height:1.1;letter-spacing:-1px;}
-.hero h1 em{color:var(--c);font-style:normal;}
-.hero p{margin-top:10px;color:var(--muted);font-size:0.78rem;line-height:1.8;max-width:500px;}
-.name-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;margin:8px 0 0;}
-.name-box h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--gold);}
-.name-box p{font-size:0.75rem;color:var(--muted);margin-bottom:20px;line-height:1.7;}
-.name-box input{width:100%;max-width:280px;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:0.82rem;outline:none;text-align:center;transition:border-color 0.2s;display:block;margin:0 auto;}
-.name-box input:focus{border-color:var(--c);}
-.start-btn{display:inline-block;margin:14px auto 0;background:var(--c);color:#000;font-family:'DM Mono',monospace;font-size:0.8rem;font-weight:600;border:none;border-radius:9px;padding:11px 30px;cursor:pointer;letter-spacing:0.5px;transition:opacity 0.2s;}
-.start-btn:hover{opacity:0.85;}
-#quizArea{display:none;}
-.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 18px 16px;margin-bottom:14px;transition:border-color 0.2s;}
-.q-card.correct{border-color:var(--green);}.q-card.wrong{border-color:var(--wrong);}
-.q-num{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--c);margin-bottom:9px;}
-.q-text{font-size:0.86rem;line-height:1.65;font-weight:500;margin-bottom:13px;}
-.opts{display:flex;flex-direction:column;gap:8px;}
-.opt{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 13px;cursor:pointer;font-size:0.8rem;line-height:1.5;text-align:left;color:var(--text);font-family:'DM Mono',monospace;width:100%;transition:border-color 0.15s,background 0.15s;}
-.opt:hover:not([disabled]){border-color:var(--c);background:#1e2530;}
-.opt-l{font-weight:700;color:var(--c);min-width:15px;font-size:0.75rem;margin-top:1px;flex-shrink:0;}
-.opt.ok{background:rgba(0,229,160,0.1);border-color:var(--green);color:var(--green);}
-.opt.ok .opt-l{color:var(--green);}
-.opt.no{background:rgba(255,68,68,0.1);border-color:var(--wrong);color:var(--wrong);}
-.opt.no .opt-l{color:var(--wrong);}
-.opt.reveal{background:rgba(0,229,160,0.06);border-color:var(--green);color:var(--green);}
-.opt[disabled]{cursor:default;pointer-events:none;}
-.fb{display:none;margin-top:10px;padding:9px 12px;border-radius:8px;font-size:0.73rem;line-height:1.5;}
-.fb.show{display:block;}
-.fb.fb-ok{background:rgba(0,229,160,0.08);color:var(--green);}
-.fb.fb-no{background:rgba(255,68,68,0.08);color:#ff8a8a;}
-.result{display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 24px;text-align:center;margin:24px 0;}
-.result.show{display:block;}
-.res-pct{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;color:var(--c);}
-.res-detail{font-size:0.78rem;color:var(--muted);margin-top:6px;}
-.res-grade{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;margin:18px 0 10px;}
-.res-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
-.btn-retry{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;cursor:pointer;transition:all 0.2s;}
-.btn-retry:hover{border-color:var(--c);color:var(--c);}
-.btn-home{text-decoration:none;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;display:inline-block;transition:all 0.2s;}
-.btn-home:hover{border-color:var(--gold);color:var(--gold);}
-.footer{border-top:1px solid var(--border);padding:24px 0 0;text-align:center;font-size:0.7rem;color:var(--muted2);line-height:2;margin-top:20px;}
-.footer span{color:var(--muted);}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}</style>
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;padding:20px;}
+.container{max-width:780px;margin:0 auto;}
+.name-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;animation:fadeSlide 0.4s ease;}
+.name-screen h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
+.name-screen h2 span{color:var(--accent);}
+.name-screen p{color:var(--muted);font-size:0.82rem;margin-bottom:28px;line-height:1.8;}
+.name-input-wrap{width:100%;max-width:380px;}
+.name-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--text);outline:none;transition:border-color 0.2s;text-align:center;margin-bottom:14px;}
+.name-input:focus{border-color:var(--accent);}
+.name-input::placeholder{color:var(--muted);}
+.btn-start{width:100%;padding:15px;background:var(--accent);color:#000;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:transform 0.15s,opacity 0.2s;letter-spacing:0.5px;}
+.btn-start:hover{transform:translateY(-2px);}
+.btn-start:disabled{opacity:0.4;cursor:default;transform:none;}
+.ghost-notice{margin-top:14px;font-size:0.72rem;color:#f5c542;display:none;}
+.ghost-notice.show{display:block;}
+.bank-info{margin-top:14px;font-size:0.7rem;color:var(--muted);line-height:1.9;}
+.bank-info span{color:var(--accent);}
+.topic-badge{margin-top:10px;font-size:0.72rem;padding:5px 14px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);display:inline-block;}
+.back-link{margin-top:30px;font-size:0.75rem;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--text);}
+.header{text-align:center;padding:40px 0 30px;}
+.header h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-1px;line-height:1.1;}
+.header h1 span{color:var(--accent);}
+.progress-bar-wrap{background:var(--border);border-radius:999px;height:6px;margin:20px 0 10px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:999px;transition:width 0.4s ease;}
+.progress-label{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-bottom:24px;}
+.question-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px;animation:fadeSlide 0.3s ease;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.q-number{font-size:0.7rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.q-text{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;line-height:1.5;margin-bottom:20px;}
+.options{display:flex;flex-direction:column;gap:10px;}
+.option{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--text);text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.1s;display:flex;align-items:flex-start;gap:12px;}
+.option:hover:not(:disabled){border-color:var(--accent);transform:translateX(4px);}
+.option .opt-letter{font-weight:500;color:var(--muted);min-width:18px;flex-shrink:0;}
+.option.correct{background:var(--correct-bg);border-color:var(--accent);color:var(--accent);}
+.option.correct .opt-letter{color:var(--accent);}
+.option.wrong{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong);}
+.option.wrong .opt-letter{color:var(--wrong);}
+.option.show-correct{background:var(--correct-bg);border-color:var(--accent);color:var(--accent);}
+.option.show-correct .opt-letter{color:var(--accent);}
+.option:disabled{cursor:default;}
+.feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-size:0.82rem;line-height:1.5;display:none;}
+.feedback.show{display:block;}
+.feedback.correct-fb{background:var(--correct-bg);border:1px solid var(--accent);color:var(--accent);}
+.feedback.wrong-fb{background:var(--wrong-bg);border:1px solid var(--wrong);color:#ff8888;}
+.nav{display:flex;justify-content:space-between;align-items:center;margin:20px 0 40px;gap:12px;}
+.btn{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;padding:12px 28px;border-radius:10px;border:none;cursor:pointer;transition:transform 0.15s,opacity 0.15s;letter-spacing:0.5px;}
+.btn:hover{transform:translateY(-2px);}
+.btn:disabled{opacity:0.3;cursor:default;transform:none;}
+.btn-prev{background:var(--surface);color:var(--text);border:1.5px solid var(--border);}
+.btn-next{background:var(--accent);color:#000;}
+.btn-submit{background:var(--accent2);color:#fff;}
+.score-chip{font-size:0.78rem;color:var(--muted);text-align:center;}
+.score-chip span{color:var(--accent);font-weight:bold;}
+.results-screen{display:none;text-align:center;padding:60px 20px;animation:fadeSlide 0.4s ease;}
+.results-screen.show{display:block;}
+.result-score-ring{width:160px;height:160px;border-radius:50%;border:6px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 30px;}
+.result-score-ring .big{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--accent);}
+.result-score-ring .small{font-size:0.75rem;color:var(--muted);}
+.results-screen h2{font-family:'Syne',sans-serif;font-size:1.8rem;margin-bottom:10px;}
+.result-breakdown{display:flex;justify-content:center;gap:30px;margin:20px 0 10px;flex-wrap:wrap;}
+.rb-item{text-align:center;}
+.rb-item .val{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;}
+.rb-item .lbl{font-size:0.72rem;color:var(--muted);}
+.grade-msg{color:var(--muted);font-size:0.9rem;margin-bottom:10px;}
+.saved-msg{font-size:0.75rem;color:var(--accent);margin-bottom:16px;min-height:20px;}
+.results-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+.review-section{margin-top:40px;text-align:left;}
+.review-section h3{font-family:'Syne',sans-serif;font-size:1.1rem;margin-bottom:16px;text-align:center;color:var(--muted);letter-spacing:1px;}
+.review-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;font-size:0.82rem;}
+.review-item.r-correct{border-left:3px solid var(--accent);}
+.review-item.r-wrong{border-left:3px solid var(--wrong);}
+.review-item .r-q{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:8px;font-size:0.88rem;}
+.review-item .r-fb{color:var(--muted);font-size:0.78rem;margin-top:6px;line-height:1.5;}
+.review-item .r-your{color:var(--wrong);}
+.review-item .r-ans{color:var(--accent);}
+.review-item .r-skip{color:var(--muted);font-style:italic;}
+</style>
 </head>
 <body>
-<div class="top-bar">
-  <div class="top-bar-inner">
-    <a class="back-btn" href="index.html">← Home</a>
-    <div class="top-title">Microbiological Hazards — Bacteria</div>
-    <div class="top-sub">FS L2 · T02</div>
+<div class="container">
+
+  <div class="name-screen" id="nameScreen">
+    <h2>Microbiological Hazards<br><span>Bacteria</span></h2>
+    <p>Danger zone · Temperatures · Spores · High-risk &amp; low-risk foods<br>Enter your name to start.</p>
+    <div class="name-input-wrap">
+      <input type="text" class="name-input" id="nameInput" placeholder="Your name..." maxlength="30">
+      <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>Start Quiz &#8594;</button>
+      <div class="ghost-notice" id="ghostNotice">&#128123; Ghost Mode &#8212; score won&#39;t be saved</div>
+    </div>
+    <div class="bank-info">&#127922; All <span>20 questions</span> every session &#183; Randomised order</div>
+    <div class="topic-badge">Food Safety L2 &#183; T02</div>
+    <a href="index.html" class="back-link">&#8592; Back to all quizzes</a>
   </div>
-</div>
-<div class="wrap">
-  <div class="hero">
-    <div class="hero-tag">📚 Food Safety Handbook L2 · Topic 02</div>
-    <h1>Microbiological Hazards<br><em>Bacteria</em></h1>
-    <p>Danger zone · Optimum temps · Spores · High-risk & low-risk foods · Multiplication rate</p>
-  </div>
-  <div class="name-box" id="nameBox">
-    <h3>Enter your name to begin</h3>
-    <p>Questions are randomised on every attempt.<br>Your score will be saved to the leaderboard.</p>
-    <input type="text" id="nameInput" placeholder="Your name..." maxlength="30" autocomplete="off">
-    <button class="start-btn" onclick="startQuiz()">Start →</button>
-  </div>
-  <div id="quizArea"></div>
-  <div class="result" id="result">
-    <div class="res-pct" id="resPct">0%</div>
-    <div class="res-detail" id="resDetail"></div>
-    <div class="res-grade" id="resGrade"></div>
-    <div class="res-btns">
-      <button class="btn-retry" onclick="retry()">Try Again</button>
-      <a class="btn-home" href="index.html">← Home</a>
+
+  <div id="quizScreen" style="display:none">
+    <div class="header">
+      <h1>Microbiological Hazards<br><span>Bacteria</span></h1>
+      <p id="playerLabel" style="color:var(--accent);font-size:0.8rem;"></p>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label"><span id="progressText">Question 1 of 20</span><span id="liveScore">Score: 0</span></div>
+    <div class="question-card" id="questionCard">
+      <div class="q-number" id="qNumber">QUESTION 01</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>&#8592; Prev</button>
+      <div class="score-chip">Answered: <span id="answeredCount">0</span>/<span id="totalQLabel">20</span></div>
+      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    <div style="text-align:center;margin-bottom:40px;">
+      <button class="btn btn-submit" onclick="submitQuiz()">Submit &amp; See Results</button>
     </div>
   </div>
-  <div class="footer"><span>May 2026 Exam Practice</span> · KiranMoghul · Open in any browser · No login needed</div>
+
+  <div class="results-screen" id="resultsScreen">
+    <div class="result-score-ring"><div class="big" id="rScore">0</div><div class="small" id="rOutOf">out of 20</div></div>
+    <h2 id="rGrade"></h2>
+    <div class="grade-msg" id="rMsg"></div>
+    <div class="saved-msg" id="savedMsg"></div>
+    <div class="result-breakdown">
+      <div class="rb-item"><div class="val" id="rCorrect" style="color:var(--accent)">0</div><div class="lbl">Correct</div></div>
+      <div class="rb-item"><div class="val" id="rWrong" style="color:var(--wrong)">0</div><div class="lbl">Wrong</div></div>
+      <div class="rb-item"><div class="val" id="rSkipped" style="color:var(--muted)">0</div><div class="lbl">Skipped</div></div>
+      <div class="rb-item"><div class="val" id="rPercent" style="color:var(--accent2)">0%</div><div class="lbl">Percentage</div></div>
+    </div>
+    <div class="results-btns">
+      <button class="btn btn-next" onclick="restartQuiz()">&#8635; Try Again</button>
+      <a href="index.html" class="btn btn-prev" style="text-decoration:none;display:inline-flex;align-items:center;">&#127968; Home</a>
+    </div>
+    <div class="review-section"><h3>&#8212; REVIEW ALL ANSWERS &#8212;</h3><div id="reviewContainer"></div></div>
+  </div>
+
 </div>
 <script>
-const QUIZ_ID='fs-l2-02';
-const ALL_Q=[{"q": "What temperature is the OPTIMUM for multiplication of most food poisoning bacteria?", "opts": ["0°C — at the freezing point where bacterial growth begins to slow", "20°C — the typical room temperature found in most kitchens", "37°C — the same temperature as the human body", "60°C — at the lower boundary of the hot holding temperature range"], "ans": 2, "fb": "The best temperature for most food poisoning bacteria is around 37°C (body temperature), although they can multiply quickly between 20°C and 50°C. Food in the danger zone must never be left for longer than necessary."}, {"q": "What is the temperature range known as the DANGER ZONE?", "opts": ["0°C to 37°C — from the freezing point up to body temperature", "5°C to 60°C — the range in which bacteria multiply rapidly in food", "10°C to 50°C — from moderate warmth to the temperature of hot drinks", "20°C to 70°C — from room temperature to well above hot holding temperature"], "ans": 1, "fb": "The danger zone is 5°C to 60°C. Food poisoning bacteria multiply rapidly in warm food rooms but most will not grow in a refrigerator, and none in frozen food, although many will survive and start multiplying when food thaws."}, {"q": "Between which temperatures do bacteria multiply QUICKLY (though not at the optimum rate)?", "opts": ["0°C to 5°C — just above the standard refrigerator temperature range", "20°C to 50°C — from room temperature to warm kitchen conditions", "60°C to 75°C — within the standard cooking temperature range for food", "75°C to 100°C — from the cooking minimum to the boiling point of water"], "ans": 1, "fb": "Bacteria multiply quickly between 20°C and 50°C — though the optimum is around 37°C. Food left at room temperature, especially during preparation, is at significant risk if left in this range for too long."}, {"q": "At what temperature should a refrigerator operate to keep food safe?", "opts": ["Below 10°C — a common setting used for large commercial walk-in refrigerators", "Between 1°C and 4°C — keeping food consistently below 5°C at all times", "Between 5°C and 8°C — a moderate cool temperature for general food storage", "Below 0°C — just at or slightly below the freezing point of most foods"], "ans": 1, "fb": "Refrigerators should operate between 1°C and 4°C. The temperature should be checked and recorded at least weekly and whenever the fridge is used. Temporary rises may occur when doors are left open or large amounts are loaded."}, {"q": "At what minimum temperature should hot food be HELD to prevent bacterial multiplication?", "opts": ["Above 37°C — above the human body temperature to prevent fast growth", "Above 50°C — above the midpoint of the bacterial danger zone range", "Above 60°C — at the upper boundary of the bacterial danger zone", "Above 75°C — above the minimum safe core cooking temperature"], "ans": 2, "fb": "Hot food must be kept above 60°C — the upper boundary of the danger zone. Food kept hot prior to serving should always be maintained above this temperature. Stews and sauces should be stirred frequently to avoid cold spots."}, {"q": "Under ideal conditions of food, warmth, and moisture, how often can bacteria DIVIDE into two?", "opts": ["Every 5 minutes — an extremely rapid rate in ideal laboratory conditions", "Every 10 minutes — doubling the number every ten minutes in warm conditions", "Every 30 minutes — dividing once every half hour in standard kitchen conditions", "Every 60 minutes — once per hour in a typical food preparation environment"], "ans": 1, "fb": "Given the right conditions of food, moisture, and warmth, some bacteria can divide into two every ten minutes. This is why it is essential that high-risk foods are not left in the danger zone for longer than absolutely necessary."}, {"q": "In 1 hour 40 minutes, 1,000 bacteria can multiply to become approximately how many?", "opts": ["Around 10,000 — a tenfold increase from the original starting count", "Around 100,000 — a hundredfold increase in that period of time", "Around 500,000 — half a million from the original thousand bacteria", "Over 1,000,000 — more than one million bacteria from the original thousand"], "ans": 3, "fb": "In 1 hour 40 minutes, 1,000 bacteria can become 1,000,000+. This illustrates why high-risk foods must not be left in the danger zone for longer than necessary and why rapid cooling after cooking is so critical."}, {"q": "Which of the following are classified as HIGH-RISK foods?", "opts": ["Dried pasta, cereals, bread, and canned goods in hermetically sealed tins", "Cooked meat, cooked poultry, dairy produce, shellfish, cooked rice, and egg products", "Vinegar-pickled vegetables, jam, dried fruit, and hard mature cheese", "Flour, sugar, dried herbs, salt, and commercially bottled cooking sauces"], "ans": 1, "fb": "High-risk foods are ready-to-eat foods which support the multiplication of harmful bacteria and are cooked or intended for eating without cooking. They must be protected from contamination and kept refrigerated or hot."}, {"q": "Which of the following are classified as LOW-RISK foods?", "opts": ["Cooked chicken breast, prawn cocktail, and cream-based seafood soup", "Raw eggs, homemade mayonnaise, and freshly made hollandaise sauce", "Dried pasta, bread, cereals, jam, canned food, dried biscuits, and hard-boiled sweets", "Cooked rice dishes, egg custard tart, and soft cream cheese products"], "ans": 2, "fb": "Low-risk foods are those that bacteria are not able to multiply in — dry foods or those with high concentrations of sugar, salt, acid, or other preservatives. They are stored in cool dry places and include cereals, dried pasta, bread, jam, and canned food."}, {"q": "What are bacterial SPORES and why are they a food safety challenge?", "opts": ["Visible mould growths appearing on food left in warm and humid conditions", "Bacteria that grow and multiply fastest at low refrigerator temperatures", "A resting phase that survives boiling for up to 5 hours and resumes multiplying when favourable conditions return", "A type of toxin released directly into food during high-temperature cooking processes"], "ans": 2, "fb": "Some bacteria produce spores which protect them against harmful conditions such as high temperatures, drying, and disinfection. Some spores can survive boiling for up to 5 hours. When suitable conditions return the spore releases the bacterium."}, {"q": "What are PATHOGENS and how do they differ from spoilage bacteria?", "opts": ["Bacteria that cause food to spoil with visible signs such as slime and off odours", "Food poisoning bacteria that make people ill but have no visible effect on food whatsoever", "Moulds and yeasts that grow visibly on bread, fruit, and dairy products", "Viruses that multiply rapidly in food held within the danger zone temperature range"], "ans": 1, "fb": "Pathogens are food poisoning bacteria. If pathogens get into food they make people ill. Pathogens have no effect on food and can only be detected by laboratory testing — contaminated food looks, smells, and tastes normal."}, {"q": "What are bacterial TOXINS and what makes them particularly dangerous?", "opts": ["Natural nutrients that bacteria release which actually improve the flavour of food", "Poisons produced by bacteria — some of which cannot be destroyed by normal cooking temperatures", "Visible signs of food spoilage produced when bacteria break down protein in food", "Cleaning chemical residues that bacteria absorb when living on food preparation surfaces"], "ans": 1, "fb": "Bacteria responsible for causing food poisoning need the following conditions to multiply and produce toxins (poisons). Toxins may be released in the body or in food. Some toxins cannot be destroyed by normal cooking and are very dangerous."}, {"q": "Which food environment do bacteria PREFER most for multiplication?", "opts": ["High-salt environments found in processed and commercially preserved food products", "Highly acidic conditions created by vinegar, citrus juice, or fermentation processes", "Foods containing nutrients and moisture — especially raw or cooked meat, poultry, and dairy produce", "Very dry food environments such as flour, cereals, and commercially dried powdered ingredients"], "ans": 2, "fb": "Bacteria prefer foods which contain nutrients and moisture, especially raw or cooked meat, poultry, and dairy produce. Foods such as dried egg or milk powder do not provide the moisture necessary for the growth of bacteria."}, {"q": "What is PASTEURISATION as a bacterial control method?", "opts": ["Freezing food to -18°C to permanently stop all bacterial activity within it", "Adding chemical preservatives such as salt or vinegar to extend the product shelf life", "A heat process that reduces micro-organisms to a safe level — used commonly for milk and juice", "Completely drying food to remove the moisture that bacteria need to survive and grow"], "ans": 2, "fb": "Pasteurisation is a heat process used to reduce micro-organisms to a safe level. It does not sterilise the food — it reduces the number of bacteria to a safe level. It is used for milk, some juices, and other products."}, {"q": "At what temperature should a FREEZER operate to stop bacterial growth?", "opts": ["At 0°C — at the standard freezing point of water and ice", "At −5°C — just slightly below the freezing point of most food products", "At −10°C — the temperature at which most bacterial activity effectively ceases", "At −18°C — the standard recommended freezer operating temperature"], "ans": 3, "fb": "Freezers should operate at −18°C. At temperatures above −10°C, spoilage organisms especially moulds and yeasts begin to cause problems. Other hazards include contamination, oxidation, and freezer burn (dehydration)."}, {"q": "Which of the following does NOT provide the moisture bacteria need to multiply?", "opts": ["Raw chicken breast stored on a tray inside the refrigerator", "Cooked rice left at room temperature after serving at a buffet", "Dried egg powder or dried milk powder in its original sealed packaging", "Soft ripened cheese stored in a sealed container in the refrigerator"], "ans": 2, "fb": "Dried foods like dried egg or milk powder do not provide the moisture necessary for the growth of bacteria. However, when water is added to dried food such as milk powder it becomes high-risk and must be stored under refrigeration or used immediately."}, {"q": "Which THREE things together make up the MICROBIOLOGICAL HAZARDS a food handler must control?", "opts": ["Contamination by glass and metal objects, multiplication in stored goods, and survival in frozen food", "Contamination of food by bacteria/viruses/moulds/parasites, multiplication of bacteria within food, and survival of pathogens due to inadequate cooking", "Temperature abuse during service, chemical contamination during cleaning operations, and pest access to stored products", "Allergen cross-contact during preparation, food spoilage by moulds, and bacterial growth in hot holding units"], "ans": 1, "fb": "Microbiological hazards include: (1) the contamination of food by bacteria, viruses, moulds, and parasites, (2) the multiplication of bacteria within the food, and (3) the survival of bacteria or other pathogens because of inadequate cooking or processing."}, {"q": "Which statement about bacteria is TRUE?", "opts": ["All bacteria found in and on food are harmful and cause food poisoning illness", "Most bacteria are harmless or even useful — only a small number are food poisoning pathogens", "Bacteria are clearly visible to the naked eye under normal kitchen lighting conditions", "Bacteria only survive in moist conditions and die immediately when food is thoroughly dried"], "ans": 1, "fb": "Bacteria are microscopic organisms found everywhere — on people, on food, in water, soil, and air. Most bacteria are harmless and some are essential for making cheese and yogurt. However, a small number known as pathogens cause food poisoning."}, {"q": "Which method uses chlorine in water to DESTROY bacteria in food environments?", "opts": ["Refrigeration at 1°C to 4°C which slows all bacterial activity significantly", "Freezing at -18°C which stops all bacterial multiplication within the food", "Using chemicals such as chlorine in water — an effective method of killing micro-organisms", "Salting food to draw out moisture and inhibit bacterial growth as a primary method"], "ans": 2, "fb": "Bacteria can be destroyed by thorough cooking, heat processing such as pasteurisation, sterilisation or canning, irradiation, and using chemicals such as chlorine in water. A combination of suitable temperature and sufficient time is always required."}, {"q": "Which food becomes HIGH-RISK when water is added to it?", "opts": ["Canned baked beans opened and stored in a sealed container in the fridge", "Cooked chicken stored uncovered on a shelf in the refrigerator", "Dried milk powder — once water is added it becomes high-risk and needs refrigeration", "A freshly baked loaf of bread stored at room temperature in a bread bin"], "ans": 2, "fb": "Bacteria are not able to multiply in dry food. However, when water is added to dried food such as milk powder it becomes high-risk and must be stored under refrigeration or used immediately — like all high-risk foods."}];
-let active=[],playerName='',answered=0,correct=0;
-function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
-document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')startQuiz();});
+const QUIZ_ID='fs-l2-02', STORAGE_KEY='leaderboard-scores';
+
+const BANK=[{"q": "What is the BEST temperature for multiplication of most food poisoning bacteria?", "opts": ["0°C (freezing point)", "20°C (room temperature)", "37°C (body temperature)", "60°C (hot holding)"], "ans": 2, "fb": "37°C is the optimum temperature for most food poisoning bacteria — the same as human body temperature."}, {"q": "What is the DANGER ZONE temperature range?", "opts": ["0°C to 37°C", "5°C to 60°C", "10°C to 50°C", "20°C to 70°C"], "ans": 1, "fb": "The danger zone is 5°C to 60°C — bacteria multiply rapidly within this range."}, {"q": "At what temperature should a refrigerator operate?", "opts": ["Below 10°C", "Below 5°C (1°C to 4°C)", "Below 15°C", "Below 0°C"], "ans": 1, "fb": "Refrigerators should operate between 1°C and 4°C — keeping food below 5°C and out of the danger zone."}, {"q": "At what temperature should hot food be kept to prevent bacterial growth?", "opts": ["Above 37°C", "Above 50°C", "Above 60°C", "Above 75°C"], "ans": 2, "fb": "Hot food must be kept above 60°C — this keeps it out of the danger zone."}, {"q": "Under ideal conditions, bacteria can divide into two every how many minutes?", "opts": ["5 minutes", "10 minutes", "30 minutes", "60 minutes"], "ans": 1, "fb": "Under the right conditions of food, moisture, and warmth, some bacteria can divide into two every ten minutes."}, {"q": "In 1 hour 40 minutes, 1,000 bacteria can become how many?", "opts": ["10,000", "100,000", "500,000", "1,000,000+"], "ans": 3, "fb": "In 1 hour 40 minutes, 1,000 bacteria can become 1,000,000+ — which is why minimising time in the danger zone is critical."}, {"q": "Which of the following are HIGH-RISK foods?", "opts": ["Dried pasta, bread, and canned food", "Cooked meat, poultry, dairy produce, shellfish, and eggs", "Cereals, crackers, and jam", "Vinegar-pickled vegetables"], "ans": 1, "fb": "High-risk foods include cooked meat, poultry, dairy, shellfish, and ready-to-eat foods that support bacterial multiplication."}, {"q": "Which of the following are LOW-RISK foods?", "opts": ["Cooked chicken and prawns", "Raw eggs and mayonnaise", "Dried pasta, bread, cereals, canned food, and jam", "Cooked rice and custards"], "ans": 2, "fb": "Low-risk foods are dry or high sugar/salt/acid foods — bacteria cannot multiply without added moisture."}, {"q": "What are bacterial SPORES and why are they dangerous?", "opts": ["They are a type of mould visible to the naked eye", "They are a resting phase that survives boiling for up to 5 hours and germinate when conditions improve", "They only grow in freezers", "They produce visible odours and colours in food"], "ans": 1, "fb": "Spores protect bacteria against high temperatures, drying, and disinfection. Some survive boiling for up to 5 hours. When favourable conditions return, they germinate and multiply."}, {"q": "What are PATHOGENS?", "opts": ["Bacteria that cause visible food spoilage", "Food poisoning bacteria that make people ill — they have no visible effect on food and can only be detected by laboratory testing", "Moulds that grow on bread", "Viruses that only affect animals"], "ans": 1, "fb": "Pathogens are food poisoning bacteria. They make people ill but have no visible effect on food — undetectable without laboratory testing."}, {"q": "Which foods do bacteria prefer for multiplication?", "opts": ["Dry foods like flour and dried pasta", "Foods containing nutrients and moisture, especially raw or cooked meat and dairy", "Acidic foods like vinegar pickles", "Frozen foods at -18°C"], "ans": 1, "fb": "Bacteria prefer foods containing nutrients and moisture — especially raw or cooked meat, poultry, and dairy produce."}, {"q": "What are TOXINS in the context of food safety?", "opts": ["Nutrients released during cooking", "Poisons produced by bacteria — some of which cannot be destroyed by normal cooking", "Natural colours in vegetables", "Cleaning chemicals"], "ans": 1, "fb": "Toxins are poisons produced by bacteria. Some toxins cannot be destroyed by normal cooking and are very dangerous."}, {"q": "What prevents bacteria from multiplying?", "opts": ["Leaving food at room temperature", "Storing food below 5°C or above 60°C — outside the danger zone", "Keeping food in a warm kitchen all day", "Preparing food hours in advance at room temperature"], "ans": 1, "fb": "Keeping food below 5°C or above 60°C keeps it outside the danger zone and prevents rapid bacterial multiplication."}, {"q": "What is PASTEURISATION?", "opts": ["Freezing food to -18°C", "A heat process used to reduce micro-organisms to a safe level", "Adding preservatives to extend shelf life", "Drying food to remove moisture"], "ans": 1, "fb": "Pasteurisation is a heat process used to reduce micro-organisms to a safe level — commonly used for milk."}, {"q": "What is the correct freezer operating temperature?", "opts": ["0°C", "−5°C", "−10°C", "−18°C"], "ans": 3, "fb": "Freezers should operate at −18°C. At this temperature, bacterial growth stops — though spores and some organisms survive."}, {"q": "Which of the following does NOT provide moisture needed for bacterial growth?", "opts": ["Raw chicken breast", "Cooked rice", "Dried egg or milk powder", "Soft cheese"], "ans": 2, "fb": "Dried foods like dried egg or milk powder do not provide the moisture necessary for bacterial growth."}, {"q": "Microbiological hazards include which THREE things?", "opts": ["Contamination by bacteria/viruses/moulds, multiplication of bacteria, and survival due to inadequate cooking", "Contamination by glass, chemicals, and mould only", "Temperature abuse, poor storage, and wrong suppliers", "Allergens, toxins, and physical objects"], "ans": 0, "fb": "Microbiological hazards include: contamination of food by bacteria/viruses/moulds/parasites, multiplication of bacteria within food, and survival of pathogens due to inadequate cooking."}, {"q": "Which statement about bacteria is TRUE?", "opts": ["All bacteria cause food poisoning", "Most bacteria are harmless — only a small number cause illness", "Bacteria can always be seen with the naked eye", "Bacteria do not survive in water or soil"], "ans": 1, "fb": "Most bacteria are harmless or useful (e.g. for cheese/yogurt). Only a small number are food poisoning bacteria known as pathogens."}, {"q": "Which temperature range allows bacteria to multiply quickly?", "opts": ["0°C to 5°C", "20°C to 50°C", "60°C to 75°C", "75°C to 100°C"], "ans": 1, "fb": "Bacteria multiply quickly between 20°C and 50°C — though the optimum is around 37°C (body temperature)."}, {"q": "Which preservation method uses chemicals like chlorine to destroy bacteria?", "opts": ["Refrigeration", "Freezing", "Using chemicals e.g. chlorine in water", "Salting only"], "ans": 2, "fb": "Bacteria can be destroyed by thorough cooking, pasteurisation, sterilisation, canning, irradiation, and chemicals such as chlorine in water."}];
+
+let isGhost=sessionStorage.getItem('ghostMode')==='1';
+if(isGhost)document.getElementById('ghostNotice').classList.add('show');
+const nameInput=document.getElementById('nameInput'),startBtn=document.getElementById('startBtn');
+nameInput.addEventListener('input',()=>{startBtn.disabled=nameInput.value.trim().length<2;});
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&nameInput.value.trim().length>=2)startQuiz();});
+
+let playerName='',current=0,sessionQ=[],userAnswers=[];
+
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function buildSession(){
+  return shuffle(BANK.slice()).map(q=>{
+    const ct=q.opts[q.ans];
+    const so=shuffle(q.opts.slice());
+    return{q:q.q,opts:so,ans:so.indexOf(ct),fb:q.fb};
+  });
+}
+
 function startQuiz(){
-  const n=document.getElementById('nameInput').value.trim();
-  if(!n)return;
-  playerName=n;
-  document.getElementById('nameBox').style.display='none';
-  document.getElementById('quizArea').style.display='block';
-  active=shuffle(ALL_Q);
-  answered=0;correct=0;
-  buildQuiz();
+  playerName=nameInput.value.trim();
+  if(playerName.length<2)return;
+  if(playerName==='1994'){isGhost=true;playerName='Ghost';}
+  sessionQ=buildSession();userAnswers=new Array(sessionQ.length).fill(null);current=0;
+  document.getElementById('nameScreen').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  document.getElementById('playerLabel').textContent=isGhost?'&#128123; Playing anonymously':'Playing as '+playerName;
+  document.getElementById('totalQLabel').textContent=sessionQ.length;
+  document.getElementById('rOutOf').textContent='out of '+sessionQ.length;
+  render();
 }
-function buildQuiz(){
-  const area=document.getElementById('quizArea');
-  const L=['A','B','C','D'];
-  area.innerHTML=active.map((q,i)=>{
-    const idx=shuffle([0,1,2,3]);
-    const newAns=idx.indexOf(q.ans);
-    const optsHtml=idx.map((oi,li)=>
-      `<button class="opt" id="o${i}_${li}" onclick="pick(${i},${li},${newAns})"><span class="opt-l">${L[li]}</span><span>${q.opts[oi]}</span></button>`
-    ).join('');
-    return `<div class="q-card" id="card${i}"><div class="q-num">Q${i+1} / ${active.length}</div><div class="q-text">${q.q}</div><div class="opts">${optsHtml}</div><div class="fb" id="fb${i}"></div></div>`;
-  }).join('');
-}
-function pick(qi,chosen,correctIdx){
-  if(document.getElementById(`o${qi}_0`).hasAttribute('disabled'))return;
-  answered++;
-  const isOk=chosen===correctIdx;
-  if(isOk)correct++;
-  for(let i=0;i<4;i++){
-    const el=document.getElementById(`o${qi}_${i}`);
-    el.setAttribute('disabled','');
-    if(i===correctIdx)el.classList.add(isOk&&i===chosen?'ok':'reveal');
-    else if(i===chosen&&!isOk)el.classList.add('no');
+
+function render(){
+  const q=sessionQ[current],tot=sessionQ.length;
+  document.getElementById('qNumber').textContent='QUESTION '+(current<9?'0':'')+(current+1);
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('progressText').textContent='Question '+(current+1)+' of '+tot;
+  document.getElementById('progressFill').style.width=((current+1)/tot*100)+'%';
+  document.getElementById('answeredCount').textContent=userAnswers.filter(a=>a!==null).length;
+  document.getElementById('liveScore').textContent='Score: '+userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').textContent=current===tot-1?'Last &#8594;':'Next &#8594;';
+  const container=document.getElementById('optionsContainer');
+  container.innerHTML='';
+  const letters=['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option';
+    btn.innerHTML='<span class="opt-letter">'+letters[i]+'</span><span>'+opt+'</span>';
+    btn.onclick=()=>selectAnswer(i);
+    if(userAnswers[current]!==null){
+      btn.disabled=true;
+      if(i===q.ans)btn.classList.add('correct');
+      else if(i===userAnswers[current])btn.classList.add('wrong');
+    }
+    container.appendChild(btn);
+  });
+  const fb=document.getElementById('feedback');
+  fb.className='feedback';
+  if(userAnswers[current]!==null){
+    const correct=userAnswers[current]===q.ans;
+    fb.textContent=(correct?'Correct! ':'Wrong. ')+q.fb;
+    fb.className='feedback show '+(correct?'correct-fb':'wrong-fb');
   }
-  document.getElementById(`card${qi}`).classList.add(isOk?'correct':'wrong');
-  const fb=document.getElementById(`fb${qi}`);
-  fb.textContent=(isOk?'✓ Correct. ':'✗ Incorrect. ')+active[qi].fb;
-  fb.className=`fb show ${isOk?'fb-ok':'fb-no'}`;
-  if(answered===active.length)setTimeout(showResult,700);
+  const card=document.getElementById('questionCard');
+  card.style.animation='none';card.offsetHeight;card.style.animation='fadeSlide 0.3s ease';
 }
-async function showResult(){
-  const pct=Math.round((correct/active.length)*100);
-  const grade=pct>=90?'Excellent 🏆':pct>=75?'Good Pass ✓':pct>=60?'Borderline — keep going ⚠️':'Needs more revision ✗';
-  document.getElementById('resPct').textContent=pct+'%';
-  document.getElementById('resDetail').textContent=correct+' correct out of '+active.length;
-  document.getElementById('resGrade').textContent=grade;
-  const r=document.getElementById('result');
-  r.classList.add('show');
-  r.scrollIntoView({behavior:'smooth',block:'center'});
-  const ghost=sessionStorage.getItem('ghostMode')==='1';
-  if(playerName&&!ghost){
+
+function selectAnswer(i){if(userAnswers[current]!==null)return;userAnswers[current]=i;render();}
+function navigate(dir){current=Math.max(0,Math.min(sessionQ.length-1,current+dir));render();}
+
+async function submitQuiz(){
+  const tot=sessionQ.length;
+  const score=userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  const wrong=userAnswers.filter((a,i)=>a!==null&&a!==sessionQ[i].ans).length;
+  const skipped=userAnswers.filter(a=>a===null).length;
+  const pct=Math.round(score/tot*100);
+  document.getElementById('rScore').textContent=score;
+  document.getElementById('rOutOf').textContent='out of '+tot;
+  document.getElementById('rCorrect').textContent=score;
+  document.getElementById('rWrong').textContent=wrong;
+  document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('rPercent').textContent=pct+'%';
+  let grade,msg;
+  if(pct>=90){grade='Outstanding! &#127942;';msg='Excellent grasp of Food Safety L2!';}
+  else if(pct>=75){grade='Great Work! &#10024;';msg='Strong performance &#8212; review a few weak spots.';}
+  else if(pct>=60){grade='Good Effort! &#128077;';msg='Keep practising.';}
+  else if(pct>=40){grade='Keep Going! &#128170;';msg='Review your notes and try again.';}
+  else{grade='More Practice Needed';msg='Go over the study content carefully.';}
+  document.getElementById('rGrade').textContent=grade;
+  document.getElementById('rMsg').textContent=msg;
+  const savedMsg=document.getElementById('savedMsg');
+  if(isGhost){savedMsg.textContent='&#128123; Ghost Mode &#8212; score not saved';savedMsg.style.color='#f5c542';}
+  else{
     try{
-      const key='leaderboard-scores';
-      const ex=await window.storage.get(key,true);
-      const scores=ex?JSON.parse(ex.value):[];
-      scores.push({name:playerName,score:correct,total:active.length,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
-      await window.storage.set(key,JSON.stringify(scores),true);
-    }catch(e){}
+      const existing=await window.storage.get(STORAGE_KEY,true).catch(()=>null);
+      const scores=existing?JSON.parse(existing.value):[];
+      scores.push({name:playerName,score,total:tot,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(STORAGE_KEY,JSON.stringify(scores),true);
+      savedMsg.textContent='Score saved as "'+playerName+'"';
+    }catch(e){savedMsg.textContent='Score could not be saved.';savedMsg.style.color='#888';}
   }
+  const rc=document.getElementById('reviewContainer');
+  rc.innerHTML='';
+  sessionQ.forEach((q,i)=>{
+    const ua=userAnswers[i],correct=ua===q.ans;
+    const div=document.createElement('div');
+    div.className='review-item '+(ua===null?'':correct?'r-correct':'r-wrong');
+    let detail='';
+    if(ua===null)detail='<div class="r-skip">Skipped &#8212; Answer: <b>'+q.opts[q.ans]+'</b></div>';
+    else if(correct)detail='<div class="r-ans">&#10003; '+q.opts[q.ans]+'</div>';
+    else detail='<div class="r-your">&#10007; Your answer: '+q.opts[ua]+'</div><div class="r-ans">&#10003; Correct: '+q.opts[q.ans]+'</div>';
+    if(q.fb)detail+='<div class="r-fb">'+q.fb+'</div>';
+    div.innerHTML='<div class="r-q">Q'+(i+1)+'. '+q.q+'</div>'+detail;
+    rc.appendChild(div);
+  });
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('resultsScreen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-function retry(){location.reload();}
+
+function restartQuiz(){
+  sessionQ=buildSession();userAnswers=new Array(sessionQ.length).fill(null);current=0;
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizScreen').style.display='block';
+  render();window.scrollTo({top:0,behavior:'smooth'});
+}
 </script>
 </body>
 </html>

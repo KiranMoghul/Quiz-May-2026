@@ -3,162 +3,280 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Food Safety L2 — 04. Contamination Hazards — & Controls</title>
-<style>:root{--c:var(--purple);}@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@300;400;500&display=swap');
-:root{--bg:#0d0d0d;--surface:#161616;--card:#1a1a1a;--border:#272727;--text:#f0f0f0;--muted:#666;--muted2:#333;--green:#00e5a0;--orange:#ff6b35;--gold:#f5c542;--purple:#a78bfa;--wrong:#ff4444;}
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚠️</text></svg>">
+<title>FS L2 T04 — Contamination Hazards — Quiz Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0d;--surface:#1a1a1a;--card:#222;--border:#333;--accent:#38bdf8;--accent2:#ff6b35;--wrong:#ff4444;--text:#f0f0f0;--muted:#888;--correct-bg:rgba(56,189,248,0.12);--wrong-bg:rgba(255,68,68,0.1);}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;pointer-events:none;z-index:0;}
-.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:0 20px 60px;}
-.top-bar{position:sticky;top:0;z-index:100;background:rgba(13,13,13,0.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:14px 20px;}
-.top-bar-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:14px;}
-.back-btn{color:var(--c);text-decoration:none;font-size:0.72rem;letter-spacing:1px;border:1px solid var(--border);padding:5px 14px;border-radius:999px;transition:border-color 0.2s;white-space:nowrap;flex-shrink:0;}
-.back-btn:hover{border-color:var(--c);}
-.top-title{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
-.top-sub{font-size:0.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
-.hero{padding:40px 0 28px;animation:fadeUp 0.4s ease both;}
-.hero-tag{display:inline-flex;align-items:center;gap:6px;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--c);border:1px solid var(--c);padding:5px 13px;border-radius:999px;margin-bottom:16px;opacity:0.8;}
-.hero h1{font-family:'Syne',sans-serif;font-size:clamp(1.5rem,5vw,2.4rem);font-weight:800;line-height:1.1;letter-spacing:-1px;}
-.hero h1 em{color:var(--c);font-style:normal;}
-.hero p{margin-top:10px;color:var(--muted);font-size:0.78rem;line-height:1.8;max-width:500px;}
-.name-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;margin:8px 0 0;}
-.name-box h3{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;margin-bottom:8px;color:var(--gold);}
-.name-box p{font-size:0.75rem;color:var(--muted);margin-bottom:20px;line-height:1.7;}
-.name-box input{width:100%;max-width:280px;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:11px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:0.82rem;outline:none;text-align:center;transition:border-color 0.2s;display:block;margin:0 auto;}
-.name-box input:focus{border-color:var(--c);}
-.start-btn{display:inline-block;margin:14px auto 0;background:var(--c);color:#000;font-family:'DM Mono',monospace;font-size:0.8rem;font-weight:600;border:none;border-radius:9px;padding:11px 30px;cursor:pointer;letter-spacing:0.5px;transition:opacity 0.2s;}
-.start-btn:hover{opacity:0.85;}
-#quizArea{display:none;}
-.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 18px 16px;margin-bottom:14px;transition:border-color 0.2s;}
-.q-card.correct{border-color:var(--green);}.q-card.wrong{border-color:var(--wrong);}
-.q-num{font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--c);margin-bottom:9px;}
-.q-text{font-size:0.86rem;line-height:1.65;font-weight:500;margin-bottom:13px;}
-.opts{display:flex;flex-direction:column;gap:8px;}
-.opt{display:flex;align-items:flex-start;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 13px;cursor:pointer;font-size:0.8rem;line-height:1.5;text-align:left;color:var(--text);font-family:'DM Mono',monospace;width:100%;transition:border-color 0.15s,background 0.15s;}
-.opt:hover:not([disabled]){border-color:var(--c);background:#1e2530;}
-.opt-l{font-weight:700;color:var(--c);min-width:15px;font-size:0.75rem;margin-top:1px;flex-shrink:0;}
-.opt.ok{background:rgba(0,229,160,0.1);border-color:var(--green);color:var(--green);}
-.opt.ok .opt-l{color:var(--green);}
-.opt.no{background:rgba(255,68,68,0.1);border-color:var(--wrong);color:var(--wrong);}
-.opt.no .opt-l{color:var(--wrong);}
-.opt.reveal{background:rgba(0,229,160,0.06);border-color:var(--green);color:var(--green);}
-.opt[disabled]{cursor:default;pointer-events:none;}
-.fb{display:none;margin-top:10px;padding:9px 12px;border-radius:8px;font-size:0.73rem;line-height:1.5;}
-.fb.show{display:block;}
-.fb.fb-ok{background:rgba(0,229,160,0.08);color:var(--green);}
-.fb.fb-no{background:rgba(255,68,68,0.08);color:#ff8a8a;}
-.result{display:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:36px 24px;text-align:center;margin:24px 0;}
-.result.show{display:block;}
-.res-pct{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;color:var(--c);}
-.res-detail{font-size:0.78rem;color:var(--muted);margin-top:6px;}
-.res-grade{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;margin:18px 0 10px;}
-.res-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
-.btn-retry{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;cursor:pointer;transition:all 0.2s;}
-.btn-retry:hover{border-color:var(--c);color:var(--c);}
-.btn-home{text-decoration:none;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'DM Mono',monospace;font-size:0.75rem;border-radius:9px;padding:9px 22px;display:inline-block;transition:all 0.2s;}
-.btn-home:hover{border-color:var(--gold);color:var(--gold);}
-.footer{border-top:1px solid var(--border);padding:24px 0 0;text-align:center;font-size:0.7rem;color:var(--muted2);line-height:2;margin-top:20px;}
-.footer span{color:var(--muted);}
-@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}</style>
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;padding:20px;}
+.container{max-width:780px;margin:0 auto;}
+.name-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;animation:fadeSlide 0.4s ease;}
+.name-screen h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;letter-spacing:-1px;margin-bottom:10px;}
+.name-screen h2 span{color:var(--accent);}
+.name-screen p{color:var(--muted);font-size:0.82rem;margin-bottom:28px;line-height:1.8;}
+.name-input-wrap{width:100%;max-width:380px;}
+.name-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:16px 20px;font-family:'DM Mono',monospace;font-size:1rem;color:var(--text);outline:none;transition:border-color 0.2s;text-align:center;margin-bottom:14px;}
+.name-input:focus{border-color:var(--accent);}
+.name-input::placeholder{color:var(--muted);}
+.btn-start{width:100%;padding:15px;background:var(--accent);color:#000;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:transform 0.15s,opacity 0.2s;letter-spacing:0.5px;}
+.btn-start:hover{transform:translateY(-2px);}
+.btn-start:disabled{opacity:0.4;cursor:default;transform:none;}
+.ghost-notice{margin-top:14px;font-size:0.72rem;color:#f5c542;display:none;}
+.ghost-notice.show{display:block;}
+.bank-info{margin-top:14px;font-size:0.7rem;color:var(--muted);line-height:1.9;}
+.bank-info span{color:var(--accent);}
+.topic-badge{margin-top:10px;font-size:0.72rem;padding:5px 14px;border-radius:999px;border:1px solid var(--accent);color:var(--accent);display:inline-block;}
+.back-link{margin-top:30px;font-size:0.75rem;color:var(--muted);text-decoration:none;}
+.back-link:hover{color:var(--text);}
+.header{text-align:center;padding:40px 0 30px;}
+.header h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;letter-spacing:-1px;line-height:1.1;}
+.header h1 span{color:var(--accent);}
+.progress-bar-wrap{background:var(--border);border-radius:999px;height:6px;margin:20px 0 10px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:var(--accent);border-radius:999px;transition:width 0.4s ease;}
+.progress-label{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--muted);margin-bottom:24px;}
+.question-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px;animation:fadeSlide 0.3s ease;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.q-number{font-size:0.7rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.q-text{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;line-height:1.5;margin-bottom:20px;}
+.options{display:flex;flex-direction:column;gap:10px;}
+.option{background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;cursor:pointer;font-family:'DM Mono',monospace;font-size:0.88rem;color:var(--text);text-align:left;transition:border-color 0.2s,background 0.2s,transform 0.1s;display:flex;align-items:flex-start;gap:12px;}
+.option:hover:not(:disabled){border-color:var(--accent);transform:translateX(4px);}
+.option .opt-letter{font-weight:500;color:var(--muted);min-width:18px;flex-shrink:0;}
+.option.correct{background:var(--correct-bg);border-color:var(--accent);color:var(--accent);}
+.option.correct .opt-letter{color:var(--accent);}
+.option.wrong{background:var(--wrong-bg);border-color:var(--wrong);color:var(--wrong);}
+.option.wrong .opt-letter{color:var(--wrong);}
+.option.show-correct{background:var(--correct-bg);border-color:var(--accent);color:var(--accent);}
+.option.show-correct .opt-letter{color:var(--accent);}
+.option:disabled{cursor:default;}
+.feedback{margin-top:14px;padding:12px 16px;border-radius:10px;font-size:0.82rem;line-height:1.5;display:none;}
+.feedback.show{display:block;}
+.feedback.correct-fb{background:var(--correct-bg);border:1px solid var(--accent);color:var(--accent);}
+.feedback.wrong-fb{background:var(--wrong-bg);border:1px solid var(--wrong);color:#ff8888;}
+.nav{display:flex;justify-content:space-between;align-items:center;margin:20px 0 40px;gap:12px;}
+.btn{font-family:'Syne',sans-serif;font-weight:700;font-size:0.9rem;padding:12px 28px;border-radius:10px;border:none;cursor:pointer;transition:transform 0.15s,opacity 0.15s;letter-spacing:0.5px;}
+.btn:hover{transform:translateY(-2px);}
+.btn:disabled{opacity:0.3;cursor:default;transform:none;}
+.btn-prev{background:var(--surface);color:var(--text);border:1.5px solid var(--border);}
+.btn-next{background:var(--accent);color:#000;}
+.btn-submit{background:var(--accent2);color:#fff;}
+.score-chip{font-size:0.78rem;color:var(--muted);text-align:center;}
+.score-chip span{color:var(--accent);font-weight:bold;}
+.results-screen{display:none;text-align:center;padding:60px 20px;animation:fadeSlide 0.4s ease;}
+.results-screen.show{display:block;}
+.result-score-ring{width:160px;height:160px;border-radius:50%;border:6px solid var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 30px;}
+.result-score-ring .big{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--accent);}
+.result-score-ring .small{font-size:0.75rem;color:var(--muted);}
+.results-screen h2{font-family:'Syne',sans-serif;font-size:1.8rem;margin-bottom:10px;}
+.result-breakdown{display:flex;justify-content:center;gap:30px;margin:20px 0 10px;flex-wrap:wrap;}
+.rb-item{text-align:center;}
+.rb-item .val{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:700;}
+.rb-item .lbl{font-size:0.72rem;color:var(--muted);}
+.grade-msg{color:var(--muted);font-size:0.9rem;margin-bottom:10px;}
+.saved-msg{font-size:0.75rem;color:var(--accent);margin-bottom:16px;min-height:20px;}
+.results-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+.review-section{margin-top:40px;text-align:left;}
+.review-section h3{font-family:'Syne',sans-serif;font-size:1.1rem;margin-bottom:16px;text-align:center;color:var(--muted);letter-spacing:1px;}
+.review-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;font-size:0.82rem;}
+.review-item.r-correct{border-left:3px solid var(--accent);}
+.review-item.r-wrong{border-left:3px solid var(--wrong);}
+.review-item .r-q{font-family:'Syne',sans-serif;font-weight:700;margin-bottom:8px;font-size:0.88rem;}
+.review-item .r-fb{color:var(--muted);font-size:0.78rem;margin-top:6px;line-height:1.5;}
+.review-item .r-your{color:var(--wrong);}
+.review-item .r-ans{color:var(--accent);}
+.review-item .r-skip{color:var(--muted);font-style:italic;}
+</style>
 </head>
 <body>
-<div class="top-bar">
-  <div class="top-bar-inner">
-    <a class="back-btn" href="index.html">← Home</a>
-    <div class="top-title">Contamination Hazards — & Controls</div>
-    <div class="top-sub">FS L2 · T04</div>
+<div class="container">
+
+  <div class="name-screen" id="nameScreen">
+    <h2>Contamination Hazards<br><span>&amp; Controls</span></h2>
+    <p>Cross-contamination · Sources · Vehicles · Allergens · Colour coding<br>Enter your name to start.</p>
+    <div class="name-input-wrap">
+      <input type="text" class="name-input" id="nameInput" placeholder="Your name..." maxlength="30">
+      <button class="btn-start" id="startBtn" onclick="startQuiz()" disabled>Start Quiz &#8594;</button>
+      <div class="ghost-notice" id="ghostNotice">&#128123; Ghost Mode &#8212; score won&#39;t be saved</div>
+    </div>
+    <div class="bank-info">&#127922; All <span>20 questions</span> every session &#183; Randomised order</div>
+    <div class="topic-badge">Food Safety L2 &#183; T04</div>
+    <a href="index.html" class="back-link">&#8592; Back to all quizzes</a>
   </div>
-</div>
-<div class="wrap">
-  <div class="hero">
-    <div class="hero-tag">📚 Food Safety Handbook L2 · Topic 04</div>
-    <h1>Contamination Hazards<br><em>& Controls</em></h1>
-    <p>Cross-contamination types · Sources & vehicles · Allergens · Colour coding · Controls</p>
-  </div>
-  <div class="name-box" id="nameBox">
-    <h3>Enter your name to begin</h3>
-    <p>Questions are randomised on every attempt.<br>Your score will be saved to the leaderboard.</p>
-    <input type="text" id="nameInput" placeholder="Your name..." maxlength="30" autocomplete="off">
-    <button class="start-btn" onclick="startQuiz()">Start →</button>
-  </div>
-  <div id="quizArea"></div>
-  <div class="result" id="result">
-    <div class="res-pct" id="resPct">0%</div>
-    <div class="res-detail" id="resDetail"></div>
-    <div class="res-grade" id="resGrade"></div>
-    <div class="res-btns">
-      <button class="btn-retry" onclick="retry()">Try Again</button>
-      <a class="btn-home" href="index.html">← Home</a>
+
+  <div id="quizScreen" style="display:none">
+    <div class="header">
+      <h1>Contamination Hazards<br><span>&amp; Controls</span></h1>
+      <p id="playerLabel" style="color:var(--accent);font-size:0.8rem;"></p>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label"><span id="progressText">Question 1 of 20</span><span id="liveScore">Score: 0</span></div>
+    <div class="question-card" id="questionCard">
+      <div class="q-number" id="qNumber">QUESTION 01</div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" disabled>&#8592; Prev</button>
+      <div class="score-chip">Answered: <span id="answeredCount">0</span>/<span id="totalQLabel">20</span></div>
+      <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next &#8594;</button>
+    </div>
+    <div style="text-align:center;margin-bottom:40px;">
+      <button class="btn btn-submit" onclick="submitQuiz()">Submit &amp; See Results</button>
     </div>
   </div>
-  <div class="footer"><span>May 2026 Exam Practice</span> · KiranMoghul · Open in any browser · No login needed</div>
+
+  <div class="results-screen" id="resultsScreen">
+    <div class="result-score-ring"><div class="big" id="rScore">0</div><div class="small" id="rOutOf">out of 20</div></div>
+    <h2 id="rGrade"></h2>
+    <div class="grade-msg" id="rMsg"></div>
+    <div class="saved-msg" id="savedMsg"></div>
+    <div class="result-breakdown">
+      <div class="rb-item"><div class="val" id="rCorrect" style="color:var(--accent)">0</div><div class="lbl">Correct</div></div>
+      <div class="rb-item"><div class="val" id="rWrong" style="color:var(--wrong)">0</div><div class="lbl">Wrong</div></div>
+      <div class="rb-item"><div class="val" id="rSkipped" style="color:var(--muted)">0</div><div class="lbl">Skipped</div></div>
+      <div class="rb-item"><div class="val" id="rPercent" style="color:var(--accent2)">0%</div><div class="lbl">Percentage</div></div>
+    </div>
+    <div class="results-btns">
+      <button class="btn btn-next" onclick="restartQuiz()">&#8635; Try Again</button>
+      <a href="index.html" class="btn btn-prev" style="text-decoration:none;display:inline-flex;align-items:center;">&#127968; Home</a>
+    </div>
+    <div class="review-section"><h3>&#8212; REVIEW ALL ANSWERS &#8212;</h3><div id="reviewContainer"></div></div>
+  </div>
+
 </div>
 <script>
-const QUIZ_ID='fs-l2-04';
-const ALL_Q=[{"q": "What is CROSS-CONTAMINATION in a food safety context?", "opts": ["Cooking food at an incorrect temperature during any stage of the preparation process", "The transfer of bacteria from contaminated raw foods to ready-to-eat food", "Using the incorrect type of knife when preparing raw vegetables in the kitchen", "Storing food in an incorrect type of container without a secure fitting lid"], "ans": 1, "fb": "Cross-contamination is the transfer of bacteria from contaminated raw foods to ready-to-eat food. It is one of the most important causes of food poisoning and may be direct, by drip, or indirect."}, {"q": "Which is an example of DIRECT cross-contamination?", "opts": ["Blood from raw meat dripping from a shelf above down onto cooked food", "Raw meat physically touching and contaminating ready-to-eat cooked meat directly", "A food handler preparing cooked meat immediately after handling raw meat without washing hands", "An insect landing on cooked food that has been left uncovered on a work surface"], "ans": 1, "fb": "Cross-contamination is direct when, for example, raw meat touches cooked meat. It is by drip when, for example, blood drips from raw meat stored above cooked meat. It is indirect when, for example, a food handler prepares cooked meat after handling raw meat without washing hands."}, {"q": "Which is an example of INDIRECT cross-contamination?", "opts": ["A whole raw chicken placed directly on top of a salad bowl during preparation", "A food handler who prepares cooked meat after handling raw meat without washing hands first", "Unwashed salad vegetables placed immediately next to freshly cooked warm food", "Flies flying in from outside and then landing on uncovered food during busy service"], "ans": 1, "fb": "Indirect cross-contamination occurs when, for example, a food handler prepares cooked meat after handling raw meat without washing their hands, or when the same surface is used for both raw food and ready-to-eat food without cleaning and disinfecting between uses."}, {"q": "What are the main VEHICLES through which bacteria are transferred to food?", "opts": ["Refrigerators, freezers, and walk-in cool rooms used for food storage", "Hands, cloths and equipment, hand-contact surfaces, and food-contact surfaces", "Ovens, microwaves, and other heat-producing cooking appliances in the kitchen", "External cardboard packaging, delivery boxes, and outer wrapping materials from suppliers"], "ans": 1, "fb": "Sometimes harmful bacteria pass directly from the source to ready-to-eat food. But usually the bacteria rely on other things to transfer them to food. These are known as vehicles. The main vehicles are: hands, cloths and equipment, hand-contact surfaces, and food-contact surfaces."}, {"q": "In colour-coded equipment systems, which colour is used for RAW MEAT?", "opts": ["Green — used for fresh salad vegetables and leafy produce preparation", "Yellow — used for cooked foods and ready-to-eat meat products", "Blue — used for raw fish and seafood products during preparation", "Red — used specifically for raw meat preparation and handling"], "ans": 3, "fb": "The use of different colours ensures equipment used for raw food is not used for cooked food. Red is usually used for raw food, yellow for cooked food, and green for salad vegetables. The colour system prevents cross-contamination."}, {"q": "In colour-coded equipment systems, which colour is used for COOKED FOOD?", "opts": ["Red — the standard colour used for all high-risk food preparation areas", "Green — the same colour used for all fresh salad vegetables and herbs", "Yellow — used for cooked food and ready-to-eat meat product preparation", "Blue — the same colour used for raw fish and all fresh seafood items"], "ans": 2, "fb": "Yellow is used for cooked food. Red is used for raw meat. Green is used for salad and vegetables. The colour system ensures that the same equipment is not used for raw food and cooked food — a key control for cross-contamination."}, {"q": "Where do people commonly harbour food poisoning bacteria on their bodies?", "opts": ["Only in the stomach and large intestine during the active digestion of food", "Only in the throat and upper respiratory tract when suffering from a cold", "In the nose, mouth, intestine, cuts and wounds on the skin, and on the skin surface itself", "Only on the visible palms of the hands when they are visibly soiled and dirty"], "ans": 2, "fb": "People commonly harbour food poisoning bacteria in the nose, mouth, intestine, cuts, and also on the skin. Food may be contaminated directly by the hands, sneezing or coughing, or indirectly by sewage-contaminated water."}, {"q": "How can VIRAL contamination of food specifically occur?", "opts": ["Through gnawing and droppings left by rodents living inside food premises", "Through an infected person handling food, or through polluted irrigation water used on salad vegetables or oysters grown in sewage-contaminated water", "Through cleaning chemicals stored incorrectly in an unmarked unlabelled food container", "Through a glass fragment falling from broken kitchen equipment into prepared food"], "ans": 1, "fb": "Viral contamination may involve an infected person handling food, polluted irrigation water used on salad vegetables, or oysters grown in sewage-contaminated water. Viruses multiply in the living cells of people and animals — not in food or water."}, {"q": "Where are PARASITES mainly found as a food contamination source?", "opts": ["In commercial dairy products and commercially produced pasteurised egg products", "In raw meat or raw fish — they grow inside the live animal or fish host", "In commercially produced cereals and all types of dried bread and baked products", "In canned and hermetically sealed commercially preserved and processed food products"], "ans": 1, "fb": "Parasites are found in raw meat or fish — they grow in the live animal or fish. They are destroyed by thorough cooking. Raw food should always be kept separate from ready-to-eat food throughout all stages of delivery, storage, preparation, serving, and distribution."}, {"q": "What are MOULDS AND YEASTS primarily responsible for in food safety?", "opts": ["Causing major food poisoning outbreaks in large catering and restaurant establishments", "Food spoilage — though some moulds also produce dangerous mycotoxins that can cause illness", "Creating serious cross-contamination between raw and ready-to-eat food in cold storage", "Directly triggering severe allergic reactions in food-sensitive individuals during meals"], "ans": 1, "fb": "Moulds and yeasts are primarily responsible for spoilage of food — especially baked products, fruit, and foods stored for too long. However, some moulds produce mycotoxins (toxins) which cause illness and sometimes death."}, {"q": "Why are BLUE plasters used specifically to cover wounds on food handlers?", "opts": ["Blue is considered the most hygienic colour available for medical dressings", "Blue plasters are visually easy to detect against most food colours if they fall into food during preparation", "Blue plasters contain embedded antibacterial agents that actively help kill pathogens", "Blue matches the standard colour of most kitchen staff uniforms and protective clothing"], "ans": 1, "fb": "Blue waterproof plasters are used because they are easy to detect if they fall off — visually distinct from most food colours. Some contain metal strips visible to food detection equipment. Cuts on fingers may need the extra protection of waterproof fingerstalls."}, {"q": "What severe reaction can allergens cause in sensitive individuals?", "opts": ["Salmonellosis with diarrhoea and vomiting lasting approximately seven days", "Botulism with progressive nervous system paralysis developing over several days", "Anaphylactic shock — a sudden severe life-threatening immune system response", "Standard gastroenteritis with stomach cramps typically lasting around 48 hours"], "ans": 2, "fb": "Allergens are substances, usually protein, which cause the body's immune system to respond. In severe cases this may result in an anaphylactic shock and even death. Symptoms may include swelling of the throat, difficulty breathing, sudden fall in blood pressure, and collapse."}, {"q": "In the event of a customer suffering ANAPHYLAXIS on the premises, what must staff do immediately?", "opts": ["Give the customer a glass of cold water and ask them to sit down and remain calm", "Not move the customer and call an ambulance immediately — the customer may have a pre-loaded adrenaline injection kit", "Ask the customer politely to leave the premises and seek their own medical help outside", "Give the customer antihistamine tablets from the standard first aid box on the wall"], "ans": 1, "fb": "All staff must be aware of the procedures. Customers should not be moved and an ambulance should be called using the emergency number. The customer may have a pre-loaded adrenaline injection kit. Staff must be trained in the procedure."}, {"q": "Which foods are recognised as common sources of ALLERGENS?", "opts": ["Standard table salt, ground black pepper, cooking oil, white sugar, and plain white vinegar", "Peanuts, sesame seeds, milk, eggs, fish, shellfish, soya, mustard, celery, and cereals containing gluten", "Plain white rice, unflavoured pasta, bottled still water, and plain boiled potatoes", "Fresh tomatoes, cucumbers, plain carrots, white onions, and standard cooking garlic"], "ans": 1, "fb": "Foods which commonly contain allergens include: peanuts, sesame seeds, and tree nuts; milk (including lactose) and eggs; fish and shellfish, soya, mustard and celery; and cereals containing gluten. Allergen information must be clearly communicated to customers."}, {"q": "What must cleaning chemicals NEVER be transferred into?", "opts": ["Properly labelled and dedicated chemical storage containers with clear identification markings", "Unmarked bottles or containers that could be confused with food or drink containers", "Locked chemical storage areas with restricted access limited to trained staff only", "Purpose-designed chemical dispensing equipment approved by the manufacturer"], "ans": 1, "fb": "Cleaning chemicals must never be transferred to unmarked or food containers, especially sprayers. They should always be stored separately or completely segregated from food. A lockable area is recommended for chemical storage, separate from food."}, {"q": "Which measures CONTROL cross-contamination in a food business?", "opts": ["Using the same chopping board for all food types for consistency and efficiency", "Colour-coded equipment, effective training and supervision, thorough cleaning and disinfection, disposable cloths, and strict separation of raw and ready-to-eat food", "Storing raw chicken and cooked meat together in the same covered container to save space", "Wiping all surfaces repeatedly with the same cloth throughout the shift to save resources"], "ans": 1, "fb": "Control of cross-contamination includes: effective instruction, supervision, and training of food handlers; separation of raw and ready-to-eat food (colour coding); effective cleaning and disinfection; use of disposable paper cloths or colour-coded cloths; and not using washbasins for washing food or equipment."}, {"q": "BACTERIAL contamination in food premises most commonly occurs because of what?", "opts": ["Customers deliberately bringing contaminated food items from outside the premises", "Ignorance, poor hygiene practices, inadequate space, poor design, or food handlers taking shortcuts during preparation", "Excessive refrigeration causing visible condensation to form directly on food surfaces", "Food being cooked at too high a temperature causing bacterial spores to release their toxins"], "ans": 1, "fb": "Bacterial contamination usually occurs within food premises because of ignorance, poor hygiene practices, inadequate space, poor design or because of food handlers taking short cuts. These are all preventable causes if the right culture of food safety is in place."}, {"q": "Which physical hazard typically originates from FOOD HANDLERS AND VISITORS to food premises?", "opts": ["Insecticide residue from pest control sprays applied around the kitchen perimeter", "Peanut protein transferred from a previous meal to food handling equipment", "Jewellery, fingernails, hair (most common), buttons, pen tops, dirty bandages, and plasters", "E. coli bacteria transferred from raw food to cooked food via unwashed hands"], "ans": 2, "fb": "Physical hazards from food handlers/visitors include jewellery, fingernails, hair (most common), buttons, pen tops, dirty bandages, plasters (use blue waterproof), cigarette ends, and fibres. Suitable protective clothing must be worn and care taken."}, {"q": "What THREE categories form the ALLERGEN CONTROL MEASURES framework for food businesses?", "opts": ["Purchasing, preparation, and plating — the three key stages of food production", "Communication (clear menus, staff training, knowledge of ingredients), Contamination controls (approved suppliers, food segregation, separate utensils), and Cleaning (handwashing, surfaces before preparation)", "Temperature control of allergen-containing food, pest management, and personal hygiene", "Delivery inspection, FIFO stock rotation, and date-code monitoring of all food stock"], "ans": 1, "fb": "Allergen CONTROL MEASURES for businesses: COMMUNICATION — clear menu descriptions/labelling, effective staff training, knowledge of ingredients. CONTAMINATION — use approved suppliers, segregate foods at all stages, use separate utensils. CLEANING — effective handwashing before preparation and thorough cleaning of utensils and surfaces."}, {"q": "Allergen reaction symptoms include which of the following?", "opts": ["Only a mild stomach upset that resolves completely on its own within a few hours", "Flushing of the skin, swelling of the throat and mouth, asthma, sudden weakness from a fall in blood pressure, nettle-rash, difficulty swallowing, abdominal pain, and collapse", "Only a runny nose, repeated sneezing, and watery eyes similar to seasonal hay fever", "Only persistent joint pain and a low-grade fever that develops very gradually over days"], "ans": 1, "fb": "Symptoms of an allergic reaction may include: flushing of the skin, swelling of the throat and mouth, asthma, sudden feeling of weakness (fall in blood pressure), nettle-rash, difficulty in swallowing or speaking, abdominal pain, feeling sick and/or vomiting, and collapse."}];
-let active=[],playerName='',answered=0,correct=0;
-function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
-document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')startQuiz();});
+const QUIZ_ID='fs-l2-04', STORAGE_KEY='leaderboard-scores';
+
+const BANK=[{"q": "What is CROSS-CONTAMINATION?", "opts": ["Cooking food at the wrong temperature", "The transfer of bacteria from contaminated raw foods to ready-to-eat food", "Using the wrong knife for vegetables", "Storing food in an incorrect container"], "ans": 1, "fb": "Cross-contamination is the transfer of bacteria from contaminated raw foods to ready-to-eat food."}, {"q": "Which is an example of DIRECT cross-contamination?", "opts": ["Blood dripping from raw meat stored above cooked meat (by drip)", "Raw meat touching cooked meat directly", "A food handler preparing cooked meat after handling raw meat without washing hands", "An insect landing on uncovered food"], "ans": 1, "fb": "Direct cross-contamination: raw meat touches cooked meat directly. By drip: blood drips from above. Indirect: food handler handles raw then cooked without washing hands."}, {"q": "Which is an example of INDIRECT cross-contamination?", "opts": ["Raw chicken placed directly on a salad", "A food handler handling raw meat then preparing cooked meat without washing hands", "Unwashed vegetables placed next to hot food", "Flies landing on uncovered food"], "ans": 1, "fb": "Indirect cross-contamination: a food handler prepares cooked meat after handling raw meat without washing hands, or uses the same surface for both without cleaning between uses."}, {"q": "What are the main VEHICLES of bacterial contamination?", "opts": ["Refrigerators and freezers", "Hands, cloths, equipment, hand-contact surfaces, and food-contact surfaces", "Ovens and microwaves", "External packaging materials"], "ans": 1, "fb": "The main vehicles of bacterial contamination are: hands, cloths and equipment, hand-contact surfaces, and food-contact surfaces."}, {"q": "Which colour-coded board is used for RAW MEAT?", "opts": ["Green", "Yellow", "Blue", "Red"], "ans": 3, "fb": "Red is used for raw meat. Yellow = cooked food. Green = salad/vegetables."}, {"q": "Which colour-coded board is used for COOKED FOOD?", "opts": ["Red", "Green", "Yellow", "Blue"], "ans": 2, "fb": "Yellow is used for cooked food. Red = raw meat, Green = salad/vegetables."}, {"q": "Where do people commonly harbour food poisoning bacteria?", "opts": ["Only in the stomach and intestines", "In the nose, mouth, intestine, cuts, and on the skin", "Only in the throat and lungs", "Only on the palms of the hands"], "ans": 1, "fb": "People commonly harbour food poisoning bacteria in the nose, mouth, intestine, cuts, and also on the skin."}, {"q": "VIRAL contamination of food can occur through:", "opts": ["Gnawing by rats", "An infected person handling food, or polluted irrigation water used on salad vegetables or oysters", "A chemical stored in an unmarked bottle", "A glass fragment falling into food"], "ans": 1, "fb": "Viral contamination may involve an infected person or polluted irrigation water used on salad vegetables or oysters grown in sewage-contaminated water."}, {"q": "PARASITES in food are mainly found in:", "opts": ["Dairy products and pasteurised eggs", "Raw meat or fish — they grow in the live animal or fish", "Cereals and dried bread products", "Canned and preserved foods"], "ans": 1, "fb": "Parasites are found in raw meat or fish — they grow in the live animal or fish."}, {"q": "MOULDS AND YEASTS are primarily responsible for:", "opts": ["Major food poisoning outbreaks", "Food spoilage — though some moulds produce dangerous toxins", "Cross-contamination between raw and cooked food", "Triggering allergic reactions directly"], "ans": 1, "fb": "Moulds and yeasts are primarily responsible for spoilage. However, some moulds produce mycotoxins that can cause illness."}, {"q": "Why are BLUE plasters used by food handlers?", "opts": ["Blue is the most hygienic colour", "Blue plasters are easily visible against food if they fall off — aiding detection", "Blue contains antibacterial agents", "Blue matches standard kitchen uniform colour"], "ans": 1, "fb": "Blue waterproof plasters are used because they are easy to detect visually if they fall off into food — distinct from most food colours."}, {"q": "What allergic reaction can occur in severe cases?", "opts": ["Salmonellosis with vomiting", "Botulism with paralysis", "Anaphylactic shock and even death", "Gastroenteritis lasting 7 days"], "ans": 2, "fb": "In severe cases, an allergic reaction may result in anaphylactic shock and even death."}, {"q": "In the event of a customer having ANAPHYLAXIS, staff should:", "opts": ["Give them water and ask them to wait quietly", "NOT move the customer and call an ambulance — the customer may have a pre-loaded adrenaline injection kit", "Ask them to leave the premises immediately", "Give antihistamine tablets from the first aid box"], "ans": 1, "fb": "All staff must be aware of procedures. Customers should NOT be moved and an ambulance should be called using the emergency number. The customer may have a pre-loaded adrenaline injection kit."}, {"q": "Which are ALL common allergen foods?", "opts": ["Peanuts, sesame seeds, milk, eggs, fish, shellfish, soya, mustard, celery, and gluten cereals", "Salt, pepper, vinegar, sugar, and cooking oil", "Tomatoes, carrots, potatoes, and onions", "White rice, plain pasta, and bottled water"], "ans": 0, "fb": "The 14 major allergens include: peanuts, sesame seeds, tree nuts, milk, eggs, fish, shellfish, soya, mustard, celery, and cereals containing gluten."}, {"q": "Cleaning chemicals must NEVER be transferred into:", "opts": ["Labelled chemical storage containers", "Unmarked bottles or food containers", "Locked chemical storage areas", "Purpose-designed dispensing equipment"], "ans": 1, "fb": "Cleaning chemicals must never be transferred to unmarked bottles or food containers — this is a serious chemical contamination hazard."}, {"q": "Which controls CROSS-CONTAMINATION?", "opts": ["Using the same chopping board for everything", "Colour-coded equipment, effective training, cleaning/disinfection, disposable cloths, and separation of raw/ready-to-eat food", "Storing raw and cooked food in the same sealed container", "Wiping all surfaces with the same cloth throughout the day"], "ans": 1, "fb": "Controls for cross-contamination include: effective training, colour coding, effective cleaning/disinfection, disposable cloths, and not using washbasins for washing food or equipment."}, {"q": "BACTERIAL contamination in food premises usually occurs because of:", "opts": ["Customers bringing outside food into the premises", "Ignorance, poor hygiene practices, inadequate space, poor design, or food handlers taking shortcuts", "Excessive refrigeration of food", "Food being cooked at too high a temperature"], "ans": 1, "fb": "Bacterial contamination usually occurs because of ignorance, poor hygiene practices, inadequate space, poor design, or food handlers taking short cuts."}, {"q": "Which physical hazard can come from food handlers?", "opts": ["Insecticide residue", "Peanut protein", "Jewellery, fingernails, hair, buttons, pen tops, dirty bandages, and plasters", "E. coli bacteria from unwashed hands"], "ans": 2, "fb": "Physical hazards from food handlers include jewellery, fingernails, hair (most common), buttons, pen tops, dirty bandages, plasters, cigarette ends, and fibres."}, {"q": "Allergen CONTROL MEASURES for businesses include:", "opts": ["Only verbal communication about allergens to customers", "Clear menu descriptions/labelling, effective staff training, knowledge of ingredients, approved suppliers, food segregation, and effective handwashing before preparation", "Only keeping peanuts off the menu", "Only storing allergen foods separately"], "ans": 1, "fb": "Allergen control measures: COMMUNICATION (clear menus, staff training, knowledge of ingredients), CONTAMINATION controls (approved suppliers, segregation, separate utensils), and CLEANING (effective handwashing, cleaning utensils/surfaces before preparation)."}, {"q": "Allergen symptoms include which of the following?", "opts": ["Only a mild stomach upset", "Swelling of throat/mouth, asthma, flushing, sudden weakness (fall in blood pressure), nettle-rash, difficulty swallowing, vomiting, and collapse", "Only a runny nose and sneezing", "Only joint pain and fever"], "ans": 1, "fb": "Allergic reaction symptoms include: flushing, swelling of throat/mouth, asthma, sudden weakness (fall in blood pressure), nettle-rash, difficulty swallowing/speaking, abdominal pain/vomiting, and collapse."}];
+
+let isGhost=sessionStorage.getItem('ghostMode')==='1';
+if(isGhost)document.getElementById('ghostNotice').classList.add('show');
+const nameInput=document.getElementById('nameInput'),startBtn=document.getElementById('startBtn');
+nameInput.addEventListener('input',()=>{startBtn.disabled=nameInput.value.trim().length<2;});
+nameInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&nameInput.value.trim().length>=2)startQuiz();});
+
+let playerName='',current=0,sessionQ=[],userAnswers=[];
+
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function buildSession(){
+  return shuffle(BANK.slice()).map(q=>{
+    const ct=q.opts[q.ans];
+    const so=shuffle(q.opts.slice());
+    return{q:q.q,opts:so,ans:so.indexOf(ct),fb:q.fb};
+  });
+}
+
 function startQuiz(){
-  const n=document.getElementById('nameInput').value.trim();
-  if(!n)return;
-  playerName=n;
-  document.getElementById('nameBox').style.display='none';
-  document.getElementById('quizArea').style.display='block';
-  active=shuffle(ALL_Q);
-  answered=0;correct=0;
-  buildQuiz();
+  playerName=nameInput.value.trim();
+  if(playerName.length<2)return;
+  if(playerName==='1994'){isGhost=true;playerName='Ghost';}
+  sessionQ=buildSession();userAnswers=new Array(sessionQ.length).fill(null);current=0;
+  document.getElementById('nameScreen').style.display='none';
+  document.getElementById('quizScreen').style.display='block';
+  document.getElementById('playerLabel').textContent=isGhost?'&#128123; Playing anonymously':'Playing as '+playerName;
+  document.getElementById('totalQLabel').textContent=sessionQ.length;
+  document.getElementById('rOutOf').textContent='out of '+sessionQ.length;
+  render();
 }
-function buildQuiz(){
-  const area=document.getElementById('quizArea');
-  const L=['A','B','C','D'];
-  area.innerHTML=active.map((q,i)=>{
-    const idx=shuffle([0,1,2,3]);
-    const newAns=idx.indexOf(q.ans);
-    const optsHtml=idx.map((oi,li)=>
-      `<button class="opt" id="o${i}_${li}" onclick="pick(${i},${li},${newAns})"><span class="opt-l">${L[li]}</span><span>${q.opts[oi]}</span></button>`
-    ).join('');
-    return `<div class="q-card" id="card${i}"><div class="q-num">Q${i+1} / ${active.length}</div><div class="q-text">${q.q}</div><div class="opts">${optsHtml}</div><div class="fb" id="fb${i}"></div></div>`;
-  }).join('');
-}
-function pick(qi,chosen,correctIdx){
-  if(document.getElementById(`o${qi}_0`).hasAttribute('disabled'))return;
-  answered++;
-  const isOk=chosen===correctIdx;
-  if(isOk)correct++;
-  for(let i=0;i<4;i++){
-    const el=document.getElementById(`o${qi}_${i}`);
-    el.setAttribute('disabled','');
-    if(i===correctIdx)el.classList.add(isOk&&i===chosen?'ok':'reveal');
-    else if(i===chosen&&!isOk)el.classList.add('no');
+
+function render(){
+  const q=sessionQ[current],tot=sessionQ.length;
+  document.getElementById('qNumber').textContent='QUESTION '+(current<9?'0':'')+(current+1);
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('progressText').textContent='Question '+(current+1)+' of '+tot;
+  document.getElementById('progressFill').style.width=((current+1)/tot*100)+'%';
+  document.getElementById('answeredCount').textContent=userAnswers.filter(a=>a!==null).length;
+  document.getElementById('liveScore').textContent='Score: '+userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').textContent=current===tot-1?'Last &#8594;':'Next &#8594;';
+  const container=document.getElementById('optionsContainer');
+  container.innerHTML='';
+  const letters=['A','B','C','D'];
+  q.opts.forEach((opt,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option';
+    btn.innerHTML='<span class="opt-letter">'+letters[i]+'</span><span>'+opt+'</span>';
+    btn.onclick=()=>selectAnswer(i);
+    if(userAnswers[current]!==null){
+      btn.disabled=true;
+      if(i===q.ans)btn.classList.add('correct');
+      else if(i===userAnswers[current])btn.classList.add('wrong');
+    }
+    container.appendChild(btn);
+  });
+  const fb=document.getElementById('feedback');
+  fb.className='feedback';
+  if(userAnswers[current]!==null){
+    const correct=userAnswers[current]===q.ans;
+    fb.textContent=(correct?'Correct! ':'Wrong. ')+q.fb;
+    fb.className='feedback show '+(correct?'correct-fb':'wrong-fb');
   }
-  document.getElementById(`card${qi}`).classList.add(isOk?'correct':'wrong');
-  const fb=document.getElementById(`fb${qi}`);
-  fb.textContent=(isOk?'✓ Correct. ':'✗ Incorrect. ')+active[qi].fb;
-  fb.className=`fb show ${isOk?'fb-ok':'fb-no'}`;
-  if(answered===active.length)setTimeout(showResult,700);
+  const card=document.getElementById('questionCard');
+  card.style.animation='none';card.offsetHeight;card.style.animation='fadeSlide 0.3s ease';
 }
-async function showResult(){
-  const pct=Math.round((correct/active.length)*100);
-  const grade=pct>=90?'Excellent 🏆':pct>=75?'Good Pass ✓':pct>=60?'Borderline — keep going ⚠️':'Needs more revision ✗';
-  document.getElementById('resPct').textContent=pct+'%';
-  document.getElementById('resDetail').textContent=correct+' correct out of '+active.length;
-  document.getElementById('resGrade').textContent=grade;
-  const r=document.getElementById('result');
-  r.classList.add('show');
-  r.scrollIntoView({behavior:'smooth',block:'center'});
-  const ghost=sessionStorage.getItem('ghostMode')==='1';
-  if(playerName&&!ghost){
+
+function selectAnswer(i){if(userAnswers[current]!==null)return;userAnswers[current]=i;render();}
+function navigate(dir){current=Math.max(0,Math.min(sessionQ.length-1,current+dir));render();}
+
+async function submitQuiz(){
+  const tot=sessionQ.length;
+  const score=userAnswers.reduce((s,a,i)=>s+(a!==null&&a===sessionQ[i].ans?1:0),0);
+  const wrong=userAnswers.filter((a,i)=>a!==null&&a!==sessionQ[i].ans).length;
+  const skipped=userAnswers.filter(a=>a===null).length;
+  const pct=Math.round(score/tot*100);
+  document.getElementById('rScore').textContent=score;
+  document.getElementById('rOutOf').textContent='out of '+tot;
+  document.getElementById('rCorrect').textContent=score;
+  document.getElementById('rWrong').textContent=wrong;
+  document.getElementById('rSkipped').textContent=skipped;
+  document.getElementById('rPercent').textContent=pct+'%';
+  let grade,msg;
+  if(pct>=90){grade='Outstanding! &#127942;';msg='Excellent grasp of Food Safety L2!';}
+  else if(pct>=75){grade='Great Work! &#10024;';msg='Strong performance &#8212; review a few weak spots.';}
+  else if(pct>=60){grade='Good Effort! &#128077;';msg='Keep practising.';}
+  else if(pct>=40){grade='Keep Going! &#128170;';msg='Review your notes and try again.';}
+  else{grade='More Practice Needed';msg='Go over the study content carefully.';}
+  document.getElementById('rGrade').textContent=grade;
+  document.getElementById('rMsg').textContent=msg;
+  const savedMsg=document.getElementById('savedMsg');
+  if(isGhost){savedMsg.textContent='&#128123; Ghost Mode &#8212; score not saved';savedMsg.style.color='#f5c542';}
+  else{
     try{
-      const key='leaderboard-scores';
-      const ex=await window.storage.get(key,true);
-      const scores=ex?JSON.parse(ex.value):[];
-      scores.push({name:playerName,score:correct,total:active.length,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
-      await window.storage.set(key,JSON.stringify(scores),true);
-    }catch(e){}
+      const existing=await window.storage.get(STORAGE_KEY,true).catch(()=>null);
+      const scores=existing?JSON.parse(existing.value):[];
+      scores.push({name:playerName,score,total:tot,pct,quiz:QUIZ_ID,date:new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short'})});
+      await window.storage.set(STORAGE_KEY,JSON.stringify(scores),true);
+      savedMsg.textContent='Score saved as "'+playerName+'"';
+    }catch(e){savedMsg.textContent='Score could not be saved.';savedMsg.style.color='#888';}
   }
+  const rc=document.getElementById('reviewContainer');
+  rc.innerHTML='';
+  sessionQ.forEach((q,i)=>{
+    const ua=userAnswers[i],correct=ua===q.ans;
+    const div=document.createElement('div');
+    div.className='review-item '+(ua===null?'':correct?'r-correct':'r-wrong');
+    let detail='';
+    if(ua===null)detail='<div class="r-skip">Skipped &#8212; Answer: <b>'+q.opts[q.ans]+'</b></div>';
+    else if(correct)detail='<div class="r-ans">&#10003; '+q.opts[q.ans]+'</div>';
+    else detail='<div class="r-your">&#10007; Your answer: '+q.opts[ua]+'</div><div class="r-ans">&#10003; Correct: '+q.opts[q.ans]+'</div>';
+    if(q.fb)detail+='<div class="r-fb">'+q.fb+'</div>';
+    div.innerHTML='<div class="r-q">Q'+(i+1)+'. '+q.q+'</div>'+detail;
+    rc.appendChild(div);
+  });
+  document.getElementById('quizScreen').style.display='none';
+  document.getElementById('resultsScreen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-function retry(){location.reload();}
+
+function restartQuiz(){
+  sessionQ=buildSession();userAnswers=new Array(sessionQ.length).fill(null);current=0;
+  document.getElementById('resultsScreen').classList.remove('show');
+  document.getElementById('quizScreen').style.display='block';
+  render();window.scrollTo({top:0,behavior:'smooth'});
+}
 </script>
 </body>
 </html>
